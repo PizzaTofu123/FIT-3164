@@ -1,0 +1,9 @@
+npm -init y | makes json file
+npm i express | installs express
+npm run serve | runs the index from package.json
+npm i nodemon -D | installs nodemon 
+npm run dev | runs the index from package.json
+npm install mongodb
+npm i mongoose | mongodb dependencies
+
+use proxy localhost 5000 to make relative api request.
