@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const app = express();
 const User = require('./models/user.models.js');
 const UserRouter = require('./routes/product.route.js');
+const env = require('dotenv');
+env.config({path: './config/.env'});
 
 //middleware because not allowed to pass json through
 //node js by default
@@ -116,7 +118,8 @@ app.delete('/api/users/:id', async (req,res) =>{
 */    
 
 //put in connection string
-mongoose.connect("mongodb+srv://123will291:UVwrhSk1skGt6NnZ@cluster0.txgm1ky.mongodb.net/Test-API?retryWrites=true&w=majority&appName=Cluster0")
+
+mongoose.connect(process.env.MONGOOSE_URI)
 .then(()=> {
     //database connected, then the server is running
     console.log("connected");
