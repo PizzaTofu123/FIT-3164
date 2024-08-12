@@ -2,24 +2,43 @@
 const mongoose = require('mongoose');
 
 const UserSchema = mongoose.Schema({
-    name: {
+    _id: {
         type: String,
-        required: [true, "Please enter name"]
+        required: true,
     },
-    student_id: {
+    firstName: {
+        type: String,
+        required: [true, "Please enter first name"]
+    },
+    lastName: {
+        type: String,
+        required: [true, "Please enter last name"]
+    },
+    studentId: {
         type: Number,
         required: true,
         default: 0
     },
+    passwordHash: {
+        type: String, 
+        required: true
+    },
     image: {
         type: String,
         required: false
+    },
+    isRepresentative: {
+        type: Boolean,
+        default: false
     }
 
 },
     {
         // 2 extra fields for created and updated at
         Timestamps: true
+    },
+    {
+        _id: false  // This disables automatic generation of the _id field
     }
 
 );
