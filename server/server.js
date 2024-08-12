@@ -23,7 +23,6 @@ app.get('/api', async (req,res) => {
     try {
         //use curlies cus find multiple users
         const user  = await User.find({});
-        //res.status(200).json({"user": ["lebron","baby"]})
         res.status(200).json(user);
     }
     catch (error){
