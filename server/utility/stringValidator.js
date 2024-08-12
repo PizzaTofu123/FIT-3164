@@ -1,5 +1,5 @@
-function isAlphanumericWithSpaces(str) { // Regular expression pattern to match alphanumeric characters and spaces
-    var patternToMatch = /^[a-zA-Z0-9\s]*$/;
+function isAlphanumeric(str) { // Regular expression pattern to match alphanumeric characters and spaces
+    var patternToMatch = /^[a-zA-Z0-9]*$/;
 
     return patternToMatch.test(str);
 }
@@ -12,6 +12,6 @@ function isNumeric(str) {
 }
 
 module.exports = {
-    isAlphanumericWithSpaces,
+    isAlphanumeric,
     isNumeric
 };
