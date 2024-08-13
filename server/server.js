@@ -2,7 +2,7 @@ const express = require('express')
 const mongoose = require('mongoose');
 const app = express();
 const User = require('./models/user.models.js');
-const UserRouter = require('./routes/product.route.js');
+const UserRouter = require('./routes/user.route.js');
 const env = require('dotenv');
 env.config({path: './config/.env'});
 
