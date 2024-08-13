@@ -3,6 +3,10 @@ const mongoose = require('mongoose');
 const {isAlphanumeric, isNumeric} = require('../utility/stringValidator')
 
 const UserSchema = mongoose.Schema({
+    _id: {
+        type: String,
+        required: true,
+    },
     firstName: {
         type: String,
         required: [true, "Please enter first name"],
@@ -51,7 +55,11 @@ const UserSchema = mongoose.Schema({
     {
         // 2 extra fields for created and updated at
         Timestamps: true
+    },
+    {
+        _id: false  // This disables automatic generation of the _id field
     }
+
 );
 
 //for mongodb to use
