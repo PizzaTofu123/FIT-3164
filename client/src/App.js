@@ -1,43 +1,35 @@
-import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Profile from './components/Profile';
-import './App.css';
+import React, {useEffect, useState} from 'react'
+
 
 function App() {
-  const [backendData, setBackendData] = useState([{}]);
-
-  // Getting data from backend and setting it into the backendData variable
-  useEffect(() => {
-    fetch('/api').then(
-      response => response.json()
-    ).then(
-      data => { setBackendData(data); }
-    );
-  }, []); // Only runs on the first render of the component
-
+  const [backendData, setBackendData] = useState([{}])
+ //getting data from backend and setting it into the backendData variable
+  useEffect (() => {
+  fetch('/api').then(
+    response => response.json()
+  ).then(
+    data => {setBackendData(data)}
+  )
+ }, []) // only runs in the first render of the component
   return (
-    <Router>
-      <div className="App">
-        <Navbar />
-        <Routes>
-          <Route path="/profile" element={<Profile />} />
-          {/* Add other routes here if necessary */}
-        </Routes>
-        <div>
-          {
-            backendData.map((dataObj, index) => {
-              return (
-                <p key={index} style={{ fontSize: 20, color: 'black' }}>
-                  {dataObj.name}
-                </p>
-              );
-            })
-          }
-        </div>
-      </div>
-    </Router>
-  );
+    <div>
+    
+    {
+      /*
+    (typeof backendData.user == "undefined") ? (
+      <p>Loading</p>
+    ): (
+      backendData.user.map((u, i) => (<p key = {i}>{u}</p>))
+    )*/
+
+    backendData.map((dataObj, index) => {
+        return (
+          <p style={{ fontSize: 20, color: 'black' }}>{dataObj.name}</p>
+        );
+      })
+    }
+    </div>
+  )
 }
 
-export default App;
+export default App

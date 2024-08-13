@@ -126,5 +126,5 @@ mongoose.connect(process.env.MONGOOSE_URI)
         console.log("listening")
     });
 })
-.catch((e) => { console.log(e);});
+.catch(() => { console.log({message:error.message});});
 
