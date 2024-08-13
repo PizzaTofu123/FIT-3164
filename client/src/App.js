@@ -24,7 +24,7 @@ function App() {
 
     backendData.map((dataObj, index) => {
         return (
-          <p style={{ fontSize: 20, color: 'black' }}>{dataObj.name}</p>
+          <p style={{ fontSize: 20, color: 'black' }}>{dataObj.firstName}</p>
         );
       })
     }
