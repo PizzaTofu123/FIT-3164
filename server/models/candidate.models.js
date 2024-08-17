@@ -7,15 +7,19 @@ const CandidateSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    candidateId: {
-        type: Schema.Types.ObjectId,
+    ElectionId: {
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref:"Candidate"
+        ref: "Election"
     },
     image: {
         type: String,
         required: false
     },
+    votes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Vote"
+    }]
 
 },
     {

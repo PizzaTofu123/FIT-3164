@@ -4,17 +4,17 @@ const {isAlphanumeric, isNumeric} = require('../utility/stringValidator')
 
 const VoteSchema = mongoose.Schema({
     userId: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref:"User",
         default: null
     },
     electionId: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref:"Election"
     },
     candidateId: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref:"Candidate"
     }
