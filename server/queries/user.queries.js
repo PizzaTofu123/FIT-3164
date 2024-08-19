@@ -13,6 +13,5 @@ module.exports = {
     getOneUser : async (userId) => {
         const user = await User.findById(userId);
         return user;
-    },
-    
+    }
 }

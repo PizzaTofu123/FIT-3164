@@ -4,6 +4,7 @@ const app = express();
 const User = require('./models/user.models.js');
 const UserRouter = require('./routes/user.route.js');
 const VoteRouter = require('./routes/vote.route.js');
+const CandidateRouter = require('./routes/candidate.route.js');
 const env = require('dotenv');
 env.config({path: './config/.env'});
 
@@ -18,6 +19,9 @@ app.use("/api/users", UserRouter);
 
 // routes for vote
 app.use("/api/votes", VoteRouter);
+
+// routes for vote
+app.use("/api/candidates", CandidateRouter);
 
 app.get('/', (req,res) => {
     res.send("testicles");
