@@ -13,7 +13,7 @@ module.exports = {
         if (!oldVote){
             return res.status(500).json({message : `Vote with id ${id} not found`});
         }
-        await candidateQueries._unlinkVoteFromCandidate(oldVote._id, oldVote.candidateId);
+        await candidateQueries._unlinkVoteFromCandidate(VoteId, oldVote.candidateId);
         const updated = await User.findByIdAndUpdate(voteId,data.candidateId);
         await candidateQueries._linkVoteToCandidate(voteId, data.candidateId);
         return updated;

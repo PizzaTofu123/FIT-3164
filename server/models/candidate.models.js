@@ -3,11 +3,31 @@ const mongoose = require('mongoose');
 const {isAlphanumeric, isNumeric} = require('../utility/stringValidator')
 
 const CandidateSchema = mongoose.Schema({
+    firstName: {
+        type: String,
+        required: [true, "Please enter first name"],
+        validate: {
+            validator: function(value) {
+                return isAlphanumeric(value);
+            },
+            message: _ => 'A valid alphanumeric name is required!'
+        }
+    },
+    lastName: {
+        type: String,
+        required: [true, "Please enter last name"],
+        validate: {
+            validator: function(value) {
+                return isAlphanumeric(value);
+            },
+            message: _ => 'A valid alphanumeric name is required!'
+        }
+    },
     description: {
         type: String,
         required: true
     },
-    ElectionId: {
+    electionId: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: "Election"

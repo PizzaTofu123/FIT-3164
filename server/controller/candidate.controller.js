@@ -8,8 +8,10 @@ module.exports = {
         try {
             //const user  = await User.create(req.body);
             const candidate = await candidateQueries.createOneCandidate({
+                firstName: req.body.firstName,
+                lastName: req.body.lastName,
                 description: req.body.description,
-                ElectionId: req.body.ElectionId,
+                electionId: req.body.electionId,
                 image: req.body.image
             })
             res.status(200).json(candidate);
@@ -50,21 +52,6 @@ module.exports = {
         const updated = await Candidate.findById(id);
         res.status(200).json(updated);
     }
-        catch (error){
-            res.status(500).json({message:error.message});
-        }
-    },
-
-    deleteOneCandidate : async (req,res) =>{
-        try {
-            const {id}  = req.params;
-            const candidate = await Candidate.findByIdAndDelete(id);
-    
-            if (!candidate){
-                return res.status(500).json({message : 'Candidate not found'});
-            }
-            res.status(200).json({message: `deleted candidate with id: ${id}`});
-        }
         catch (error){
             res.status(500).json({message:error.message});
         }
