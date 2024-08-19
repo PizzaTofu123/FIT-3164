@@ -6,7 +6,7 @@ module.exports = {
         await election.save();
         return election
     },
-    getAllElection : async () => {
+    getAllElections : async () => {
         const election = await Election.find({});
         return election;
     },
