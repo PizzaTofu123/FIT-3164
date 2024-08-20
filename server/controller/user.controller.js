@@ -1,11 +1,22 @@
 // what happens when routed to the router
 // what happens when routed to the router
 const User = require("../models/user.models");
+const userQueries = require("../queries/user.queries");
 module.exports = {
     createOneUser : async (req,res) =>
     {
         try {
-            const user  = await User.create(req.body);
+            //const user  = await User.create(req.body);
+            birthDate = Math.floor((new Date() - new Date(req.body.dob).getTime()) / 3.15576e+10) // 3.115576 is miliseconds
+            const user = await userQueries.createOneUser({
+                firstName: req.body.firstName,
+                lastName: req.body.lastName,
+                studentId: req.body.studentId,
+                passwordHash: req.body.passwordHash,
+                isRepresentative: req.body.isRepresentative,
+                dob: req.body.dob,
+                age: birthDate
+            })
             res.status(200).json(user);
         }
         catch (error){
@@ -18,7 +29,7 @@ module.exports = {
     {
         try {
             //use curlies cus find multiple users
-            const user  = await User.find({});
+            const user  = await userQueries.getAllUser();
             res.status(200).json(user);
         }
         catch (error){
@@ -30,9 +41,13 @@ module.exports = {
     getOneUser : async (req,res) =>
         {
             try {
-                //get id
+                //get id from ref
+                //may change this to req.body soon ?
                 const {id}  = req.params;
-                const user  = await User.findById(id);
+                const user  = await userQueries.getOneUser(id);
+                if (!user){
+                    res.status(500).json({message : `User with id ${id} not found`});
+                }
                 res.status(200).json(user);
             }
             catch (error){
@@ -48,7 +63,7 @@ module.exports = {
         const user  = await User.findByIdAndUpdate(id, req.body);
 
         if (!user){
-            return res.status(500).json({message : 'User not found'});
+            return res.status(500).json({message : `User with id ${id} not found`});
         }
 
         const updated = await User.findById(id);
@@ -74,6 +89,7 @@ module.exports = {
         }
     }
 
+    
 }
 
 

@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 const {isAlphanumeric, isNumeric} = require('../utility/stringValidator')
 
-const UserSchema = mongoose.Schema({
+const CandidateSchema = mongoose.Schema({
     firstName: {
         type: String,
         required: [true, "Please enter first name"],
@@ -23,37 +23,27 @@ const UserSchema = mongoose.Schema({
             message: _ => 'A valid alphanumeric name is required!'
         }
     },
-    studentId: {
-        type: Number,
-        required: true,
-        default: 0,
-        validate: {
-            validator: function(value) {
-                return isNumeric(value);
-            },
-            message: _ => 'A valid numeric ID is required!'
-        }
-    },
-    passwordHash: {
-        type: String, 
+    description: {
+        type: String,
         required: true
     },
-    dob: {
-        //YYYY-MM-DD
-        type: Date,
-        required: true 
-    },
-    age: {
-        type: Number,
-        required: false
+    electionId: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: "Election"
     },
     image: {
         type: String,
         required: false
     },
-    isRepresentative: {
-        type: Boolean,
-        default: false
+    votes: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Vote"
+    }],
+    voteCount: {
+        type: Number,
+        required: false,
+        default: 0
     }
 
 },
@@ -64,6 +54,6 @@ const UserSchema = mongoose.Schema({
 );
 
 //for mongodb to use
-const User = mongoose.model("User", UserSchema);
+const Candidate = mongoose.model("Candidate", CandidateSchema);
 
-module.exports = User;
+module.exports = Candidate;
