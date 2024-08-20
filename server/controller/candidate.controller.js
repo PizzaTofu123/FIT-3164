@@ -60,12 +60,12 @@ module.exports = {
     deleteOneCandidate : async (req,res) =>{
         try {
             const {id}  = req.params;
-            const candidate = await Candidate.findByIdAndDelete(id);
-    
-            if (!candidate){
-                return res.status(500).json({message : 'Candidate not found'});
+            const candidate = await candidateQueries.deleteOneCandidate(id);
+            if (candidate) {
+                res.status(200).json({message: `deleted candidate with id: ${id}`});
+            } else {
+                res.status(500).json({message : 'Candidate not found'});
             }
-            res.status(200).json({message: `deleted candidate with id: ${id}`});
         }
         catch (error){
             res.status(500).json({message:error.message});
@@ -88,6 +88,4 @@ module.exports = {
             res.status(500).json({message:error.message});
         }
     },
-
-    
 }

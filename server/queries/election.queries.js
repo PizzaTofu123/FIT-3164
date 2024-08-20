@@ -1,6 +1,7 @@
 const Election = require("../models/election.model");
+const mainQueries = require("./main.queries");
 
-module.exports = {
+const electionQueries = {
     createElection : async (data) => {
         const election = new Election(data);
         await election.save();
@@ -16,3 +17,6 @@ module.exports = {
     },
     
 }
+
+mainQueries.categories = electionQueries;
+module.exports = electionQueries;

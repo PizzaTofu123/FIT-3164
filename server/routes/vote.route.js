@@ -8,5 +8,7 @@ const voteController = require("../controller/vote.controller");
 
 router.post('/', voteController.createOneVote);
 router.put('/:id', voteController.updateVote);
+router.delete('/:id', voteController.deleteOneVote);
+
 
 module.exports = router;

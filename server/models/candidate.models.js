@@ -39,7 +39,12 @@ const CandidateSchema = mongoose.Schema({
     votes: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Vote"
-    }]
+    }],
+    voteCount: {
+        type: Number,
+        required: false,
+        default: 0
+    }
 
 },
     {

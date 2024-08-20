@@ -1,6 +1,7 @@
 const Candidate = require("../models/candidate.models");
+const mainQueries = require("./main.queries");
 
-module.exports = {
+const candidateQueries = {
     createOneCandidate : async (data) => {
         const candidate = new Candidate(data);
         await candidate.save();
@@ -18,18 +19,45 @@ module.exports = {
     },
 
     async _linkVoteToCandidate(voteId, candidateId){
-        // connect multiple events with categories
         await Candidate.updateMany(
             { _id:  candidateId },
             { $addToSet: { votes: voteId } }
         ).exec();
+        await this.addVoteCount(candidateId);
     },
 
     async _unlinkVoteFromCandidate(voteId, candidateId){
-        // removes connection from events to categories
-        await Category.updateMany(
+        await Candidate.updateMany(
             { _id:  candidateId },
             { $pull: { votes: voteId } }
         ).exec();
+        await this.decreaseVoteCount(candidateId);
+    },
+
+    async addVoteCount(candidateId){
+        const candidate = await Candidate.findById(candidateId).exec();
+        candidate.voteCount += 1;
+        await candidate.save();  
+    },
+
+    async decreaseVoteCount(candidateId){
+        const candidate = await Candidate.findById(candidateId).exec();
+        candidate.voteCount -= 1;
+        await candidate.save();  
+    },
+
+    deleteOneCandidate : async (candidateId) =>{
+        const candidate = await Candidate.findByIdAndDelete(candidateId);
+        if (candidate) {
+            for(let voteId of candidate.votes){
+                await mainQueries.votes.deleteOneVote(voteId);
+            }
+            return candidate;
+        } else {
+            return null;
+        }
     }
 }
+
+mainQueries.candidates = candidateQueries;
+module.exports = candidateQueries;

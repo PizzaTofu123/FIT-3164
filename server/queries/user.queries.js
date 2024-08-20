@@ -1,6 +1,7 @@
 const User = require("../models/user.models");
+const mainQueries = require("./main.queries");
 
-module.exports = {
+const userQueries = {
     createOneUser : async (data) => {
         const user = new User(data);
         await user.save();
@@ -15,3 +16,6 @@ module.exports = {
         return user;
     }
 }
+
+mainQueries.users = userQueries;
+module.exports = userQueries;

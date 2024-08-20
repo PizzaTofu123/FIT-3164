@@ -29,7 +29,7 @@ module.exports = {
         })
 
         if (!vote){
-            return res.status(500).json({message : `Vote with id ${id} not found`});
+            res.status(500).json({message : `Vote with id ${id} not found`});
         }
 
         const updated = await Vote.findById(id);
@@ -38,5 +38,20 @@ module.exports = {
         catch (error){
             res.status(500).json({message:error.message});
         }
+    },
+    deleteOneVote : async (req,res) =>{
+        try {
+            const {id}  = req.params;
+            const vote = await voteQueries.deleteOneVote(id);
+            if (vote) {
+                res.status(200).json({message: `deleted vote with id: ${id}`});
+            } else {
+                res.status(500).json({message : 'Vote not found'});
+            }
+        }
+        catch (error){
+            res.status(500).json({message:error.message});
+        }
     }
+
 }
