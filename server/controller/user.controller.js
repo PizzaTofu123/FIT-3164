@@ -7,12 +7,15 @@ module.exports = {
     {
         try {
             //const user  = await User.create(req.body);
+            birthDate = Math.floor((new Date() - new Date(req.body.dob).getTime()) / 3.15576e+10) // 3.115576 is miliseconds
             const user = await userQueries.createOneUser({
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
                 studentId: req.body.studentId,
                 passwordHash: req.body.passwordHash,
-                isRepresentative: req.body.isRepresentative
+                isRepresentative: req.body.isRepresentative,
+                dob: req.body.dob,
+                age: birthDate
             })
             res.status(200).json(user);
         }

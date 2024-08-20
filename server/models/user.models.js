@@ -38,6 +38,15 @@ const UserSchema = mongoose.Schema({
         type: String, 
         required: true
     },
+    dob: {
+        //YYYY-MM-DD
+        type: Date,
+        required: true 
+    },
+    age: {
+        type: Number,
+        required: false
+    },
     image: {
         type: String,
         required: false
