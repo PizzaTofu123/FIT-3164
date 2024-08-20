@@ -68,7 +68,7 @@
   
   .election-list {
     max-width: 500px;
-    margin: 0 auto;
+    margin: 0;
   }
   
   button {
@@ -90,7 +90,7 @@
   
   .left-column {
     flex: 1;
-    margin-left: 150px;
+    margin-left: 170px;
     margin-right: 20px;
   }
   
