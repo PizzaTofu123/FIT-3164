@@ -60,6 +60,7 @@ module.exports = {
     deleteOneCandidate : async (req,res) =>{
         try {
             const {id}  = req.params;
+            console.log("crot");
             const candidate = await candidateQueries.deleteOneCandidate(id);
             if (candidate) {
                 res.status(200).json({message: `deleted candidate with id: ${id}`});

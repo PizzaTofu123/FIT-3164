@@ -36,18 +36,22 @@ const candidateQueries = {
 
     async addVoteCount(candidateId){
         const candidate = await Candidate.findById(candidateId).exec();
-        candidate.voteCount += 1;
-        await candidate.save();  
+        if (candidate){
+            candidate.voteCount += 1;
+            await candidate.save();  
+        }
     },
 
     async decreaseVoteCount(candidateId){
         const candidate = await Candidate.findById(candidateId).exec();
-        candidate.voteCount -= 1;
-        await candidate.save();  
+        if (candidate){
+            candidate.voteCount -= 1;
+            await candidate.save();  
+        }
     },
 
     deleteOneCandidate : async (candidateId) =>{
-        const candidate = await Candidate.findByIdAndDelete(candidateId);
+        const candidate = await Candidate.findByIdAndDelete(candidateId).exec();
         if (candidate) {
             for(let voteId of candidate.votes){
                 await mainQueries.votes.deleteOneVote(voteId);

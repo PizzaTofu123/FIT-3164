@@ -9,20 +9,20 @@ const voteQueries = {
         return vote;
     },
     updateVote : async (voteId, data) => {
-        const oldVote  = await User.findById(voteId);
+        const oldVote  = await Vote.findById(voteId);
         if (!oldVote){
             return res.status(500).json({message : `Vote with id ${id} not found`});
         }
         await mainQueries.candidates._unlinkVoteFromCandidate(voteId, oldVote.candidateId);
 
-        const updated = await User.findByIdAndUpdate(voteId,data.candidateId);
-        await mainQueries.candidateQueries._linkVoteToCandidate(voteId, data.candidateId);
+        const updated = await Vote.findByIdAndUpdate(voteId,data.candidateId);
+        await mainQueries.candidates._linkVoteToCandidate(voteId, data.candidateId);
         
         return updated;
     },
     deleteOneVote : async (voteId) => {
         const vote = await Vote.findByIdAndDelete(voteId);
-        mainQueries.candidates._unlinkVoteFromCandidate(vote._id, vote.candidateId);
+        mainQueries.candidates._unlinkVoteFromCandidate(voteId, vote.candidateId);
         return vote;
     }
 }
