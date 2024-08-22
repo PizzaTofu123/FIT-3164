@@ -1,5 +1,5 @@
 const express = require("express");
-const Election = require("../models/election.models");
+const Election = require("../models/election.model");
 const router = express.Router();
 const ElectionController = require("../controller/election.controller");
 
