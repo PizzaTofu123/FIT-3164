@@ -43,7 +43,12 @@ module.exports = {
     try {
         //get id from req params instantly
         const {id}  = req.params;
-        const candidate  = await Candidate.findByIdAndUpdate(id, req.body);
+        const candidate  = await Candidate.findByIdAndUpdate(id, {
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            description: req.body.description,
+            image: req.body.image
+            });
 
         if (!candidate){
             return res.status(500).json({message : `Candidate with id ${id} not found`});
