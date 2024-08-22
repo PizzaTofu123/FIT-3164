@@ -22,10 +22,7 @@ const ElectionSchema = mongoose.Schema({
     candidates: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Candidate"
-    }],
-
-    //IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT 
-    //how to do votes cuz u want vote id or by number idk how to store
+    }]
 
 },
     {
