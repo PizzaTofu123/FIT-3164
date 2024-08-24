@@ -54,7 +54,16 @@ const UserSchema = mongoose.Schema({
     isRepresentative: {
         type: Boolean,
         default: false
-    }
+    },
+    email: {
+        type: String,
+        required: true
+    },
+    clubs: [{
+        type: String,
+        required: true
+    }]
+
 
 },
     {

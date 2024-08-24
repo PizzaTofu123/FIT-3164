@@ -5,6 +5,7 @@ const candidateQueries = require("../queries/candidate.queries");
 module.exports = {
     createOneCandidate : async (req,res) =>
     {
+        
         try {
             //const user  = await User.create(req.body);
             const candidate = await candidateQueries.createOneCandidate({
@@ -26,10 +27,10 @@ module.exports = {
             try {
                 //get id from ref
                 //may change this to req.body soon ?
-                const {id}  = req.params;
-                const candidate  = await candidateQueries.getOneCandidate(id);
+                const {candidateId}  = req.params;
+                const candidate  = await candidateQueries.getOneCandidate(candidateId);
                 if (!candidate){
-                    res.status(500).json({message : `Candidate with id ${id} not found`});
+                    res.status(500).json({message : `Candidate with id ${candidateId} not found`});
                 }
                 res.status(200).json(candidate);
             }
@@ -42,8 +43,8 @@ module.exports = {
     updateOneCandidate : async (req,res) =>{
     try {
         //get id from req params instantly
-        const {id}  = req.params;
-        const candidate  = await Candidate.findByIdAndUpdate(id, {
+        const {candidateId}  = req.params;
+        const candidate  = await Candidate.findByIdAndUpdate(candidateId, {
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             description: req.body.description,
@@ -51,10 +52,10 @@ module.exports = {
             });
 
         if (!candidate){
-            return res.status(500).json({message : `Candidate with id ${id} not found`});
+            return res.status(500).json({message : `Candidate with id ${candidateId} not found`});
         }
 
-        const updated = await Candidate.findById(id);
+        const updated = await Candidate.findById(candidateId);
         res.status(200).json(updated);
     }
         catch (error){

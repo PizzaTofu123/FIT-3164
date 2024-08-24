@@ -2,6 +2,8 @@
 // what happens when routed to the router
 const Vote = require("../models/vote.models");
 const voteQueries = require("../queries/vote.queries");
+const flagController = require("../controller/user.election.flag.controller");
+
 module.exports = {
     createOneVote : async (req,res) =>
     {
@@ -11,6 +13,10 @@ module.exports = {
                 userId: req.body.userId,
                 electionId: req.body.electionId,
                 candidateId: req.body.candidateId
+            })
+            await flagController.createOneFlag({
+                userId: req.body.userId,
+                electionId: req.body.electionId
             })
             res.status(200).json(vote);
         }
@@ -23,16 +29,16 @@ module.exports = {
     updateVote : async (req,res) =>{
     try {
         //get id from req params instantly
-        const {id}  = req.params;
-        const vote  = await voteQueries.updateVote(id, {
+        const {voteId}  = req.params;
+        const vote  = await voteQueries.updateVote(voteId, {
             candidateId: req.body.candidateId
         })
 
         if (!vote){
-            res.status(500).json({message : `Vote with id ${id} not found`});
+            res.status(500).json({message : `Vote with id ${voteId} not found`});
         }
 
-        const updated = await Vote.findById(id);
+        const updated = await Vote.findById(voteId);
         res.status(200).json(updated);
     }
         catch (error){
@@ -41,10 +47,10 @@ module.exports = {
     },
     deleteOneVote : async (req,res) =>{
         try {
-            const {id}  = req.params;
-            const vote = await voteQueries.deleteOneVote(id);
+            const {voteId}  = req.params;
+            const vote = await voteQueries.deleteOneVote(voteId);
             if (vote) {
-                res.status(200).json({message: `deleted vote with id: ${id}`});
+                res.status(200).json({message: `deleted vote with id: ${voteId}`});
             } else {
                 res.status(500).json({message : 'Vote not found'});
             }

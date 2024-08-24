@@ -8,9 +8,9 @@ const CandidateController = require("../controller/candidate.controller");
 
 router.post('/', CandidateController.createOneCandidate);
 
-router.get('/:id', CandidateController.getCandidateWithVotes);
+router.get('/:candidateId', CandidateController.getCandidateWithVotes);
 
-router.put('/:id', CandidateController.updateOneCandidate);
-router.delete('/:id', CandidateController.deleteOneCandidate);
+router.put('/:candidateId', CandidateController.updateOneCandidate);
+router.delete('/:candidateId', CandidateController.deleteOneCandidate);
 
 module.exports = router;
