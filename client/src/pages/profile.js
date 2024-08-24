@@ -1,13 +1,9 @@
 import React, { useState } from 'react';
 import './profile.css';
+import { Link } from 'react-router-dom';
 
-function Profile() {
+function Profile({ user }) {
   const [activeTab, setActiveTab] = useState('about');
-  const [editing, setEditing] = useState(false);
-
-  const toggleEdit = () => {
-    setEditing(!editing);
-  };
 
   const renderContent = () => {
     switch (activeTab) {
@@ -17,36 +13,43 @@ function Profile() {
             <div className="profile-info-item">
               <i className="fas fa-user"></i>
               <div>
-                <label>Name</label>
-                {editing ? <input type="text" defaultValue="Bobby Wilson" /> : <p>Bobby Wilson</p>}
+                <label>First Name</label>
+                <p>{user.firstName}</p>
+              </div>
+            </div>
+            <div className="profile-info-item">
+              <i className="fas fa-user"></i>
+              <div>
+                <label>Last Name</label>
+                <p>{user.lastName}</p>
               </div>
             </div>
             <div className="profile-info-item">
               <i className="fas fa-venus-mars"></i>
               <div>
                 <label>Pronouns</label>
-                {editing ? <input type="text" defaultValue="He/Him" /> : <p>He/Him</p>}
+                <p>{user.pronouns}</p>
               </div>
             </div>
             <div className="profile-info-item">
               <i className="fas fa-id-card"></i>
               <div>
                 <label>Monash Student ID</label>
-                <p>31234567</p>
+                <p>{user.studentID}</p>
               </div>
             </div>
             <div className="profile-info-item">
               <i className="fas fa-envelope"></i>
               <div>
                 <label>Monash Email Address</label>
-                {editing ? <input type="email" defaultValue="bwil0001@student.monash.edu" /> : <p>bwil0001@student.monash.edu</p>}
+                <p>{user.email}</p>
               </div>
             </div>
             <div className="profile-info-item">
               <i className="fas fa-phone"></i>
               <div>
                 <label>Mobile Number</label>
-                {editing ? <input type="text" defaultValue="0412345678" /> : <p>0412345678</p>}
+                <p>{user.mobile}</p>
               </div>
             </div>
           </div>
@@ -58,28 +61,28 @@ function Profile() {
               <i className="fas fa-graduation-cap"></i>
               <div>
                 <label>Level</label>
-                <p>Undergraduate</p>
+                <p>{user.level}</p>
               </div>
             </div>
             <div className="profile-info-item">
               <i className="fas fa-university"></i>
               <div>
                 <label>Faculty</label>
-                <p>Faculty of Science</p>
+                <p>{user.faculty}</p>
               </div>
             </div>
             <div className="profile-info-item">
               <i className="fas fa-book"></i>
               <div>
                 <label>Course</label>
-                <p>Bachelor of Science</p>
+                <p>{user.course}</p>
               </div>
             </div>
             <div className="profile-info-item">
               <i className="fas fa-calendar-alt"></i>
               <div>
                 <label>Year</label>
-                <p>3</p>
+                <p>{user.year}</p>
               </div>
             </div>
           </div>
@@ -118,12 +121,10 @@ function Profile() {
   return (
     <div className="profile-container">
       <div className="profile-header">
-        <img src="/images/default_profile.png" alt="Profile" className="profile-picture" />
+        <img src={user.profilePicture} alt="Profile" className="profile-picture" />
         <div className="profile-header-text">
-          <h1>Bobby Wilson</h1>
-          <button onClick={toggleEdit} className="edit-profile-button">
-            {editing ? 'Save' : 'Edit profile'}
-          </button>
+          <h1>{user.firstName} {user.lastName}</h1>
+          <Link to="/edit-profile" className="edit-profile-link">Edit profile</Link>
         </div>
       </div>
       <div className="profile-tabs">

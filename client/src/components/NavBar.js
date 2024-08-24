@@ -1,21 +1,23 @@
 import React from 'react';
-import './NavBar.css'; // Import the CSS for styling
 import { Link } from 'react-router-dom';
+import './NavBar.css';
 
-const NavBar = () => {
+const NavBar = ({ user }) => {
   return (
     <nav className="navbar">
       <div className="navbar-left">
         <img src="/images/monash-logo.png" alt="Monash University Logo" className="navbar-logo" />
       </div>
       <div className="navbar-center">
-        <Link to="/" className="navbar-link">DASHBOARD</Link>
-        <Link to="/clubelections" className="navbar-link">CLUB ELECTIONS</Link>
+        <a href="/dashboard" className="navbar-link">DASHBOARD</a>
+        <a href="/clubelections" className="navbar-link">CLUB ELECTIONS</a>
       </div>
       <div className="navbar-right">
         <i className="fas fa-bell navbar-icon"></i>
-        <span className="navbar-username">Bob Wilson</span>
-        <Link to="profile"><i className="fas fa-user-circle navbar-icon"></i></Link>
+        <span className="navbar-username">{user.firstName} {user.lastName}</span>
+        <Link to="/profile">
+          <i className="fas fa-user-circle navbar-icon"></i>
+        </Link>
       </div>
     </nav>
   );
