@@ -16,6 +16,7 @@ module.exports = {
                 representativeOfClubs: req.body.representativeOfClubs,
                 dob: req.body.dob,
                 age: birthDate,
+                email: req.body.email,
                 clubs: req.body.clubs
             })
             res.status(200).json(user);
