@@ -13,9 +13,10 @@ module.exports = {
                 lastName: req.body.lastName,
                 studentId: req.body.studentId,
                 passwordHash: req.body.passwordHash,
-                isRepresentative: req.body.isRepresentative,
+                representativeOfClubs: req.body.representativeOfClubs,
                 dob: req.body.dob,
-                age: birthDate
+                age: birthDate,
+                clubs: req.body.clubs
             })
             res.status(200).json(user);
         }

@@ -51,7 +51,7 @@ const UserSchema = mongoose.Schema({
         type: String,
         required: false
     },
-    isRepresentative: {
+    representativeOfClubs: {
         type: Boolean,
         default: false
     },
