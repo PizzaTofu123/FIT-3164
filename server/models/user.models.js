@@ -51,10 +51,6 @@ const UserSchema = mongoose.Schema({
         type: String,
         required: false
     },
-    representativeOfClubs: {
-        type: Boolean,
-        default: false
-    },
     email: {
         type: String,
         required: true

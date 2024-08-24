@@ -1,5 +1,5 @@
 // what happens when routed to the router
-// what happens when routed to the router
+
 const Vote = require("../models/vote.models");
 const voteQueries = require("../queries/vote.queries");
 const flagController = require("../controller/user.election.flag.controller");

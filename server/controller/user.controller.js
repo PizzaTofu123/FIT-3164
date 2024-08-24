@@ -1,5 +1,4 @@
 // what happens when routed to the router
-// what happens when routed to the router
 const User = require("../models/user.models");
 const userQueries = require("../queries/user.queries");
 module.exports = {
@@ -13,7 +12,6 @@ module.exports = {
                 lastName: req.body.lastName,
                 studentId: req.body.studentId,
                 passwordHash: req.body.passwordHash,
-                representativeOfClubs: req.body.representativeOfClubs,
                 dob: req.body.dob,
                 age: birthDate,
                 email: req.body.email,
@@ -45,10 +43,10 @@ module.exports = {
             try {
                 //get id from ref
                 //may change this to req.body soon ?
-                const {id}  = req.params;
-                const user  = await userQueries.getOneUser(id);
+                const {userId}  = req.params;
+                const user  = await userQueries.getOneUser(userId);
                 if (!user){
-                    res.status(500).json({message : `User with id ${id} not found`});
+                    res.status(500).json({message : `User with id ${userId} not found`});
                 }
                 res.status(200).json(user);
             }
@@ -61,14 +59,14 @@ module.exports = {
     updateOneUser : async (req,res) =>{
     try {
         //get id from req params instantly
-        const {id}  = req.params;
-        const user  = await User.findByIdAndUpdate(id, req.body);
+        const {userId}  = req.params;
+        const user  = await User.findByIdAndUpdate(userId, req.body);
 
         if (!user){
-            return res.status(500).json({message : `User with id ${id} not found`});
+            return res.status(500).json({message : `User with id ${userId} not found`});
         }
 
-        const updated = await User.findById(id);
+        const updated = await User.findById(userId);
         res.status(200).json(updated);
     }
         catch (error){
@@ -78,13 +76,13 @@ module.exports = {
 
     deleteOneUser : async (req,res) =>{
         try {
-            const {id}  = req.params;
-            const user = await User.findByIdAndDelete(id);
+            const {userId}  = req.params;
+            const user = await User.findByIdAndDelete(userId);
     
             if (!user){
                 return res.status(500).json({message : 'User not found'});
             }
-            res.status(200).json({message: `deleted user with id: ${id}`});
+            res.status(200).json({message: `deleted user with id: ${userId}`});
         }
         catch (error){
             res.status(500).json({message:error.message});
