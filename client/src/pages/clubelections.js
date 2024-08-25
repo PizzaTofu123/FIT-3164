@@ -26,7 +26,7 @@ const ClubElections = () => {
 
   return (
     <div className="club-elections">
-    <h1 className='main-heading'>CLUB ELECTIONS</h1>
+    <h1 className='main-heading'>Club Elections</h1>
       {elections.map((election) => (
         <ElectionDetail
           key={election.id}

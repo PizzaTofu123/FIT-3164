@@ -4,6 +4,7 @@ import ElectionList from '../components/ElectionList';
 import Calendar from 'react-calendar';
 import '../components/Calendar.css'
 import 'react-calendar/dist/Calendar.css';
+import './index.css';
  
 const Home = () => {
     const [elections] = useState([

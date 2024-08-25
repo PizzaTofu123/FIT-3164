@@ -5,7 +5,7 @@ const ElectionItem = ({ clubName, closingDate, onVote }) => {
     <div className="election-item">
       <h3>{clubName}</h3>
       <p>Polling closes: {closingDate}</p>
-      <button onClick={onVote}>Vote</button>
+      <button className="index-button" onClick={onVote}>Vote</button>
     </div>
   );
 };

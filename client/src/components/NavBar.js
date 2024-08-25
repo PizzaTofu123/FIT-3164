@@ -9,7 +9,7 @@ const NavBar = ({ user }) => {
         <img src="/images/monash-logo.png" alt="Monash University Logo" className="navbar-logo" />
       </div>
       <div className="navbar-center">
-        <a href="/dashboard" className="navbar-link">DASHBOARD</a>
+        <a href="/" className="navbar-link">DASHBOARD</a>
         <a href="/clubelections" className="navbar-link">CLUB ELECTIONS</a>
       </div>
       <div className="navbar-right">
