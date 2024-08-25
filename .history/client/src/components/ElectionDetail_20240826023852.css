@@ -1,0 +1,141 @@
+.club-elections {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Space between each election */
+  }
+  
+  .election-detail {
+    margin-left: 170px;
+    margin-right: 170px;
+  }
+  
+  .election-info {
+    display: flex;
+    align-items: center;
+    gap: 35px; /* Space between elements */
+    background-color: #DEE9F5;
+    padding: 20px 30px;
+    border-radius: 20px;
+    text-align: center;
+  }
+  
+  .election-info p {
+    margin: 0;
+  }
+
+.polling-open {
+    background-color: #65ADA2; /* Green background */
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    width: 100px;
+  }
+  
+  .polling-closed {
+    background-color: #EB6442; /* Red background */
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    width: 100px;
+  }
+  
+  .polling-not-started {
+    background-color: #f0ad4e;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    width: 100px;
+  }
+
+  .polling-not-started {
+    margin: 0;
+    color: #3532A2;
+    width: 150px;
+  }
+  
+  .polling-not-started span {
+    color: #EB4242;
+    font-weight: bold;
+  }
+
+  .closing-date {
+    margin: 0;
+    color: #3532A2;
+    width: 150px;
+  }
+  
+  .closing-date span {
+    color: #EB4242;
+    font-weight: bold;
+  }
+  
+  .status {
+    margin: 0;
+    color: #3532A2;
+    width: 120px;
+    align-items: center;
+  }
+  
+  .status-voted {
+    background-color: #65ADA2;
+    color: white;
+    padding: 2px 10px;
+    border-radius: 5px;
+  }
+  
+  .status-pending {
+    background-color: #919191;
+    color: white;
+    padding: 2px 10px;
+    border-radius: 5px;
+  }
+
+  .election-info button {
+    padding: 10px 15px;
+    cursor: pointer;
+    width: 125px;
+    margin: 0px 20px;
+  }
+
+  .btn-preferences {
+    background-color: #919191;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .btn-vote {
+    background-color: #F5BD22;
+    color: #3532A2;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .btn-preferences:hover,
+  .btn-vote:hover {
+    background-color: darken(#919191, 10%);
+    background-color: darken(#F5BD22, 10%);
+    opacity: 0.8;
+  }
+
+  .btn-view-results {
+    background-color: #F5BD22;
+    color: #3532A2;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .btn-disabled {
+    background-color: #EBEAEA;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: not-allowed;
+  }
+  

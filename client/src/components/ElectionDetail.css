@@ -39,12 +39,23 @@
     width: 100px;
   }
   
-  .polling-not-started {
-    background-color: #f0ad4e; /* Orange background */
+  /* .polling-not-started {
+    background-color: #f0ad4e;
     color: white;
     padding: 5px 10px;
     border-radius: 5px;
     width: 100px;
+  } */
+
+  .polling-not-started {
+    margin: 0;
+    color: #3532A2;
+    width: 150px;
+  }
+  
+  .polling-not-started span {
+    color: #EB4242;
+    font-weight: bold;
   }
 
   .closing-date {

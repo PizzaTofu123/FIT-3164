@@ -45,7 +45,7 @@ const ElectionDetail = ({ clubName, pollingStatus, pollingOpenDate, closingDate,
               )}
           </p>
           <p className="closing-date">
-            Polling Closes:
+            Polling Closes
             <br />
             <span>{closingDate}</span>
           </p>
