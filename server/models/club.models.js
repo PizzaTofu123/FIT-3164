@@ -6,17 +6,20 @@ const ClubSchema = mongoose.Schema({
     clubName: {
         type: String,
         required: [true, "Please enter club name"],
-        validate: {
-            validator: function(value) {
-                return isAlphanumeric(value);
-            },
-            message: _ => 'A valid alphanumeric name is required!'
-        }
+
     },
     clubDescription: {
         type: String,
         required: true
-    }
+    },
+    clubRepresentatives: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    }],
+    clubMembers: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    }]
 },
     {
         // 2 extra fields for created and updated at

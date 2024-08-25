@@ -1,6 +1,8 @@
 // what happens when routed to the router
 const User = require("../models/user.models");
 const userQueries = require("../queries/user.queries");
+const mainQueries = require("../queries/main.queries");
+
 module.exports = {
     createOneUser : async (req,res) =>
     {
@@ -78,11 +80,14 @@ module.exports = {
         try {
             const {userId}  = req.params;
             const user = await User.findByIdAndDelete(userId);
-    
-            if (!user){
+            if (user) {
+                for(let clubId of user.clubs){
+                    await mainQueries.clubs.deleteRepresentative(user);
+                }
+                res.status(200).json({message: `deleted user with id: ${userId}`});
+            } else {
                 return res.status(500).json({message : 'User not found'});
             }
-            res.status(200).json({message: `deleted user with id: ${userId}`});
         }
         catch (error){
             res.status(500).json({message:error.message});

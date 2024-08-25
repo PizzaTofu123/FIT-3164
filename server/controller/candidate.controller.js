@@ -25,8 +25,6 @@ module.exports = {
     getOneCandidate : async (req,res) =>
         {
             try {
-                //get id from ref
-                //may change this to req.body soon ?
                 const {candidateId}  = req.params;
                 const candidate  = await candidateQueries.getOneCandidate(candidateId);
                 if (!candidate){

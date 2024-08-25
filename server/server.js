@@ -7,8 +7,8 @@ const VoteRouter = require('./routes/vote.route.js');
 const CandidateRouter = require('./routes/candidate.route.js');
 const FlagRouter = require('./routes/user.election.flag.route.js');
 const ElectionRouter = require('./routes/election.route.js')
+const ClubRouter = require('./routes/club.route.js');
 const env = require('dotenv');
-const Election = require('./models/election.model.js');
 env.config({path: './config/.env'});
 
 //middleware because not allowed to pass json through
@@ -20,6 +20,9 @@ app.use(express.urlencoded({extended: false}));
 // routes for user
 app.use("/api/users", UserRouter);
 
+// routes for clubs
+app.use("/api/clubs", ClubRouter);
+
 // routes for vote
 app.use("/api/votes", VoteRouter);
 
@@ -27,10 +30,10 @@ app.use("/api/votes", VoteRouter);
 app.use("/api/candidates", CandidateRouter);
 
 // routes for flag
-app.use("/api/Flags", FlagRouter);
+app.use("/api/flags", FlagRouter);
 
 // routes for election
-app.use("/api/elections", ElectionRouter)
+app.use("/api/elections", ElectionRouter);
 
 app.get('/', (req,res) => {
     res.send("testicles");

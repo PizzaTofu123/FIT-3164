@@ -16,15 +16,40 @@ const clubQueries = {
         return club;
     },
     deleteOneClub : async (clubId) =>{
-        const club = await Candidate.findByIdAndDelete(clubId).exec();
-        /*if (club) {
-            for(let voteId of candidate.votes){
-                await mainQueries.votes.deleteOneVote(voteId);
-            }
-            return candidate;
-        } else {
-            return null;
-        }*/
+        const club = await Club.findByIdAndDelete(clubId).exec();
+    },
+    async addMember(userId, clubId){
+        await Club.updateMany(
+            { _id:  clubId },
+            { $addToSet: { clubMembers: userId } }
+        ).exec();
+        return userId;
+    },
+
+    async deleteMember(userId, clubId){
+        await Club.updateMany(
+            { _id:  clubId },
+            { $pull: { clubMembers: userId } }
+        ).exec();
+        return userId;
+    },
+    
+    async addRepresentative(userId, clubId){
+        await Club.updateMany(
+            { _id:  clubId },
+            { $addToSet: { clubRepresentatives: userId } }
+        ).exec();
+        await this.addMember(userId, clubId);
+        return userId;
+    },
+
+    async deleteRepresentative(userId, clubId){
+        await Club.updateMany(
+            { _id:  clubId },
+            { $pull: { clubRepresentatives: userId } }
+        ).exec();
+        await this.deleteMember(userId, clubId);
+        return userId;
     }
 }
 

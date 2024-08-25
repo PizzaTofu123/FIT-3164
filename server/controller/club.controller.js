@@ -7,10 +7,11 @@ module.exports = {
     createOneClub : async (req,res) =>
     {
         try {
-            //const user  = await User.create(req.body);
             const club = await clubQueries.createOneClub({
                 clubName: req.body.clubName,
-                clubDescription: req.body.clubDescription
+                clubDescription: req.body.clubDescription,
+                clubRepresentatives: req.body.clubRepresentatives,
+                clubMembers: req.body.clubMembers,
             })
             res.status(200).json(club);
         }
@@ -25,9 +26,9 @@ module.exports = {
                 //get id from ref
                 //may change this to req.body soon ?
                 const {clubId}  = req.params;
-                const club  = await clubQueries.getOneCandidate(clubId);
+                const club  = await clubQueries.getOneClub(clubId);
                 if (!club){
-                    res.status(500).json({message : `Candidate with id ${clubId} not found`});
+                    res.status(500).json({message : `Club with id ${clubId} not found`});
                 }
                 res.status(200).json(club);
             }
@@ -74,7 +75,7 @@ module.exports = {
     deleteOneClub : async (req,res) =>{
         try {
             const {clubId}  = req.params;
-            const club = await clubQueries.deleteOneCandidate(clubId);
+            const club = await clubQueries.deleteOneClub(clubId);
             if (club) {
                 res.status(200).json({message: `deleted club with id: ${clubId}`});
             } else {
@@ -84,5 +85,66 @@ module.exports = {
         catch (error){
             res.status(500).json({message:error.message});
         }
-    }
+    },
+
+    addMember : async (req,res) =>{
+        try {
+            const {clubId}  = req.params;
+            const member = await clubQueries.addMember(req.body.userId, clubId);
+            if (member) {
+                res.status(200).json({message: `added member with id: ${member}`});
+            } else {
+                res.status(500).json({message : 'Member not added'});
+            }
+        }
+        catch (error){
+            res.status(500).json({message:error.message});
+        }
+    },
+
+    deleteMember : async (req,res) =>{
+        try {
+            const {clubId}  = req.params;
+            const member = await clubQueries.deleteMember(req.body.userId, clubId);
+            if (member) {
+                res.status(200).json({message: `deleted member with id: ${member}`});
+            } else {
+                res.status(500).json({message : 'Member not deleted'});
+            }
+        }
+        catch (error){
+            res.status(500).json({message:error.message});
+        }
+    },
+
+    addRepresentative : async (req,res) =>{
+        try {
+            const {clubId}  = req.params;
+            const member = await clubQueries.addRepresentative(req.body.userId, clubId);
+            if (member) {
+                res.status(200).json({message: `added rep with id: ${member}`});
+            } else {
+                res.status(500).json({message : 'Rep not added'});
+            }
+        }
+        catch (error){
+            res.status(500).json({message:error.message});
+        }
+    },
+
+    deleteRepresentative : async (req,res) =>{
+        try {
+            const {clubId}  = req.params;
+            const member = await clubQueries.deleteRepresentative(req.body.userId, clubId);
+            if (member) {
+                res.status(200).json({message: `deleted rep with id: ${member}`});
+            } else {
+                res.status(500).json({message : 'Rep not added'});
+            }
+        }
+        catch (error){
+            res.status(500).json({message:error.message});
+        }
+    },
+
 }
