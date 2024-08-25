@@ -1,4 +1,8 @@
-.App {
+body {
+    font-family: 'IBM Plex Sans', sans-serif;
+  }
+  
+  .App {
     text-align: center;
   }
   
@@ -99,3 +103,4 @@
     margin-top: 70px;
     padding-left: 20px;
   }
+  
