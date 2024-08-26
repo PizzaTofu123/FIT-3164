@@ -90,7 +90,7 @@
   
   .profile-info-item label {
     font-size: 16px;
-    font-weight: bold; /* Keep labels bold for clarity */
+    font-weight: bold;
     color: #333;
     width: 200px;
   }
