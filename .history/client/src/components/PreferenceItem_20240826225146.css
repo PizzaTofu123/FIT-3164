@@ -1,0 +1,91 @@
+.preferences-page {
+    margin-bottom: 40px;
+  }
+  
+  h2 {
+    color: #3532A2;
+  }
+
+  .page-header {
+    display: flex;
+    margin-left: 170px;
+  }
+
+  .back-button-preference {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    margin-right: 15px;
+  }
+  
+  .back-button-preference i {
+    font-size: 27px;
+    color: #000;
+  }
+  
+  .back-button i:hover {
+    color: gray;
+  }
+  
+  .preferences-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background-color: #DEE9F5;
+    margin: 0px 170px;
+    padding: 30px;
+    border-radius: 20px;
+  }
+  
+  .candidate-container {
+    display: flex;
+    align-items: center;
+    padding: 10px 30px;
+    border-radius: 20px;
+    background-color: white;
+    position: relative;
+  }
+  
+  .candidate-info {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+  }
+  
+  .candidate-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+  }
+  
+  .candidate-details {
+    display: flex;
+    align-items: center;
+    position: relative;
+     width: 100%;
+  }
+  
+  .candidate-name {
+    font-weight: bold;
+    color: #3532A2;
+    margin-right: auto;
+  }
+  
+  .candidate-position {
+    font-style: italic;
+    color: #3532A2;
+    position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  }
+  
+  .voted-status {
+    background-color: #65ADA2;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 5px;
+    white-space: nowrap;
+  }
+  
