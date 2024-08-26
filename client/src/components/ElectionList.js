@@ -4,7 +4,7 @@ import ElectionItem from './ElectionItem';
 const ElectionList = ({ elections, handleVote }) => {
   return (
     <div className="election-list">
-      <h2>Ongoing and Upcoming Elections</h2>
+      <h2>Ongoing Elections</h2>
       {elections.map((election) => (
         <ElectionItem
           key={election.id}

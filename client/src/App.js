@@ -34,6 +34,7 @@ function App() {
   // Function to handle profile save
   const handleSaveProfile = (updatedProfile) => {
     setUserProfile(updatedProfile);
+    localStorage.setItem('userProfile', JSON.stringify(updatedProfile));
   };
 
   // Function to handle login
@@ -48,6 +49,14 @@ function App() {
     setTimeout(() => {
       setShowLoginMessage(false);
     }, 3000);
+  };
+
+  // **New Function to handle log out**
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setUserProfile({});
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('userProfile');
   };
 
   // Getting data from backend and setting it into the backendData variable
@@ -83,7 +92,7 @@ function App() {
           {isLoggedIn ? (
             <>
               <Route path="/clubelections" element={<ClubElections />} />
-              <Route path="/profile" element={<Profile user={userProfile} />} />
+              <Route path="/profile" element={<Profile user={userProfile} handleLogout={handleLogout} />} />
               <Route path="/edit-profile" element={<EditProfilePage user={userProfile} onSave={handleSaveProfile} />} />
               <Route path="/vote/:clubName" element={<Vote />} />
               <Route path="/preferences/:clubName" element={<Preferences />} />
