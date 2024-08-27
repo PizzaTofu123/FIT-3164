@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './profile.css';
 import { Link } from 'react-router-dom';
 
-function Profile({ user }) {
+function Profile({ user, handleLogout }) {
   const [activeTab, setActiveTab] = useState('about');
 
   const renderContent = () => {
@@ -135,6 +135,9 @@ function Profile({ user }) {
       <div className="profile-content">
         {renderContent()}
       </div>
+
+      {/* Log Out Button */}
+      <button className="logout-button" onClick={handleLogout}>Log Out</button>
     </div>
   );
 }
