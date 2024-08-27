@@ -52,8 +52,12 @@ const UserSchema = mongoose.Schema({
         required: true
     },
     clubs: [{
-        type: String,
-        required: true
+        type: mongoose.Schema.Types.ObjectId,
+        default: []
+    }],
+    representingClubs: [{
+        type: mongoose.Schema.Types.ObjectId,
+        default: []
     }]
 
 

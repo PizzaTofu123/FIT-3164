@@ -19,6 +19,14 @@ const ClubSchema = mongoose.Schema({
     clubMembers: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
+    }],
+    memberEmailList: [{
+        type: String,
+        required: true
+    }],
+    representativeEmailList: [{
+        type: String,
+        required: true
     }]
 },
     {

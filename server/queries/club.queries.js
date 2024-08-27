@@ -50,6 +50,52 @@ const clubQueries = {
         ).exec();
         await this.deleteMember(userId, clubId);
         return userId;
+    },
+    checkMemberAndRepresentativeUsingEmail : async (email, clubs=[], Rclubs=[]) => {
+        for(let clubId of clubs){
+            const club = await mainQueries.clubs.getOneClub(clubId);
+            let emailList = club.memberEmailList;
+            if (emailList){
+                if (!emailList.includes(email)){
+                    return false
+                }
+                await mainQueries.clubs.addMember()
+            }
+            else {
+                return false
+            }
+        }
+        for(let clubId of Rclubs){
+            const club = await mainQueries.clubs.getOneClub(clubId);
+            let emailList = club.representativeEmailList;
+            if (emailList){
+                if (!emailList.includes(email)){
+                    return false
+                }
+            }
+            else {
+                return false
+            }
+        }
+        return true
+    },
+
+    _linkUserToClubs : async (userId, clubs =[], Rclubs =[]) => {
+        for(let clubId of clubs){
+            await mainQueries.clubs.addMember(userId,clubId);
+        }
+        for(let clubId of Rclubs){
+            await mainQueries.clubs.addRepresentative(userId,clubId);
+        }
+    },
+
+    _unlinkUserToClubs : async (userId, clubs =[], Rclubs =[]) => {
+        for(let clubId of clubs){
+            await mainQueries.clubs.deleteMember(userId,clubId);
+        }
+        for(let clubId of Rclubs){
+            await mainQueries.clubs.deleteRepresentative(userId,clubId);
+        }
     }
 }
 

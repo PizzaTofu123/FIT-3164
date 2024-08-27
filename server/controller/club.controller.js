@@ -12,6 +12,8 @@ module.exports = {
                 clubDescription: req.body.clubDescription,
                 clubRepresentatives: req.body.clubRepresentatives,
                 clubMembers: req.body.clubMembers,
+                memberEmailList: req.body.memberEmailList,
+                representativeEmailList: req.body.representativeEmailList
             })
             res.status(200).json(club);
         }
@@ -145,6 +147,6 @@ module.exports = {
         catch (error){
             res.status(500).json({message:error.message});
         }
-    },
-
+    }
 }
+

@@ -7,19 +7,26 @@ module.exports = {
     createOneUser : async (req,res) =>
     {
         try {
-            //const user  = await User.create(req.body);
-            birthDate = Math.floor((new Date() - new Date(req.body.dob).getTime()) / 3.15576e+10) // 3.115576 is miliseconds
-            const user = await userQueries.createOneUser({
-                firstName: req.body.firstName,
-                lastName: req.body.lastName,
-                studentId: req.body.studentId,
-                passwordHash: req.body.passwordHash,
-                dob: req.body.dob,
-                age: birthDate,
-                email: req.body.email,
-                clubs: req.body.clubs
-            })
-            res.status(200).json(user);
+            const inClub = await mainQueries.clubs.checkMemberAndRepresentativeUsingEmail(req.body.email, req.body.clubs, req.body.representingClubs);
+            if(!inClub){
+                res.status(200).json({message: "Wrong club/representative input"});
+            }
+            else {
+                birthDate = Math.floor((new Date() - new Date(req.body.dob).getTime()) / 3.15576e+10) // 3.115576 is miliseconds
+                const user = await userQueries.createOneUser({
+                    firstName: req.body.firstName,
+                    lastName: req.body.lastName,
+                    studentId: req.body.studentId,
+                    passwordHash: req.body.passwordHash,
+                    dob: req.body.dob,
+                    age: birthDate,
+                    email: req.body.email,
+                    clubs: req.body.clubs,
+                    representingClubs: req.body.representingClubs
+                })
+                await mainQueries.clubs._linkUserToClubs(user._id, user.clubs, user.representingClubs);
+                res.status(200).json(user);
+            }
         }
         catch (error){
             //status 500 means error
@@ -81,22 +88,18 @@ module.exports = {
             const {userId}  = req.params;
             const user = await User.findByIdAndDelete(userId);
             if (user) {
-                for(let clubId of user.clubs){
-                    await mainQueries.clubs.deleteRepresentative(user);
-                }
+                await mainQueries.clubs._unlinkUserToClubs(userId, user.clubs, user.representingClubs);
+                
                 res.status(200).json({message: `deleted user with id: ${userId}`});
             } else {
-                return res.status(500).json({message : 'User not found'});
+                res.status(500).json({message : 'User not found'});
             }
         }
         catch (error){
             res.status(500).json({message:error.message});
         }
     }
-
-    
 }
-
 
 //or
 /*
