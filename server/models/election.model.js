@@ -3,7 +3,10 @@ const mongoose = require('mongoose');
 const {isAlphanumeric, isNumeric} = require('../utility/stringValidator')
 
 const ElectionSchema = mongoose.Schema({
-
+    electionName: {
+        type: String,
+        required: true
+    },
     electionStartDate: {
         type: Date,
         required: true,
@@ -21,8 +24,14 @@ const ElectionSchema = mongoose.Schema({
 
     candidates: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Candidate"
-    }]
+        ref: "Candidate",
+        default: []
+    }],
+
+    club: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "club"
+    }
 
 },
     {
@@ -30,15 +39,6 @@ const ElectionSchema = mongoose.Schema({
         Timestamps: true
     }
 );
-
-ElectionSchema.pre('save', function (next) {
-    if (this.electionStartDate > this.electionEndDate) {
-      next(new Error('Start date cannot be after end date'));
-    } else {
-      next();
-    }
-  });
-
 //for mongodb to use
 const Election = mongoose.model("Election", ElectionSchema);
 

@@ -1,4 +1,5 @@
 const Club = require("../models/club.models");
+const User = require("../models/user.models");
 const mainQueries = require("./main.queries");
 
 const clubQueries = {
@@ -17,6 +18,14 @@ const clubQueries = {
     },
     deleteOneClub : async (clubId) =>{
         const club = await Club.findByIdAndDelete(clubId).exec();
+        const mem = club.clubMembers;
+        for(let userId of mem){
+            await User.updateMany(
+                { _id:  userId },
+                { $pull: { representingClubs: clubId, clubs: clubId } }
+            ).exec();
+        }
+        
     },
     async addMember(userId, clubId){
         await Club.updateMany(

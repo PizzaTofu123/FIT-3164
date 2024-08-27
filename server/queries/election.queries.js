@@ -8,12 +8,12 @@ const electionQueries = {
         return election
     },
 
-    getAllElections : async () => {
+    getAllElection : async () => {
         const election = await Election.find({});
         return election;
     },
 
-    getElection : async (electionId) => {
+    getOneElection : async (electionId) => {
         const election = await Election.findById(electionId);
         return election;
     },

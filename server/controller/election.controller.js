@@ -1,21 +1,24 @@
 const Election = require("../models/election.model");
 const candidateQueries = require("../queries/candidate.queries");
 const electionQueries = require("../queries/election.queries");
-const userQueries = require("../queries/user.queries")
+const userQueries = require("../queries/user.queries");
 
 module.exports = {
     createElection : async (req,res) =>
     {
         try {
-
-            const election = await electionQueries.createElection({
-                electionStartDate: req.body.startDate,
-                electionEndDate: req.body.endDate,
-                // might need tuing not 100 percent sure
-                representatives: req.body.representatives,
-                candidates: req.body.candidates
-            })
-            res.status(200).json(election);
+            if (req.body.electionStartDate > req.body.electionEndDate) {
+                res.status(200).json({message: "Start date needs to be earlier than end date"});
+            } else {
+                const election = await electionQueries.createElection({
+                    electionName: req.body.electionName,
+                    electionStartDate: req.body.electionStartDate,
+                    electionEndDate: req.body.electionEndDate,
+                    club: req.body.club,
+                    candidates: req.body.candidates 
+                })
+                res.status(200).json(election);
+            }
         }
         catch (error){
             //status 500 means error
@@ -23,11 +26,11 @@ module.exports = {
         }
     },
 
-    getAllElections : async (req,res) =>
+    getAllElection : async (req,res) =>
     {
         try {
             //use curlies cus find multiple users
-            const election  = await electionQueries.getAllElections();
+            const election  = await electionQueries.getAllElection();
             res.status(200).json(election);
         }
         catch (error){
@@ -36,15 +39,15 @@ module.exports = {
         }
     },
 
-    getElection : async (req,res) =>
+    getOneElection : async (req,res) =>
         {
             try {
                 //get id from ref
                 //may change this to req.body soon ?
-                const {id}  = req.params;
-                const election  = await electionQueries.getElection(id);
+                const {electionId}  = req.params;
+                const election  = await electionQueries.getOneElection(electionId);
                 if (!election){
-                    res.status(500).json({message : `Election with id ${id} not found`});
+                    res.status(500).json({message : `Election with id ${electionId} not found`});
                 }
                 res.status(200).json(election);
             }
@@ -57,14 +60,14 @@ module.exports = {
     updateElection : async (req,res) =>{
     try {
         //get id from req params instantly
-        const {id}  = req.params;
-        const election  = await Election.findByIdAndUpdate(id, req.body);
+        const {electionId}  = req.params;
+        const election  = await Election.findByIdAndUpdate(electionId, req.body);
 
         if (!election){
-            return res.status(500).json({message : `Election with id ${id} not found`});
+            return res.status(500).json({message : `Election with id ${electionId} not found`});
         }
 
-        const updated = await Election.findById(id);
+        const updated = await Election.findById(electionId);
         res.status(200).json(updated);
     }
         catch (error){
@@ -74,13 +77,13 @@ module.exports = {
 
     deleteElection : async (req,res) =>{
         try {
-            const {id}  = req.params;
-            const election = await Election.findByIdAndDelete(id);
+            const {electionId}  = req.params;
+            const election = await Election.findByIdAndDelete(electionId);
     
             if (!election){
                 return res.status(500).json({message : 'Election not found'});
             }
-            res.status(200).json({message: `deleted election with id: ${id}`});
+            res.status(200).json({message: `deleted election with id: ${electionId}`});
         }
         catch (error){
             res.status(500).json({message:error.message});
