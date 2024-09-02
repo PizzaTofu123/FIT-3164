@@ -5,6 +5,7 @@ const candidateQueries = {
     createOneCandidate : async (data) => {
         const candidate = new Candidate(data);
         await candidate.save();
+        await mainQueries.elections._linkCandidateToElection(data.electionId, candidate._id);
         return candidate
     },
 
@@ -56,6 +57,7 @@ const candidateQueries = {
             for(let voteId of candidate.votes){
                 await mainQueries.votes.deleteOneVote(voteId);
             }
+            await mainQueries.elections._unlinkCandidateToElection(candidate.electionId, candidate._id);
             return candidate;
         } else {
             return null;

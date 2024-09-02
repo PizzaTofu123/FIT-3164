@@ -10,6 +10,9 @@ const ElectionRouter = require('./routes/election.route.js')
 const ClubRouter = require('./routes/club.route.js');
 const env = require('dotenv');
 env.config({path: './config/.env'});
+var cors = require('cors');
+
+app.use(cors());
 
 //middleware because not allowed to pass json through
 //node js by default
@@ -50,6 +53,18 @@ app.get('/api', async (req,res) => {
         res.status(500).json({message:error.message});
     }
 });
+
+//put in connection string
+
+mongoose.connect(process.env.MONGOOSE_URI)
+.then(()=> {
+    //database connected, then the server is running
+    console.log("connected");
+    app.listen(5000, () => {
+        console.log("listening on 5000")
+    });
+})
+.catch((e) => { console.log(e);});
 
 
 //before routing nd controlling
@@ -135,16 +150,4 @@ app.delete('/api/users/:id', async (req,res) =>{
     }
 });
 */    
-
-//put in connection string
-
-mongoose.connect(process.env.MONGOOSE_URI)
-.then(()=> {
-    //database connected, then the server is running
-    console.log("connected");
-    app.listen(5000, () => {
-        console.log("listening")
-    });
-})
-.catch((e) => { console.log(e);});
 

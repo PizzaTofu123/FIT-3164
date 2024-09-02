@@ -12,6 +12,6 @@ router.get('/', ElectionController.getAllElection);
 router.get('/:electionId', ElectionController.getOneElection);
 
 router.put('/:electionId', ElectionController.updateElection);
-router.delete('/:electionId', ElectionController.deleteElection);
+router.delete('/:electionId', ElectionController.deleteOneElection);
 
 module.exports = router;

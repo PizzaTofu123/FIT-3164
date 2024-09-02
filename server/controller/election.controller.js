@@ -75,7 +75,7 @@ module.exports = {
         }
     },
 
-    deleteElection : async (req,res) =>{
+    deleteOneElection : async (req,res) =>{
         try {
             const {electionId}  = req.params;
             const election = await Election.findByIdAndDelete(electionId);
@@ -125,7 +125,7 @@ module.exports = {
             res.status(500).json({ message: error.message });
         }
     },
-
+/*
     addCandidateToElection : async(req,res) => {
         try {
             const {electionId , candidateId} = req.params;
@@ -181,73 +181,8 @@ module.exports = {
         } catch (error) {
             return res.status(500).json({ message: 'Server error', error: error.message });
         }
-    }, 
-
-    addRepresentativeToElection : async(req,res) => {
-        try {
-            const {electionId , representativeId} = req.params;
-            const election = await electionQueries.findById(electionId);
-            if (!election){
-                res.status(500).json({message : `Election with id ${electionId} not found`});
-            }
-
-            const representative = await userQueries.findById(representativeId);
-            if (!representative){
-                res.status(500).json({message : `Representative with id ${representativeId} not found`});
-            }
-
-            if(representative.isRepresentative == false){
-                res.status(500).json({message : `User with id ${representativeId} is not a representative`});
-            }
-            
-            // Add the candidate to the election's candidates array if not already added
-            if (!election.representatives.includes(representativeId)) {
-                election.representatives.push(representativeId);
-                await election.save();
-                return res.status(200).json({ message: 'Representative added successfully', election });
-            } else {
-                return res.status(400).json({ message: 'Representative already in the election' });
-            }
-
-        } catch (error) {
-            return res.status(500).json({ message: 'Server error', error: error.message });
-        }
-    },
-
-    removeRepresentativefromElection : async(req,res) => {
-        try {
-            const {electionId , representativeId} = req.params;
-            const election = await electionQueries.findById(electionId);
-            if (!election){
-                res.status(500).json({message : `Election with id ${electionId} not found`});
-            }
-
-            const representative = await userQueries.findById(representativeId);
-            if (!representative){
-                res.status(500).json({message : `Representative with id ${representativeId} not found`});
-            }
-
-            if(representative.isRepresentative == false){
-                res.status(500).json({message : `User with id ${representativeId} is not a representative`});
-            }
-
-            // Check if the candidate exists in the election's candidates array
-            const representativeIndex = election.representatives.indexOf(representativeId);
-            if (representativeIndex === -1) {
-                return res.status(404).json({ message: `Representative with id ${representativeId} not found` });
-            }
-
-            // Remove the candidate from the array
-            election.representatives.splice(representativeIndex, 1);
-            await election.save();
-
-            return res.status(200).json({ message: `Representative with id ${representativeId} removed successfully`, election });
-
-        } catch (error) {
-            return res.status(500).json({ message: 'Server error', error: error.message });
-        }
     }
-
+*/
 
     
 }

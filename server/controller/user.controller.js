@@ -2,6 +2,7 @@
 const User = require("../models/user.models");
 const userQueries = require("../queries/user.queries");
 const mainQueries = require("../queries/main.queries");
+const bcrypt = require('bcrypt');
 
 module.exports = {
     createOneUser : async (req,res) =>
@@ -13,16 +14,22 @@ module.exports = {
             }
             else {
                 birthDate = Math.floor((new Date() - new Date(req.body.dob).getTime()) / 3.15576e+10) // 3.115576 is miliseconds
+                const salt = await bcrypt.genSalt();
+                const password = await bcrypt.hash(req.body.passwordHash, salt);
                 const user = await userQueries.createOneUser({
                     firstName: req.body.firstName,
                     lastName: req.body.lastName,
                     studentId: req.body.studentId,
-                    passwordHash: req.body.passwordHash,
+                    passwordHash: password,
                     dob: req.body.dob,
                     age: birthDate,
                     email: req.body.email,
                     clubs: req.body.clubs,
-                    representingClubs: req.body.representingClubs
+                    representingClubs: req.body.representingClubs,
+                    level: req.body.level,
+                    faculty: req.body.faculty,
+                    course: req.body.course,
+                    year: req.body.year,
                 })
                 await mainQueries.clubs._linkUserToClubs(user._id, user.clubs, user.representingClubs);
                 res.status(200).json(user);
@@ -98,7 +105,23 @@ module.exports = {
         catch (error){
             res.status(500).json({message:error.message});
         }
-    }
+    },
+
+    
+    login : async (req,res) =>{
+        try {
+            const user = await User.findOne({ email:req.body.email }).exec();
+            if (user) {
+                let flag = await bcrypt.compare(req.body.password, user.passwordHash);
+                res.status(200).json(flag);
+            } else {
+                res.status(200).json(false);
+            }
+        }
+        catch (error){
+            res.status(500).json({message:error.message});
+        }
+    },
 }
 
 //or

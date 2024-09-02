@@ -58,9 +58,23 @@ const UserSchema = mongoose.Schema({
     representingClubs: [{
         type: mongoose.Schema.Types.ObjectId,
         default: []
-    }]
-
-
+    }],
+    level: {
+        type: String,
+        required: true
+    },
+    faculty: {
+        type: String,
+        required: true
+    },
+    course: {
+        type: String,
+        required: true
+    },
+    year: {
+        type: Number,
+        required: true
+    },
 },
     {
         // 2 extra fields for created and updated at

@@ -18,6 +18,19 @@ const electionQueries = {
         return election;
     },
 
+    deleteOneElection : async (electionId) =>{
+        const election = await Election.findByIdAndDelete(electionId).exec();
+        if (election) {
+            for(let candidateId of election.candidates){
+                await mainQueries.Candidates.deleteOneCandidate(candidateId);
+                this._unlinkCandidateToElection(electionId, candidateId);
+            }
+            return election;
+        } else {
+            return null;
+        }
+    },
+
     async _linkCandidateToElection(electionId, candidateId){
         await Election.updateMany(
             { _id:  electionId },
@@ -30,23 +43,8 @@ const electionQueries = {
             { _id:  electionId },
             { $pull: { candidates: candidateId } }
         ).exec();
-    },
-
-    async _linkRepresentativeToElection(electionId, representativeId){
-        await Election.updateMany(
-            { _id:  electionId },
-            { $addToSet: { representatives: representativeId } }
-        ).exec();
-    },
-
-    async _unlinkRepresentativeToElection(electionId, representativeId){
-        await Election.updateMany(
-            { _id:  electionId },
-            { $pull: { representatives: representativeId } }
-        ).exec();
     }
-    
 }
 
-mainQueries.categories = electionQueries;
+mainQueries.elections = electionQueries;
 module.exports = electionQueries;

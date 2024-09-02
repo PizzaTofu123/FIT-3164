@@ -16,12 +16,6 @@ const ElectionSchema = mongoose.Schema({
         type: Date,
         required: true
     },
-
-    representatives: [{
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: "User"
-    }],
-
     candidates: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Candidate",
