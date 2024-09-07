@@ -13,7 +13,7 @@ module.exports = {
                 clubRepresentatives: req.body.clubRepresentatives,
                 clubMembers: req.body.clubMembers,
                 memberEmailList: req.body.memberEmailList,
-                representativeEmailList: req.body.representativeEmailList
+                representativeEmailList: req.body.representativeEmailList,
             })
             res.status(200).json(club);
         }
@@ -65,7 +65,7 @@ module.exports = {
     {
         try {
             //use curlies cus find multiple users
-            const club  = await clubQueries.getAllUser();
+            const club  = await clubQueries.getAllClub();
             res.status(200).json(club);
         }
         catch (error){

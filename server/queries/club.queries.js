@@ -8,14 +8,17 @@ const clubQueries = {
         await club.save();
         return club;
     },
+    
     getAllClub : async () => {
         const club = await Club.find({});
         return club;
     },
+
     getOneClub : async (clubId) => {
         const club = await Club.findById(clubId);
         return club;
     },
+
     deleteOneClub : async (clubId) =>{
         const club = await Club.findByIdAndDelete(clubId).exec();
         const mem = club.clubMembers;
@@ -105,7 +108,21 @@ const clubQueries = {
         for(let clubId of Rclubs){
             await mainQueries.clubs.deleteRepresentative(userId,clubId);
         }
-    }
+    },
+
+    _linkElectionToClubs : async (electionId, clubId) => {
+        await Club.updateMany(
+            { _id:  clubId },
+            { $addToSet: { elections: electionId } }
+        ).exec();
+    },
+
+    _unlinkElectionToClubs  : async (electionId, clubId) => {
+        await Club.updateMany(
+            { _id:  clubId },
+            { $pull: { elections: electionId } }
+        ).exec();
+    },
 }
 
 mainQueries.clubs = clubQueries;

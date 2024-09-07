@@ -7,15 +7,6 @@ const ElectionSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    electionStartDate: {
-        type: Date,
-        required: true,
-        default: Date.now
-    },
-    electionEndDate: {
-        type: Date,
-        required: true
-    },
     candidates: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Candidate",
