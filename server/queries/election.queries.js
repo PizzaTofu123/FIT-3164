@@ -5,6 +5,7 @@ const electionQueries = {
     createElection : async (data) => {
         const election = new Election(data);
         await election.save();
+        await mainQueries.clubs._linkElectionToClubs(election._id, election.club);
         return election
     },
 
@@ -23,8 +24,8 @@ const electionQueries = {
         if (election) {
             for(let candidateId of election.candidates){
                 await mainQueries.Candidates.deleteOneCandidate(candidateId);
-                this._unlinkCandidateToElection(electionId, candidateId);
             }
+            await mainQueries.clubs._unlinkElectionToClubs(election._id, election.club);
             return election;
         } else {
             return null;

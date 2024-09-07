@@ -18,7 +18,14 @@ import MembersSignIn from './pages/MembersSignIn';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 function App() {
-  const [backendData, setBackendData] = useState([{}]);
+  const [data, setData] = useState([{}]);
+  // Getting data from backend and setting it into the backendData variable
+  useEffect(() => {
+    fetch('http://localhost:5000/api/')
+      .then(res  => res.json())
+      .then(data => setData(data))
+      .catch(err => console.error(err));
+  }, []);
 
   // Initialize state from local storage
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
@@ -59,15 +66,6 @@ function App() {
     localStorage.removeItem('userProfile');
   };
 
-  // Getting data from backend and setting it into the backendData variable
-  useEffect(() => {
-    fetch('/api')
-      .then(response => response.json())
-      .then(data => {
-        setBackendData(data);
-      });
-  }, []);
-
   return (
     <div>
       <Router>
@@ -104,12 +102,6 @@ function App() {
         </Routes>
       </Router>
 
-      {/* Render the backend data below the NavBar */}
-      {backendData.map((dataObj, index) => (
-        <p key={index} style={{ fontSize: 20, color: 'black' }}>
-          {dataObj.firstName}
-        </p>
-      ))}
     </div>
   );
 }

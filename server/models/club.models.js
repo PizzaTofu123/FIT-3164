@@ -27,7 +27,23 @@ const ClubSchema = mongoose.Schema({
     representativeEmailList: [{
         type: String,
         required: true
-    }]
+    }],
+    electionStartDate: {
+        type: Date,
+        default: null
+    },
+    electionEndDate: {
+        type: Date,
+        default: null
+    },
+    electionOngoingFlag: {
+        type: Boolean,
+        deafult:false
+    },
+    elections: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Election"
+    }],
 },
     {
         // 2 extra fields for created and updated at
