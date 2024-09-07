@@ -50,6 +50,7 @@
   }
   
   .signup-heading {
+    color: black;
     font-size: 2em;
     margin-bottom: 10px;
     text-align: center;
@@ -113,6 +114,6 @@
   }
   
   .signup-button:hover {
-    background-color: #0056b3;
+    background-color: #005a92;
   }
   

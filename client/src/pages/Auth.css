@@ -20,10 +20,10 @@ body, html {
   margin-bottom: 10px;
 }
 
-h2-auth {
+.h2-auth {
   color: black;
   font-size: 2em;
-  font-weight: 400;
+  font-weight: 200;
   margin-bottom: 20px;
 }
 
@@ -67,7 +67,7 @@ h2-auth {
 }
 
 .auth-button:hover {
-  background-color: #014d7c;
+  background-color: #005a92;
 }
 
 .forgot-password {
