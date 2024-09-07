@@ -12,7 +12,7 @@ function SignIn() {
     // Implement authentication logic here
     if (email && password) {
       console.log('Sign In Successful');
-      navigate('/dashboard'); // Redirect to dashboard or main page
+      navigate('/dashboard'); // Redirect to dashboard
     } else {
       alert('Please enter both email and password');
     }
@@ -30,7 +30,6 @@ function SignIn() {
           className="auth-input"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter your Monash email"
           required
         />
         <label htmlFor="password">Password</label>
@@ -40,7 +39,6 @@ function SignIn() {
           className="auth-input"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="Enter your password"
           required
         />
         <div className="forgot-password">

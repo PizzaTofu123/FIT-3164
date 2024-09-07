@@ -1,0 +1,118 @@
+.signup-wrapper {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .signup-header {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+  }
+  
+  .signup-logo {
+    width: 150px;
+    height: auto;
+  }
+  
+  .signup-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+  }
+  
+  .signup-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .signup-illustration {
+    width: 500px;
+    height: auto;
+  }
+  
+  .signup-form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 400px;
+  }
+  
+  .signup-heading {
+    font-size: 2em;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  
+  .signup-text {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .signup-link {
+    color: #0056b3;
+    text-decoration: none;
+  }
+  
+  .signup-link:hover {
+    text-decoration: underline;
+  }
+  
+  .signup-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .signup-form-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    width: 100%;
+  }
+  
+  .signup-label {
+    font-weight: bold;
+    font-size: 1em;
+    white-space: nowrap;
+    width: 300px;
+    text-align: left;
+    margin-right: 20px;
+  }
+  
+  .signup-input, .signup-date-input {
+    padding: 10px;
+    flex-grow: 1;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 0.5em;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .signup-button {
+    padding: 12px;
+    font-size: 1.2em;
+    background-color: #016DAE;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+  
+  .signup-button:hover {
+    background-color: #0056b3;
+  }
+  
