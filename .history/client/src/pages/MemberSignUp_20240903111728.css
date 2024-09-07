@@ -1,0 +1,112 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'IBM Plex Sans', sans-serif;
+  }
+  
+  .signup-page {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    /* padding: 40px 80px; */
+    background-color: #fff;
+  }
+  
+  .monash-logo-container {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
+  }
+  
+  .monash-logo {
+    width: 180px;
+  }
+  
+  .signup-content {
+    display: flex;
+    width: 100%;
+    margin-top: 0px;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .signup-left {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .signup-illustration {
+    width: 90%;
+    max-width: 500px;
+    height: auto;
+  }
+  
+  .signup-right {
+    flex: 1;
+    padding: 0px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .back-button {
+    font-size: 1.5em;
+    background: none;
+    border: none;
+    border-radius: 100px;
+    cursor: pointer;
+    color: black;
+    margin-bottom: 20px;
+    align-self: flex-start;
+  }
+  
+  h2 {
+    font-size: 1.8em;
+    font-weight: bold;
+    margin-bottom: 30px;
+    color: #333;
+    text-align: center;
+  }
+  
+  .signup-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+    width: 70%;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size:1.1em;
+  }
+  
+  .signup-form input {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.1em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .submit-button {
+    padding: 12px 50px;
+    background-color: #016DAE;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    font-size: 1.2em;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+  
+  .submit-button:hover {
+    background-color: #003d80;
+  }

@@ -29,6 +29,7 @@ function SignUp() {
   };
 
   return (
+<<<<<<< HEAD
     <div className="signup-wrapper">
       <div className="signup-header">
         <img src="/images/monash_logo_login.png" alt="Monash University Logo" className="signup-logo" />
@@ -120,6 +121,15 @@ function SignUp() {
           </form>
         </div>
       </div>
+=======
+    <div className="auth-container">
+      <img src="/images/monash_logo_login.png" alt="Monash University Logo" className="auth-logo" />
+      <h2 className='h2-auth'>Create an account</h2>
+      <button className="auth-button" onClick={() => navigate('/member-signup')}>Members</button>
+      <button className="auth-button">Committee</button>
+      <p className="auth-text">Already have an account?</p>
+      <Link to="/" className="auth-link">Sign In</Link>
+>>>>>>> b151cf31c8e5ebc660a5c577ddcd34b93da09b96
     </div>
   );
 }

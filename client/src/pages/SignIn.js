@@ -21,7 +21,7 @@ function SignIn() {
   return (
     <div className="auth-container">
       <img src="/images/monash_logo_login.png" alt="Monash University Logo" className="auth-logo" />
-      <h2>Sign In</h2>
+      <h2 className='h2-auth'>Sign In</h2>
       <form onSubmit={handleSignIn} className="auth-form">
         <label htmlFor="email">Monash Email</label>
         <input
