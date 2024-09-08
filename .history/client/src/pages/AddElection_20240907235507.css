@@ -1,0 +1,81 @@
+/* Center the form on the page */
+.adde-election {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+  }
+  
+  /* Form heading */
+  .create-election h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  /* Form fields */
+  .create-election form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Label styling */
+  .create-election label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  /* Input fields */
+  .create-election input,
+  .create-election textarea,
+  .create-election select {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+  
+  /* Textarea styling */
+  .create-election textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+  
+  /* Buttons styling */
+  .create-election .buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .create-election button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  /* Different button colors */
+  .create-election button[type="submit"] {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  .create-election button[type="button"] {
+    background-color: #ffc107;
+    color: white;
+  }
+  
+  .create-election button[type="button"]:nth-child(2) {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  /* Add hover effect to buttons */
+  .create-election button:hover {
+    opacity: 0.9;
+  }
+  
