@@ -20,4 +20,6 @@ router.put('/members/delete/:clubId', ClubController.deleteMember);
 router.put('/representatives/add/:clubId', ClubController.addRepresentative);
 router.put('/representatives/delete/:clubId', ClubController.deleteRepresentative);
 
+router.put('/election/start/:clubId', ClubController.startElection); 
+
 module.exports = router;

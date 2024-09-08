@@ -123,6 +123,15 @@ const clubQueries = {
             { $pull: { elections: electionId } }
         ).exec();
     },
+
+    endElection  : async () => {
+        const d = new Date();
+        await Club.updateMany(
+            { electionEndDate:  {$lt : d.getTime()
+            }},
+            { electionOngoingFlag: false, electionStartDate: null, electionEndDate: null }
+        ).exec();
+    },
 }
 
 mainQueries.clubs = clubQueries;

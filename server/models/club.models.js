@@ -12,6 +12,10 @@ const ClubSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    image: {
+        type: String,
+        required: false
+    },
     clubRepresentatives: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
@@ -44,6 +48,7 @@ const ClubSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Election"
     }],
+    
 },
     {
         // 2 extra fields for created and updated at

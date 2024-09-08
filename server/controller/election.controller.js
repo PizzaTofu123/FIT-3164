@@ -7,18 +7,14 @@ module.exports = {
     createElection : async (req,res) =>
     {
         try {
-            if (req.body.electionStartDate > req.body.electionEndDate) {
-                res.status(200).json({message: "Start date needs to be earlier than end date"});
-            } else {
-                const election = await electionQueries.createElection({
-                    electionName: req.body.electionName,
-                    electionStartDate: req.body.electionStartDate,
-                    electionEndDate: req.body.electionEndDate,
-                    club: req.body.club,
-                    candidates: req.body.candidates 
-                })
-                res.status(200).json(election);
-            }
+
+            const election = await electionQueries.createElection({
+                electionName: req.body.electionName,
+                club: req.body.club,
+                candidates: req.body.candidates 
+            })
+            res.status(200).json(election);
+            
         }
         catch (error){
             //status 500 means error
