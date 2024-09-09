@@ -63,6 +63,7 @@ const clubQueries = {
         await this.deleteMember(userId, clubId);
         return userId;
     },
+    
     checkMemberAndRepresentativeUsingEmail : async (email, clubs=[], Rclubs=[]) => {
         for(let clubId of clubs){
             const club = await mainQueries.clubs.getOneClub(clubId);

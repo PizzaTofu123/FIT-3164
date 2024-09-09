@@ -16,4 +16,7 @@ router.delete('/:userId', UserController.deleteOneUser);
 
 router.post('/login', UserController.login);
 
+router.post('/populate', UserController.populateUser);
+router.post('/populateClub', UserController.populateClub);
+
 module.exports = router;

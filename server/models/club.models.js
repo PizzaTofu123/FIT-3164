@@ -48,6 +48,11 @@ const ClubSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Election"
     }],
+    image: {
+        type: String,
+        required: false,
+        default: null
+    },
     
 },
     {

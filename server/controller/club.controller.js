@@ -14,7 +14,8 @@ module.exports = {
                 clubMembers: req.body.clubMembers,
                 memberEmailList: req.body.memberEmailList,
                 representativeEmailList: req.body.representativeEmailList,
-                image: req.body.image
+                image: req.body.image,
+                electionOngoingFlag: false
             })
             res.status(200).json(club);
         }

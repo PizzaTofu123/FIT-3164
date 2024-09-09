@@ -2,22 +2,27 @@ const Election = require("../models/election.model");
 const candidateQueries = require("../queries/candidate.queries");
 const electionQueries = require("../queries/election.queries");
 const userQueries = require("../queries/user.queries");
+const mainQueries = require("../queries/main.queries");
 
 module.exports = {
     createElection : async (req,res) =>
     {
         try {
-
-            const election = await electionQueries.createElection({
-                electionName: req.body.electionName,
-                club: req.body.club,
-                candidates: req.body.candidates 
-            })
-            res.status(200).json(election);
+            const club = await mainQueries.clubs.getOneClub(club);
+            if (club.electionOngoingFlag){
+                const election = await electionQueries.createElection({
+                    electionName: req.body.electionName,
+                    club: req.body.club,
+                    candidates: req.body.candidates 
+                })
+                res.status(200).json(election);
+            }
+            else {
+                res.status(200).json({message: "no election ongoing"});
+            }
             
         }
         catch (error){
-            //status 500 means error
             res.status(500).json({message:error.message});
         }
     },

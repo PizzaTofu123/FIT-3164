@@ -1,5 +1,6 @@
 // what happens when routed to the router
 const User = require("../models/user.models");
+const Club = require("../models/club.models");
 const userQueries = require("../queries/user.queries");
 const mainQueries = require("../queries/main.queries");
 const bcrypt = require('bcrypt');
@@ -117,6 +118,85 @@ module.exports = {
             } else {
                 res.status(200).json(false);
             }
+        }
+        catch (error){
+            res.status(500).json({message:error.message});
+        }
+    },
+
+    populateUser : async (req,res) =>{
+        try{
+            const levelArray = ["Undergraduate", "Postgraduate"];
+            const faculties = ["Arts", "Business", "Economics", "Education", "Engineering", "IT", "Science", "Law", "Medicine", "Pharmacy"];
+            function randomIntFromInterval(min, max) { // min and max included 
+                return Math.floor(Math.random() * (max - min + 1) + min);
+            }
+            let userArray = [];
+            for (let i = 1; i < 451; i++) {
+                let level = levelArray[Math.floor(Math.random() * levelArray.length)];
+                let faculty = faculties[Math.floor(Math.random() * faculties.length)];
+                let salt = await bcrypt.genSalt();
+                let password = await bcrypt.hash("clubmem" + i, salt);
+                userArray.push({
+                    firstName: "club",
+                    lastName: "mem" + i,
+                    studentId: randomIntFromInterval(11111111, 99999999),
+                    passwordHash: password,
+                    dob: new Date(),
+                    age: randomIntFromInterval(17, 62),
+                    email: "clubmem" + i + "@gmail.com",
+                    clubs: ["66de83a667bdf5235649ef91"],
+                    representingClubs: [],
+                    level: level,
+                    faculty: faculty,
+                    course: level + " of " +faculty,
+                    year: randomIntFromInterval(1, 4),
+                })
+            }
+            await User.insertMany(userArray).then(function () {
+                console.log("Data inserted") 
+            }).catch(function (error) {
+                console.log(error)     
+            });
+            const users = await userQueries.getAllUser();
+            let memList = [];
+            let repList = [];
+            for (let i = 0; i < users.length; i ++){
+                let user = users[i]
+                memList.push(user._id);
+                if (user.representingClubs){
+                    repList.push(user._id)
+                }
+            }
+            const club  = await Club.findByIdAndUpdate(req.body.clubId, {
+                clubMembers: memList,
+                clubRepresentatives: repList
+            });
+            res.status(200).json({message: "done"});
+
+        }
+        catch (error){
+            res.status(500).json({message:error.message});
+        }
+    },
+
+    populateClub: async (req,res) =>{
+        try{
+            const users = await userQueries.getAllUser();
+            let memList = [];
+            let repList = [];
+            for (let i = 0; i < users.length; i ++){
+                let user = users[i]
+                memList.push(user._id);
+                if (user.representingClubs){
+                    repList.push(user._id)
+                }
+            }
+            const club  = await Club.findByIdAndUpdate(req.body.clubId, {
+                clubMembers: memList,
+                clubRepresentatives: repList
+            });
+            res.status(200).json({message:"Done"});
         }
         catch (error){
             res.status(500).json({message:error.message});
