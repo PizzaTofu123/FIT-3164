@@ -2,7 +2,7 @@ import React from 'react';
 import './ElectionDetail.css';
 import { useNavigate } from 'react-router-dom';
 
-const ElectionDetail = ({ clubName, pollingStatus, pollingOpenDate, closingDate, voteStatus, onVote, onViewResults }) => {
+const ElectionDetail = ({ clubName, pollingStatus, pollingOpenDate, closingDate, voteStatus}) => {
     const isPollingOpen = pollingStatus === 'open';
     const isPollingClosed = pollingStatus === 'closed';
     const isPollingNotStarted = pollingStatus === 'not_started';

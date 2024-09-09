@@ -4,45 +4,46 @@ import UpcomingElectionList from "../components/UpcomingElectionList";
 import './index.css';
  
 const Home = () => {
-    const [elections] = useState([
-        { id: 1, clubLogo: 'https://cdn-icons-png.flaticon.com/128/6062/6062646.png', clubName: 'Monash Association of Coding (MAC)', closingDate: '28/08/2024' },
-        { id: 2, clubLogo: 'https://cdn-icons-png.flaticon.com/128/9305/9305711.png', clubName: 'Monash Cyber Security Club (MONSEC)', closingDate: '15/09/2024' },
-      ]);
+    // const [elections] = useState([
+    //     { id: 1, clubLogo: 'https://cdn-icons-png.flaticon.com/128/6062/6062646.png', clubName: 'Monash Association of Coding (MAC)', closingDate: '28/08/2024' },
+    //     { id: 2, clubLogo: 'https://cdn-icons-png.flaticon.com/128/9305/9305711.png', clubName: 'Monash Cyber Security Club (MONSEC)', closingDate: '15/09/2024' },
+    //   ]);
     
       const [upcomingElections] = useState([
         { id: 3, clubLogo: 'https://cdn-icons-png.flaticon.com/128/3171/3171927.png', clubName: 'Monash Film Society', openingDate: '25/10/2024' },
     ]);
 
-    // const [elections, setElections] = useState([]);
-    // // const [upcomingElections, setUpcomingElections] = useState([]);
-    // const [loading, setLoading] = useState(true);
-    // const [error, setError] = useState(null);
+    const [elections, setElections] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    // // Fetch elections and upcoming elections from the backend API
-    // useEffect(() => {
-    //     const fetchElections = async () => {
-    //         try {
-    //             setLoading(true); // Set loading to true while data is being fetched
+    useEffect(() => {
+        const fetchElections = async () => {
+            try {
+                setLoading(true);
+                const response = await fetch('http://localhost:5000/api/clubs');
+                const data = await response.json();
 
-    //             // Fetch ongoing elections
-    //             const responseElections = await fetch('http://localhost:5000/api/clubs');
-    //             const dataElections = await responseElections.json();
-    //             setElections(dataElections); // Update the state with the fetched elections data
+                // Filter only ongoing elections based on the `electionOngoingFlag`
+                const ongoingElections = data.filter(election => election.electionOngoingFlag);
 
-    //             // Fetch upcoming elections
-    //             // const responseUpcomingElections = await fetch('https://your-backend-api.com/upcoming-elections');
-    //             // const dataUpcomingElections = await responseUpcomingElections.json();
-    //             // setUpcomingElections(dataUpcomingElections); // Update the state with the fetched upcoming elections data
+                const formattedElections = ongoingElections.map(election => ({
+                    id: election._id,
+                    clubName: election.clubName,
+                    closingDate: new Date(election.electionEndDate).toLocaleDateString(),
+                    clubLogo: 'https://cdn-icons-png.flaticon.com/128/6062/6062646.png' // modify after logo added in database
+                }));
 
-    //         } catch (err) {
-    //             setError("Error fetching election data");
-    //         } finally {
-    //             setLoading(false); // Set loading to false once the data is fetched
-    //         }
-    //     };
+                setElections(formattedElections);
+            } catch (err) {
+                setError("Error fetching election data");
+            } finally {
+                setLoading(false);
+            }
+        };
 
-    //     fetchElections(); // Call the function to fetch data
-    // }, []); // Empty dependency array means this will run once when the component mounts
+        fetchElections();
+    }, []);
       
       const handleVote = (electionId) => {
         console.log('Vote button clicked for election:', electionId); 
@@ -51,6 +52,14 @@ const Home = () => {
       const handleAlert = (electionId) => {
         console.log('Alert me button clicked for upcoming election:', electionId);
     };
+
+    if (loading) {
+      return <div>Loading elections...</div>;
+  }
+
+  if (error) {
+      return <div>{error}</div>;
+  }
 
     return (
         <div>
