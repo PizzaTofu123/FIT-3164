@@ -17,6 +17,7 @@ import ClubSignUp from './pages/ClubSignUp';
 import MembersSignIn from './pages/MembersSignIn';
 import Organisers from './pages/organisers';
 import AddElection from './pages/AddElection';
+import EducationDetails from './pages/EducationDetails';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 function App() {
@@ -86,6 +87,7 @@ function App() {
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/member-signup" element={<MemberSignUp />} />
+          <Route path="/education-details" element={<EducationDetails />} />
           <Route path="/club-signup" element={<ClubSignUp />} />
           <Route path="/members-signin" element={<MembersSignIn handleLogin={handleLogin} />} />
 

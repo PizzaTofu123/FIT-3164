@@ -24,8 +24,15 @@ function SignUp() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form submitted', formData);
-    navigate('/dashboard'); // Redirect after successful form submission
+
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+
+    // Store personal info in localStorage or state before navigating to next step
+    localStorage.setItem('personalInfo', JSON.stringify(formData));
+    navigate('/education-details'); // Navigate to the next form
   };
 
   return (
@@ -43,7 +50,6 @@ function SignUp() {
             Already have an account? <Link to="/signin" className="signup-link">Sign In</Link>
           </p>
           <form onSubmit={handleSubmit} className="signup-form">
-            
             <div className="signup-form-group">
               <label className="signup-label">First Name</label>
               <input 
@@ -87,7 +93,7 @@ function SignUp() {
                 name="dob" 
                 value={formData.dob} 
                 onChange={handleChange} 
-                className="signup-input signup-date-input" 
+                className="signup-input" 
                 required 
               />
             </div>

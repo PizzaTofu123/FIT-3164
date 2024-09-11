@@ -1,4 +1,6 @@
-.signup-wrapper {
+/* EducationDetails.css */
+
+.education-wrapper {
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -9,19 +11,19 @@
     box-sizing: border-box;
   }
   
-  .signup-header {
+  .education-header {
     width: 100%;
     display: flex;
     justify-content: flex-start;
-    margin-bottom: 20px;
+    margin-bottom: 0px;
   }
   
-  .signup-logo {
+  .education-logo {
     width: 150px;
     height: auto;
   }
   
-  .signup-container {
+  .education-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -31,78 +33,65 @@
     margin: auto;
   }
   
-  .signup-image {
+  .education-image {
     display: flex;
     justify-content: center;
     align-items: center;
   }
   
-  .signup-illustration {
-    width: 500px;
+  .education-illustration {
+    width: 400px;
     height: auto;
   }
   
-  .signup-form-container {
+  .education-form-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     max-width: 400px;
-  }
-  
-  .signup-heading {
-    color: black;
-    font-size: 2em;
-    margin-bottom: 10px;
     text-align: center;
   }
   
-  .signup-text {
+  .education-heading {
+    color: black;
+    font-size: 2em;
+    margin-bottom: 10px;
+  }
+  
+  .education-text {
     text-align: center;
     margin-bottom: 20px;
   }
   
-  .signup-link {
-    color: #0056b3;
-    text-decoration: none;
-  }
-  
-  .signup-link:hover {
-    text-decoration: underline;
-  }
-  
-  .signup-form {
+  .education-form-group {
     display: flex;
-    flex-direction: column;
-  }
-  
-  .signup-form-group {
-    display: flex;
-    justify-content: space-between;
+    justify-content: center; /* Center the label and input vertically */
     align-items: center;
     margin-bottom: 15px;
     width: 100%;
+    text-align: left;
   }
   
-  .signup-label {
+  .education-label {
     font-weight: bold;
     font-size: 1em;
     white-space: nowrap;
-    width: 300px;
+    width: 100px; /* Adjust the width to ensure proper alignment */
     text-align: left;
     margin-right: 20px;
   }
   
-  .signup-input, .signup-date-input {
+  .education-input {
     padding: 10px;
     flex-grow: 1;
     border-radius: 5px;
     border: 1px solid #ccc;
-    font-size: 0.5em;
+    font-size: 1.0em;
     width: 100%;
     box-sizing: border-box;
   }
   
-  .signup-button {
+  .education-button {
     padding: 12px;
     font-size: 1.2em;
     background-color: #016DAE;
@@ -115,7 +104,23 @@
     width: 50%;
   }
   
-  .signup-button:hover {
-    background-color: #005a92;
+  .education-button:hover {
+    background-color: #014d7c;
+  }
+  
+  /* Adding back button styling */
+  .education-back-button {
+    font-size: 1.5rem;
+    color: black;
+    border: none;
+    background: none;
+    cursor: pointer;
+    position: absolute;
+    top: 200px;
+    left: 750px;
+  }
+  
+  .education-back-button:hover {
+    text-decoration: underline;
   }
   

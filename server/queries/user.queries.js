@@ -3,9 +3,13 @@ const mainQueries = require("./main.queries");
 
 const userQueries = {
     createOneUser : async (data) => {
-        const user = new User(data);
-        await user.save();
-        return user
+        try {
+            const user = new User(data);
+            await user.save();
+            return user;
+        } catch (error) {
+            throw new Error('Error creating user');
+        }
     },
     getAllUser : async () => {
         const user = await User.find({});
