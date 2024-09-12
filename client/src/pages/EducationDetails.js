@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import './EducationDetails.css'; // Importing EducationDetails specific CSS
+import './EducationDetails.css';
 
 function EducationDetails() {
   const [educationData, setEducationData] = useState({
@@ -252,68 +252,68 @@ function EducationDetails() {
     "International Relations and Journalism",
     "International Sustainable Tourism Management",
     "Interpreting and Translation Studies",
-"Journalism",
-"Juris Doctor",
-"Doctor of Philosophy (Law)",
-"Laws",
-"Legal Studies",
-"Magnetic Resonance Imaging",
-"Management",
-"Management and Accounting",
-"Management and Advanced Finance",
-"Management and Applied Marketing",
-"Management and Behaviour and Systemic Change",
-"Management and Regulation and Compliance",
-"Marketing and Digital Communications",
-"Mathematics",
-"Medical Ultrasound",
-"Medicine, Nursing and Health Sciences",
-"Mental Health Sciences",
-"Monash Sustainable Development Institute",
-"Monash University Accident Research Centre",
-"Music",
-"Nursing Practice",
-"Nutrition and Dietetics",
-"Occupational and Environmental Health",
-"Occupational Therapy Practice",
-"Paramedic Practitioner",
-"Perioperative Medicine",
-"Pharmaceutical Science",
-"Pharmacy and Pharmaceutical Sciences",
-"Pharmacy Practice",
-"Science",
-"Philosophy",
-"Education",
-"Physiotherapy",
-"Podiatric Medicine",
-"Professional Accounting",
-"Professional Accounting and Business Law",
-"Professional Certificate of Clinical Simulation",
-"Professional Certificate of Epidemiology",
-"Professional Certificate of Health Professions Education",
-"Professional Certificate of Public Health",
-"Professional Engineering",
-"Professional Psychology",
-"Project Management",
-"Public Health",
-"Public Policy",
-"Radiation Therapy",
-"Regulation and Compliance",
-"Reproductive Sciences",
-"Road Safety",
-"Science",
-"Social Work",
-"Strategic Communications Management",
-"Surgery",
-"Teaching",
-"Technology and Regulation",
-"TESOL",
-"Theatre Performance",
-"Translation Studies",
-"Transport and Mobility Planning",
-"Urban Planning and Design",
-"Wound Care",
-"X-ray Image Interpretation",
+    "Journalism",
+    "Juris Doctor",
+    "Doctor of Philosophy (Law)",
+    "Laws",
+    "Legal Studies",
+    "Magnetic Resonance Imaging",
+    "Management",
+    "Management and Accounting",
+    "Management and Advanced Finance",
+    "Management and Applied Marketing",
+    "Management and Behaviour and Systemic Change",
+    "Management and Regulation and Compliance",
+    "Marketing and Digital Communications",
+    "Mathematics",
+    "Medical Ultrasound",
+    "Medicine, Nursing and Health Sciences",
+    "Mental Health Sciences",
+    "Monash Sustainable Development Institute",
+    "Monash University Accident Research Centre",
+    "Music",
+    "Nursing Practice",
+    "Nutrition and Dietetics",
+    "Occupational and Environmental Health",
+    "Occupational Therapy Practice",
+    "Paramedic Practitioner",
+    "Perioperative Medicine",
+    "Pharmaceutical Science",
+    "Pharmacy and Pharmaceutical Sciences",
+    "Pharmacy Practice",
+    "Science",
+    "Philosophy",
+    "Education",
+    "Physiotherapy",
+    "Podiatric Medicine",
+    "Professional Accounting",
+    "Professional Accounting and Business Law",
+    "Professional Certificate of Clinical Simulation",
+    "Professional Certificate of Epidemiology",
+    "Professional Certificate of Health Professions Education",
+    "Professional Certificate of Public Health",
+    "Professional Engineering",
+    "Professional Psychology",
+    "Project Management",
+    "Public Health",
+    "Public Policy",
+    "Radiation Therapy",
+    "Regulation and Compliance",
+    "Reproductive Sciences",
+    "Road Safety",
+    "Science",
+    "Social Work",
+    "Strategic Communications Management",
+    "Surgery",
+    "Teaching",
+    "Technology and Regulation",
+    "TESOL",
+    "Theatre Performance",
+    "Translation Studies",
+    "Transport and Mobility Planning",
+    "Urban Planning and Design",
+    "Wound Care",
+    "X-ray Image Interpretation",
   ];
 
   const handleChange = (e) => {
@@ -327,33 +327,11 @@ function EducationDetails() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Get personal info from localStorage
-    const personalInfo = JSON.parse(localStorage.getItem('personalInfo'));
+    // Store education info in localStorage
+    localStorage.setItem('educationInfo', JSON.stringify(educationData));
 
-    // Combine both personal and education info
-    const combinedData = { ...personalInfo, ...educationData };
-
-    try {
-      const response = await fetch('http://localhost:5000/api/users', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(combinedData),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        alert('User registered successfully!');
-        navigate('/club-signup'); // Redirect after successful registration
-      } else {
-        alert('Error: ' + data.message);
-      }
-    } catch (error) {
-      console.error('Error during sign-up:', error);
-      alert('Something went wrong. Please try again later.');
-    }
+    // Navigate to the ClubSignUp page after collecting education info
+    navigate('/club-signup');
   };
 
   // Updates the course options based on the selected level

@@ -12,7 +12,6 @@ import EditProfilePage from './pages/EditProfilePage';
 import Vote from './pages/vote';
 import Preferences from './pages/preferences';
 import Results from './pages/results';
-import MemberSignUp from './pages/MemberSignUp';
 import ClubSignUp from './pages/ClubSignUp';
 import MembersSignIn from './pages/MembersSignIn';
 import Organisers from './pages/organisers';
@@ -86,7 +85,6 @@ function App() {
           <Route path="/" element={isLoggedIn ? <Home /> : <Navigate to="/signin" replace />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/member-signup" element={<MemberSignUp />} />
           <Route path="/education-details" element={<EducationDetails />} />
           <Route path="/club-signup" element={<ClubSignUp />} />
           <Route path="/members-signin" element={<MembersSignIn handleLogin={handleLogin} />} />
