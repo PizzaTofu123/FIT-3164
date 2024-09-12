@@ -13,7 +13,7 @@
     width: 100%;
     display: flex;
     justify-content: flex-start;
-    margin-bottom: 20px;
+    margin-bottom: 0px;
   }
   
   .signup-logo {
@@ -25,7 +25,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 50px;
+    gap: 25px;
     width: 100%;
     max-width: 1200px;
     margin: auto;
@@ -87,7 +87,7 @@
     font-weight: bold;
     font-size: 1em;
     white-space: nowrap;
-    width: 300px;
+    width: 270px;
     text-align: left;
     margin-right: 20px;
   }

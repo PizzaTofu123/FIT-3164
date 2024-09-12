@@ -6,7 +6,8 @@ function SignUp() {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
-    monashID: '',
+    studentID: '',
+    monashEmail: '',
     dob: '',
     password: '',
     confirmPassword: ''
@@ -80,6 +81,18 @@ function SignUp() {
                 type="text" 
                 name="monashID" 
                 value={formData.monashID} 
+                onChange={handleChange} 
+                className="signup-input" 
+                required 
+              />
+            </div>
+
+            <div className="signup-form-group">
+              <label className="signup-label">Monash Email</label>
+              <input 
+                type="email" 
+                name="monashEmail" 
+                value={formData.monashEmail} 
                 onChange={handleChange} 
                 className="signup-input" 
                 required 

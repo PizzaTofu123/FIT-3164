@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './EducationDetails.css'; // Importing EducationDetails specific CSS
 
 function EducationDetails() {
@@ -70,28 +70,43 @@ function EducationDetails() {
           <h2 className="education-heading">Education Details</h2>
           <p className="education-description">Please fill in your education details.</p>
           <form onSubmit={handleSubmit} className="education-form">
+            
             <div className="education-form-group">
               <label className="education-label">Level</label>
-              <input 
-                type="text" 
+              <select 
                 name="level" 
                 value={educationData.level} 
                 onChange={handleChange} 
                 className="education-input" 
-                required 
-              />
+                required
+              >
+                <option value="" disabled>Select Level</option>
+                <option value="Undergraduate">Undergraduate</option>
+                <option value="Postgraduate">Postgraduate</option>
+              </select>
             </div>
 
             <div className="education-form-group">
               <label className="education-label">Faculty</label>
-              <input 
-                type="text" 
+              <select 
                 name="faculty" 
                 value={educationData.faculty} 
                 onChange={handleChange} 
                 className="education-input" 
-                required 
-              />
+                required
+              >
+                <option value="" disabled>Select Faculty</option>
+                <option value="Faculty of Art, Design and Architecture">Faculty of Art, Design and Architecture</option>
+                <option value="Faculty of Arts">Faculty of Arts</option>
+                <option value="Faculty of Business and Economics">Faculty of Business and Economics</option>
+                <option value="Faculty of Education">Faculty of Education</option>
+                <option value="Faculty of Engineering">Faculty of Engineering</option>
+                <option value="Faculty of Information Technology">Faculty of Information Technology</option>
+                <option value="Faculty of Law">Faculty of Law</option>
+                <option value="Faculty of Medicine, Nursing and Health Sciences">Faculty of Medicine, Nursing and Health Sciences</option>
+                <option value="Faculty of Pharmacy and Pharmaceutical Sciences">Faculty of Pharmacy and Pharmaceutical Sciences</option>
+                <option value="Faculty of Science">Faculty of Science</option>
+              </select>
             </div>
 
             <div className="education-form-group">
