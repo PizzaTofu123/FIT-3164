@@ -16,6 +16,7 @@ import ClubDetails from './pages/ClubDetails';
 import Organisers from './pages/organisers';
 import AddElection from './pages/AddElection';
 import EducationDetails from './pages/EducationDetails';
+import SignUpConfirmation from './components/SignUpConfirmation';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 function App() {
@@ -82,10 +83,11 @@ function App() {
 
         <Routes>
           <Route path="/" element={isLoggedIn ? <Home /> : <Navigate to="/signin" replace />} />
-          <Route path="/signin" element={<SignIn handleLogin={handleLogin} />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/education-details" element={<EducationDetails />} />
           <Route path="/club-details" element={<ClubDetails />} />
+          <Route path="/signup-confirmation" element={<SignUpConfirmation />} />
+          <Route path="/signin" element={<SignIn />} />
 
           {isLoggedIn ? (
             <>
