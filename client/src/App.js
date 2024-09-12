@@ -13,7 +13,6 @@ import Vote from './pages/vote';
 import Preferences from './pages/preferences';
 import Results from './pages/results';
 import ClubDetails from './pages/ClubDetails';
-import MembersSignIn from './pages/MembersSignIn';
 import Organisers from './pages/organisers';
 import AddElection from './pages/AddElection';
 import EducationDetails from './pages/EducationDetails';
@@ -83,11 +82,10 @@ function App() {
 
         <Routes>
           <Route path="/" element={isLoggedIn ? <Home /> : <Navigate to="/signin" replace />} />
-          <Route path="/signin" element={<SignIn />} />
+          <Route path="/signin" element={<SignIn handleLogin={handleLogin} />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/education-details" element={<EducationDetails />} />
           <Route path="/club-details" element={<ClubDetails />} />
-          <Route path="/members-signin" element={<MembersSignIn handleLogin={handleLogin} />} />
 
           {isLoggedIn ? (
             <>
