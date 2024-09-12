@@ -331,7 +331,7 @@ function EducationDetails() {
     localStorage.setItem('educationInfo', JSON.stringify(educationData));
 
     // Navigate to the ClubSignUp page after collecting education info
-    navigate('/club-signup');
+    navigate('/club-details');
   };
 
   // Updates the course options based on the selected level

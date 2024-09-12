@@ -12,7 +12,7 @@ import EditProfilePage from './pages/EditProfilePage';
 import Vote from './pages/vote';
 import Preferences from './pages/preferences';
 import Results from './pages/results';
-import ClubSignUp from './pages/ClubSignUp';
+import ClubDetails from './pages/ClubDetails';
 import MembersSignIn from './pages/MembersSignIn';
 import Organisers from './pages/organisers';
 import AddElection from './pages/AddElection';
@@ -86,7 +86,7 @@ function App() {
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/education-details" element={<EducationDetails />} />
-          <Route path="/club-signup" element={<ClubSignUp />} />
+          <Route path="/club-details" element={<ClubDetails />} />
           <Route path="/members-signin" element={<MembersSignIn handleLogin={handleLogin} />} />
 
           {isLoggedIn ? (
