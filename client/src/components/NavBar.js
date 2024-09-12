@@ -18,6 +18,9 @@ const NavBar = ({ user }) => {
         <Link to="/clubelections" className="navbar-link">CLUB ELECTIONS</Link>
       </div>
       <div className="navbar-right">
+        <Link to="/organisers">
+        <i className="fas fa-solid fa-people-group navbar-icon"></i>
+        </Link>
         <i className="fas fa-bell navbar-icon"></i>
         <span className="navbar-username">{firstName} {lastName}</span>
         <Link to="/profile">
