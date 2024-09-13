@@ -13,6 +13,7 @@
   .election-info {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 35px; /* Space between elements */
     background-color: #DEE9F5;
     padding: 20px 30px;
