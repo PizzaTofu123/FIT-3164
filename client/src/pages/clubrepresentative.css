@@ -103,6 +103,18 @@
       .index-button.yellow:hover {
         background-color: #e8b426;
       }
+
+      .index-button.disabled {
+        background-color: #EBEAEA;
+        color: white;
+        border: none;
+        padding: 10px 10px;
+        border-radius: 20px;
+        margin-left: 40px;
+        font-weight: bold;
+        max-width: 130px;
+        cursor: not-allowed! important;
+      }
   
   .add-button-container {
       text-align: right;

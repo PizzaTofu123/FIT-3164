@@ -18,7 +18,7 @@ const NavBar = ({ user }) => {
         <Link to="/clubelections" className="navbar-link">CLUB ELECTIONS</Link>
       </div>
       <div className="navbar-right">
-        <Link to="/organisers">
+        <Link to="/clubrepresentative">
         <i className="fas fa-solid fa-people-group navbar-icon"></i>
         </Link>
         <i className="fas fa-bell navbar-icon"></i>

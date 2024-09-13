@@ -39,8 +39,6 @@ const ElectionItemCR = ({ clubLogo, clubName, closingDate }) => {
         <p className={isClosingSoon() ? 'closing-soon' : ''}>
             {isClosingSoon() ? `Closing soon: ${closingDate}` : `Polling closes: ${closingDate}`}
           </p>
-        {/* </div> */}
-        {/* <div className="button-group"> */}
           <button className="index-button grey" onClick={handleEditDetailsClick}>Edit Details</button>
           <button className="index-button grey" onClick={handleEditCandidatesClick}>Edit Candidates</button>
           <button className="index-button yellow" onClick={handleViewResultsClick}>View Results</button>
