@@ -9,11 +9,12 @@ const Home = () => {
     //     { id: 2, clubLogo: 'https://cdn-icons-png.flaticon.com/128/9305/9305711.png', clubName: 'Monash Cyber Security Club (MONSEC)', closingDate: '15/09/2024' },
     //   ]);
     
-      const [upcomingElections] = useState([
-        { id: 3, clubLogo: 'https://cdn-icons-png.flaticon.com/128/3171/3171927.png', clubName: 'Monash Film Society', openingDate: '25/10/2024' },
-    ]);
+    //   const [upcomingElections] = useState([
+    //     { id: 3, clubLogo: 'https://cdn-icons-png.flaticon.com/128/3171/3171927.png', clubName: 'Monash Film Society', openingDate: '25/10/2024' },
+    // ]);
 
     const [elections, setElections] = useState([]);
+    const [upcomingElections, setUpcomingElections] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -27,6 +28,9 @@ const Home = () => {
                 // Filter only ongoing elections based on the `electionOngoingFlag`
                 const ongoingElections = data.filter(election => election.electionOngoingFlag);
 
+                // Filter upcoming elections based on start date
+                const upcomingElections = data.filter(election => new Date(election.electionStartDate) > new Date());
+
                 const formattedElections = ongoingElections.map(election => ({
                     id: election._id,
                     clubName: election.clubName,
@@ -34,7 +38,15 @@ const Home = () => {
                     clubLogo: 'https://cdn-icons-png.flaticon.com/128/6062/6062646.png' // modify after logo added in database
                 }));
 
+                const formattedUpcomingElections = upcomingElections.map(election => ({
+                    id: election._id,
+                    clubName: election.clubName,
+                    openingDate: new Date(election.electionStartDate).toLocaleDateString(),
+                    clubLogo: 'https://cdn-icons-png.flaticon.com/128/3171/3171927.png' // Modify after logo is added in the database
+                }));
+
                 setElections(formattedElections);
+                setUpcomingElections(formattedUpcomingElections);
             } catch (err) {
                 setError("Error fetching election data");
             } finally {
