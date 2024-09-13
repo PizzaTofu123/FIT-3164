@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ElectionListCR from '../components/ElectionListCR';
 import UpcomingElectionListCR from "../components/UpcomingElectionListCR";
-import PastElectionList from "../components/PastElectionList";
 import './clubrepresentative.css';
 import { Link } from "react-router-dom";
 
@@ -34,33 +33,22 @@ const ClubRepresentative = () => {
                 // Filter upcoming elections based on start date
                 const upcomingElections = data.filter(election => new Date(election.electionStartDate) > new Date());
 
-                // Filter for past elections based on end date
-                const pastElections = data.filter(election => new Date(election.electionEndDate) < new Date());
-
                 const formattedElections = ongoingElections.map(election => ({
                     id: election._id,
                     clubName: election.clubName,
                     closingDate: new Date(election.electionEndDate).toLocaleDateString(),
-                    clubLogo: election.clubLogo
+                    clubLogo: 'https://cdn-icons-png.flaticon.com/128/6062/6062646.png' // modify after logo added in database
                 }));
 
                 const formattedUpcomingElections = upcomingElections.map(election => ({
                     id: election._id,
                     clubName: election.clubName,
                     openingDate: new Date(election.electionStartDate).toLocaleDateString(),
-                    clubLogo: election.clubLogo
+                    clubLogo: 'https://cdn-icons-png.flaticon.com/128/3171/3171927.png' // Modify after logo is added in the database
                 }));
-
-                const formattedPastElections = pastElections.map(election => ({
-                  id: election._id,
-                  clubName: election.clubName,
-                  closingDate: new Date(election.electionEndDate).toLocaleDateString(),
-                  clubLogo: election.clubLogo
-              }));
 
                 setElections(formattedElections);
                 setUpcomingElections(formattedUpcomingElections);
-                setPastElections(formattedPastElections);
             } catch (err) {
                 setError("Error fetching election data");
             } finally {
@@ -81,23 +69,23 @@ const ClubRepresentative = () => {
 
     return (
         <div>
-          <h1 className='main-heading'>CLUB REPRESENTATIVE DASHBOARD</h1>
-          <div className="add-button-container">
-            <Link to="/add-election">
-              <button className="add-button"><i className="fa-solid fa-plus"></i></button>
-            </Link>
-          </div>
-          <div className="app-container">
-            <div className="election-container">
-              <ElectionListCR elections={elections} />
+            <h1 className='main-heading'>CLUB REPRESENTATIVE DASHBOARD</h1>
+            <div className="add-button-container">
+                <Link to="/add-election">
+                    <button className="add-button"><i className="fa-solid fa-plus"></i></button>
+                </Link>
             </div>
-            <div className="election-container">
-              <UpcomingElectionListCR upcomingElections={upcomingElections} />
-            </div>
-            <div className="election-container">
-              <PastElectionList pastElections={pastElections} />
-            </div>
-          </div>
+      <div className="app-container">
+      <div className="election-container">
+        <ElectionListCR elections={elections} />
+      </div>
+      <div className="election-container">
+          <UpcomingElectionListCR upcomingElections={upcomingElections} />
+      </div>
+      {/* <div className="election-container">
+        <PastElectionList/>
+      </div> */}
+    </div>
         </div>
     );
 };

@@ -41,14 +41,14 @@ const ClubRepresentative = () => {
                     id: election._id,
                     clubName: election.clubName,
                     closingDate: new Date(election.electionEndDate).toLocaleDateString(),
-                    clubLogo: election.clubLogo
+                    clubLogo: 'https://cdn-icons-png.flaticon.com/128/6062/6062646.png' // modify after logo added in database
                 }));
 
                 const formattedUpcomingElections = upcomingElections.map(election => ({
                     id: election._id,
                     clubName: election.clubName,
                     openingDate: new Date(election.electionStartDate).toLocaleDateString(),
-                    clubLogo: election.clubLogo
+                    clubLogo: 'https://cdn-icons-png.flaticon.com/128/3171/3171927.png' // Modify after logo is added in the database
                 }));
 
                 const formattedPastElections = pastElections.map(election => ({

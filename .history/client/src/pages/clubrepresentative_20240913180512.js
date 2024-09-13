@@ -41,7 +41,7 @@ const ClubRepresentative = () => {
                     id: election._id,
                     clubName: election.clubName,
                     closingDate: new Date(election.electionEndDate).toLocaleDateString(),
-                    clubLogo: election.clubLogo
+                    clubLogo: 'https://cdn-icons-png.flaticon.com/128/6062/6062646.png' // modify after logo added in database
                 }));
 
                 const formattedUpcomingElections = upcomingElections.map(election => ({
