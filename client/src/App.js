@@ -12,12 +12,11 @@ import EditProfilePage from './pages/EditProfilePage';
 import Vote from './pages/vote';
 import Preferences from './pages/preferences';
 import Results from './pages/results';
-import MemberSignUp from './pages/MemberSignUp';
-import ClubSignUp from './pages/ClubSignUp';
-import MembersSignIn from './pages/MembersSignIn';
+import ClubDetails from './pages/ClubDetails';
 import ClubRepresentative from './pages/clubrepresentative';
 import AddElection from './pages/AddElection';
 import EducationDetails from './pages/EducationDetails';
+import SignUpConfirmation from './components/SignUpConfirmation';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 function App() {
@@ -84,12 +83,11 @@ function App() {
 
         <Routes>
           <Route path="/" element={isLoggedIn ? <Home /> : <Navigate to="/signin" replace />} />
-          <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/member-signup" element={<MemberSignUp />} />
           <Route path="/education-details" element={<EducationDetails />} />
-          <Route path="/club-signup" element={<ClubSignUp />} />
-          <Route path="/members-signin" element={<MembersSignIn handleLogin={handleLogin} />} />
+          <Route path="/club-details" element={<ClubDetails />} />
+          <Route path="/signup-confirmation" element={<SignUpConfirmation />} />
+          <Route path="/signin" element={<SignIn />} />
 
           {isLoggedIn ? (
             <>

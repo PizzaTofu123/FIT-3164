@@ -1,0 +1,182 @@
+.club-wrapper {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.club-header {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 0px;
+}
+
+.club-logo {
+  width: 150px;
+  height: auto;
+  margin-top: -0.5px;
+}
+
+.club-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
+  width: 100%;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.club-back-button {
+  font-size: 1.5rem;
+  color: black;
+  border: none;
+  background: none;
+  cursor: pointer;
+  position: absolute;
+  top: 200px;
+  left: 750px;
+}
+
+.club-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.club-illustration {
+  width: 400px;
+  height: auto;
+}
+
+.club-form-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 400px;
+  text-align: left;
+}
+
+.club-heading {
+  color: black;
+  font-size: 2em;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.club-description {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.club-form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+  width: 100%;
+  text-align: left;
+}
+
+.club-input-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.club-label {
+  font-weight: bold;
+  font-size: 1em;
+  margin-bottom: 5px;
+  white-space: nowrap;
+  text-align: left;
+  width: auto;
+  margin-right: 20px;
+}
+
+.club-input {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 1em;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+}
+
+.club-delete-button {
+  background-color: transparent;
+  border: none;
+  color: red;
+  font-size: 0.8em;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.club-representative-label {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+}
+
+.club-checkbox {
+  margin-left: 0px;
+  position: relative;
+  left: 35px;
+  transform: scale(1.5);
+}
+
+.club-yes-label {
+  margin-left: 35px;
+  font-size: 1em;
+  font-weight: normal;
+}
+
+/* Container for Add and Sign Up buttons */
+.club-button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.club-add-button {
+  padding: 10px;
+  font-size: 1.5em;
+  background-color: #016DAE;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: background-color 0.3s ease;
+  width: 50px;
+  height: 50px;
+}
+
+.club-add-button:hover {
+  background-color: #014d7c;
+}
+
+.club-submit-button {
+  padding: 12px;
+  font-size: 1.2em;
+  background-color: #016DAE;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  margin-top: 20px;
+  width: 50%;
+  transition: background-color 0.3s ease;
+}
+
+.club-submit-button:hover {
+  background-color: #014d7c;
+}
