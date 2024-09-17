@@ -25,16 +25,16 @@ function SignUp() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+  
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match");
       return;
     }
-
-    // Store personal info in localStorage or state before navigating to next step
+  
+    // Store personal info in localStorage
     localStorage.setItem('personalInfo', JSON.stringify(formData));
-    navigate('/education-details'); // Navigate to the next form
-  };
+    navigate('/education-details'); // Navigate to education details
+  };  
 
   return (
     <div className="signup-wrapper">

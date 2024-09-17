@@ -6,6 +6,7 @@ function EducationDetails() {
   const [educationData, setEducationData] = useState({
     level: '',
     faculty: '',
+    secondFaculty: '',
     course: '',
     year: '',
   });
@@ -324,15 +325,13 @@ function EducationDetails() {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-
+  
     // Store education info in localStorage
     localStorage.setItem('educationInfo', JSON.stringify(educationData));
-
-    // Navigate to the ClubSignUp page after collecting education info
-    navigate('/club-details');
-  };
+    navigate('/club-details'); // Navigate to the next step
+  };  
 
   // Updates the course options based on the selected level
   const getCourses = () => {
@@ -379,6 +378,29 @@ function EducationDetails() {
 
             <div className="education-form-group">
               <label className="education-label">Faculty</label>
+              <select
+                name="faculty"
+                value={educationData.faculty}
+                onChange={handleChange}
+                className="education-input"
+                required
+              >
+                <option value="">Select Faculty</option>
+                <option value="Faculty of Art, Design and Architecture">Faculty of Art, Design and Architecture</option>
+                <option value="Faculty of Arts">Faculty of Arts</option>
+                <option value="Faculty of Business and Economics">Faculty of Business and Economics</option>
+                <option value="Faculty of Education">Faculty of Education</option>
+                <option value="Faculty of Engineering">Faculty of Engineering</option>
+                <option value="Faculty of Information Technology">Faculty of Information Technology</option>
+                <option value="Faculty of Law">Faculty of Law</option>
+                <option value="Faculty of Medicine, Nursing and Health Sciences">Faculty of Medicine, Nursing and Health Sciences</option>
+                <option value="Faculty of Pharmacy and Pharmaceutical Sciences">Faculty of Pharmacy and Pharmaceutical Sciences</option>
+                <option value="Faculty of Science">Faculty of Science</option>
+              </select>
+            </div>
+
+            <div className="education-form-group">
+              <label className="education-label">Second Faculty</label>
               <select
                 name="faculty"
                 value={educationData.faculty}

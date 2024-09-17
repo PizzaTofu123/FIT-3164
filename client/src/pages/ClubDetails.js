@@ -140,9 +140,35 @@ function ClubDetails() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Clubs Data:', clubs);
-    navigate('/signup-confirmation');  // Navigate to the confirmation page
-  };
+  
+    // Retrieve personal info and education info from localStorage
+    const personalInfo = JSON.parse(localStorage.getItem('personalInfo'));
+    const educationInfo = JSON.parse(localStorage.getItem('educationInfo'));
+  
+    // Combine all the data
+    const userData = {
+      ...personalInfo,
+      education: educationInfo,
+      clubs: clubs
+    };
+  
+    // Send the combined data to the backend
+    fetch('http://localhost:5000/api/user', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userData),
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Success:', data);
+      navigate('/signup-confirmation'); // Redirect to confirmation page
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+  };  
 
   return (
     <div className="club-wrapper">
