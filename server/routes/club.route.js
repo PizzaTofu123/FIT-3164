@@ -7,6 +7,7 @@ const ClubController = require("../controller/club.controller");
 
 
 router.post('/', ClubController.createOneClub);
+router.post('/populate', ClubController.populateClub);
 
 router.put('/:clubId', ClubController.updateOneClub);
 
@@ -22,5 +23,7 @@ router.put('/representatives/delete/:clubId', ClubController.deleteRepresentativ
 
 router.put('/election/start/:clubId', ClubController.startElection); 
 router.put('/election/schedule/:clubId', ClubController.scheduleElection); 
+
+
 
 module.exports = router;

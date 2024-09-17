@@ -52,7 +52,7 @@ const candidateQueries = {
     },
 
     deleteOneCandidate : async (candidateId) =>{
-        const candidate = await Candidate.findByIdAndDelete(candidateId).exec();
+        const candidate = await Candidate.findByIdAndDelete(candidateId);
         if (candidate) {
             for(let voteId of candidate.votes){
                 await mainQueries.votes.deleteOneVote(voteId);

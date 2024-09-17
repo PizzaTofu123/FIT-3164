@@ -16,6 +16,7 @@ module.exports = {
                 image: req.body.image,
                 level: req.body.level,
                 faculty: req.body.faculty,
+                secondFaculty: req.body.secondFaculty,
                 course: req.body.course,
                 year: req.body.year
             })
@@ -53,6 +54,7 @@ module.exports = {
             image: req.body.image,
             level: req.body.level,
             faculty: req.body.faculty,
+            secondFaculty: req.body.secondFaculty,
             course: req.body.course,
             year: req.body.year
             });
@@ -71,11 +73,10 @@ module.exports = {
 
     deleteOneCandidate : async (req,res) =>{
         try {
-            const {id}  = req.params;
-            console.log("crot");
-            const candidate = await candidateQueries.deleteOneCandidate(id);
+            const {candidateId}  = req.params;
+            const candidate = await candidateQueries.deleteOneCandidate(candidateId);
             if (candidate) {
-                res.status(200).json({message: `deleted candidate with id: ${id}`});
+                res.status(200).json({message: `deleted candidate with id: ${candidateId}`});
             } else {
                 res.status(500).json({message : 'Candidate not found'});
             }
@@ -87,8 +88,8 @@ module.exports = {
 
     getCandidateWithVotes : async (req,res) =>{
         try {
-            const {id}  = req.params;
-            const candidate  = await candidateQueries.getCandidateWithVotes(id);
+            const {candidateId}  = req.params;
+            const candidate  = await candidateQueries.getCandidateWithVotes(candidateId);
     
             if (!candidate){
                 return res.status(500).json({message : 'Candidate not found'});
@@ -101,4 +102,6 @@ module.exports = {
             res.status(500).json({message:error.message});
         }
     },
+
+
 }

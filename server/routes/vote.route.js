@@ -9,6 +9,7 @@ const voteController = require("../controller/vote.controller");
 router.post('/', voteController.createOneVote);
 router.put('/:voteId', voteController.updateVote);
 router.delete('/:voteId', voteController.deleteOneVote);
+router.post('/populateVote', voteController.populateVote);
 
 
 module.exports = router;

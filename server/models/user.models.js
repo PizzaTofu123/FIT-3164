@@ -68,6 +68,10 @@ const UserSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    secondFaculty: {
+        type: String,
+        default: null
+    },
     course: {
         type: String,
         required: true
