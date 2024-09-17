@@ -68,6 +68,7 @@ module.exports = {
     getAllClub : async (req,res) =>
     {
         try {
+            await clubQueries.checkScheduleElection();
             await clubQueries.endElection();
             //use curlies cus find multiple users
             const club  = await clubQueries.getAllClub();
@@ -162,6 +163,57 @@ module.exports = {
                 const {clubId}  = req.params;
                 const club  = await Club.findByIdAndUpdate(clubId, {
                     electionOngoingFlag: true,
+                    electionStartDate: req.body.electionStartDate,
+                    electionEndDate: req.body.electionEndDate
+                    });
+        
+                if (!club){
+                    return res.status(500).json({message : `Club with id ${clubId} not found`});
+                }
+        
+                const updated = await Club.findById(clubId);
+                res.status(200).json(updated);
+            }
+        }
+        catch (error){
+            //status 500 means error
+            res.status(500).json({message:error.message});
+        }
+    },
+
+    startElection : async (req,res) =>{
+        try {
+            if (req.body.electionStartDate > req.body.electionEndDate) {
+                res.status(200).json({message: "Start date needs to be earlier than end date"});
+            } else {
+                const {clubId}  = req.params;
+                const club  = await Club.findByIdAndUpdate(clubId, {
+                    electionOngoingFlag: true,
+                    electionStartDate: req.body.electionStartDate,
+                    electionEndDate: req.body.electionEndDate
+                    });
+        
+                if (!club){
+                    return res.status(500).json({message : `Club with id ${clubId} not found`});
+                }
+        
+                const updated = await Club.findById(clubId);
+                res.status(200).json(updated);
+            }
+        }
+        catch (error){
+            //status 500 means error
+            res.status(500).json({message:error.message});
+        }
+    },
+
+    scheduleElection : async (req,res) =>{
+        try {
+            if (req.body.electionStartDate > req.body.electionEndDate) {
+                res.status(200).json({message: "Start date needs to be earlier than end date"});
+            } else {
+                const {clubId}  = req.params;
+                const club  = await Club.findByIdAndUpdate(clubId, {
                     electionStartDate: req.body.electionStartDate,
                     electionEndDate: req.body.electionEndDate
                     });

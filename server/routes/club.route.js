@@ -21,5 +21,6 @@ router.put('/representatives/add/:clubId', ClubController.addRepresentative);
 router.put('/representatives/delete/:clubId', ClubController.deleteRepresentative);
 
 router.put('/election/start/:clubId', ClubController.startElection); 
+router.put('/election/schedule/:clubId', ClubController.scheduleElection); 
 
 module.exports = router;

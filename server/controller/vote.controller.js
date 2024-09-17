@@ -12,7 +12,11 @@ module.exports = {
                 //const user  = await User.create(req.body);
                 const vote = await voteQueries.createOneVote({
                     electionId: req.body.electionId,
-                    candidateId: req.body.candidateId
+                    candidateId: req.body.candidateId,
+                    level: req.body.level,
+                    faculty: req.body.faculty,
+                    course: req.body.course,
+                    year: req.body.year,
                 })
                 await mainQueries.userElectionFlags.createFlag({
                     userId: req.body.userId,
@@ -100,5 +104,36 @@ module.exports = {
             res.status(500).json({message:error.message});
         }
     },
+
+    populateVote: async (req,res) =>{
+        try{
+            const elections = await mainQueries.elections.getAllElection();
+            const users = await mainQueries.users.getAllUser();
+            for (let i = 0; i < elections.length; i ++){
+                let election = elections[i];
+                let candidates = election.candidates;
+                for (let i = 0; i < users.length; i ++){
+                    let user = users[i];
+                    let chosen_candidate = candidates[Math.floor(Math.random() * candidates.length)];
+                    const vote = await voteQueries.createOneVote({
+                        electionId: election._id,
+                        candidateId: chosen_candidate,
+                        level: user.level,
+                        faculty: user.faculty,
+                        course: user.course,
+                        year: user.year
+                    })
+                    await mainQueries.userElectionFlags.createFlag({
+                        userId: user._id,
+                        electionId: election._id
+                    })
+                }
+            }
+            res.status(200).json({message: "done"});
+        }
+        catch (error){
+            res.status(500).json({message:error.message});
+        }
+    },  
 
 }

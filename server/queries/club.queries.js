@@ -133,6 +133,15 @@ const clubQueries = {
             { electionOngoingFlag: false, electionStartDate: null, electionEndDate: null }
         ).exec();
     },
+
+    checkScheduleElection  : async () => {
+        const d = new Date();
+        await Club.updateMany(
+            {   
+                electionStartDate:  {$lt : d.getTime()}},
+            { electionOngoingFlag: true, electionStartDate: null, electionEndDate: null }
+        ).exec();
+    },
 }
 
 mainQueries.clubs = clubQueries;

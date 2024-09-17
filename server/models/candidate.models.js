@@ -44,7 +44,23 @@ const CandidateSchema = mongoose.Schema({
         type: Number,
         required: false,
         default: 0
-    }
+    },
+    level: {
+        type: String,
+        required: true
+    },
+    faculty: {
+        type: String,
+        required: true
+    },
+    course: {
+        type: String,
+        required: true
+    },
+    year: {
+        type: Number,
+        required: true
+    },
 
 },
     {

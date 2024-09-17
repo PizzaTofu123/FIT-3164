@@ -135,6 +135,13 @@ module.exports = {
             for (let i = 1; i < 451; i++) {
                 let level = levelArray[Math.floor(Math.random() * levelArray.length)];
                 let faculty = faculties[Math.floor(Math.random() * faculties.length)];
+                let course = "";
+                if (level == "Undergraduate"){
+                    course = "Bachelor of " + faculty;
+                }
+                else {
+                    course = "Master of " + faculty;
+                }
                 let salt = await bcrypt.genSalt();
                 let password = await bcrypt.hash("clubmem" + i, salt);
                 userArray.push({
@@ -149,7 +156,7 @@ module.exports = {
                     representingClubs: [],
                     level: level,
                     faculty: faculty,
-                    course: level + " of " +faculty,
+                    course:  course,
                     year: randomIntFromInterval(1, 4),
                 })
             }
@@ -196,7 +203,7 @@ module.exports = {
                 clubMembers: memList,
                 clubRepresentatives: repList
             });
-            res.status(200).json({message:"Done"});
+            res.status(200).json({message: "done"});
         }
         catch (error){
             res.status(500).json({message:error.message});

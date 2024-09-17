@@ -13,7 +13,11 @@ module.exports = {
                 lastName: req.body.lastName,
                 description: req.body.description,
                 electionId: req.body.electionId,
-                image: req.body.image
+                image: req.body.image,
+                level: req.body.level,
+                faculty: req.body.faculty,
+                course: req.body.course,
+                year: req.body.year
             })
             res.status(200).json(candidate);
         }
@@ -46,7 +50,11 @@ module.exports = {
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             description: req.body.description,
-            image: req.body.image
+            image: req.body.image,
+            level: req.body.level,
+            faculty: req.body.faculty,
+            course: req.body.course,
+            year: req.body.year
             });
 
         if (!candidate){
