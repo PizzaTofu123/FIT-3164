@@ -124,7 +124,7 @@ function ClubDetails() {
       try {
         const response = await fetch('http://localhost:5000/api/clubs');
         const data = await response.json();
-        setClubs(data);
+        setClubs(data); // Assuming 'data' is an array of clubs with clubName
       } catch (error) {
         console.error('Error fetching clubs:', error);
       }
@@ -209,6 +209,7 @@ function ClubDetails() {
                 <div className="club-input-container">
                   <label className="club-label">Club {index + 1}</label>
 
+                  {/* Replace the text input with a dropdown menu */}
                   <select
                     name="clubName"
                     value={club.clubName}

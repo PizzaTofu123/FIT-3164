@@ -124,7 +124,7 @@ function ClubDetails() {
       try {
         const response = await fetch('http://localhost:5000/api/clubs');
         const data = await response.json();
-        setClubs(data);
+        setClubs(data); // Assuming 'data' is an array of clubs with clubName
       } catch (error) {
         console.error('Error fetching clubs:', error);
       }
