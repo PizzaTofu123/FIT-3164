@@ -1,11 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const UpcomingElectionItemCR = ({ clubLogo, clubName, openingDate }) => {
+const UpcomingElectionItemCR = ({ clubId, clubLogo, clubName, openingDate }) => {
     const navigate = useNavigate();
     
     const handleEditDetailsClick = () => {
-        navigate(`/edit-details/${clubName}`);
+        navigate(`/edit-election/${clubId}`);
       };
     
       const handleEditCandidatesClick = () => {
