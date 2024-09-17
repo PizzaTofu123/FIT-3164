@@ -8,6 +8,7 @@ const ElectionListCR = ({ elections }) => {
       {elections.map((election) => (
         <ElectionItemCR
           key={election.id}
+          clubId={election.id}
           clubLogo={election.clubLogo}
           clubName={election.clubName}
           closingDate={election.closingDate}

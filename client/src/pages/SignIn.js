@@ -2,17 +2,35 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Auth.css';
 
-function SignIn() {
+function SignIn({ handleLogin }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleSignIn = (e) => {
+  const handleSignIn = async (e) => {
     e.preventDefault();
-    // Implement authentication logic here
+
     if (email && password) {
-      console.log('Sign In Successful');
-      navigate('/dashboard'); // Redirect to dashboard
+      try {
+        const response = await fetch('http://localhost:5000/api/users/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          console.log('Sign In Successful');
+          handleLogin(data);  // Pass the user profile data to App.js
+          navigate('/profile');  // Redirect to profile/dashboard
+        } else {
+          alert('Invalid credentials, please try again.');
+        }
+      } catch (error) {
+        console.error('Error during sign in:', error);
+        alert('An error occurred during sign in, please try again later.');
+      }
     } else {
       alert('Please enter both email and password');
     }

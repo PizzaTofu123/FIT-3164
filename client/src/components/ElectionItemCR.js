@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const ElectionItemCR = ({ clubLogo, clubName, closingDate }) => {
+const ElectionItemCR = ({ clubId, clubLogo, clubName, closingDate }) => {
   const navigate = useNavigate();
 
   const parseDate = (dateStr) => {
@@ -19,7 +19,7 @@ const ElectionItemCR = ({ clubLogo, clubName, closingDate }) => {
   };
   
   const handleEditDetailsClick = () => {
-    navigate(`/edit-details/${clubName}`);
+    navigate(`/edit-election/${clubId}`);
   };
 
   const handleEditCandidatesClick = () => {

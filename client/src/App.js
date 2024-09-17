@@ -15,6 +15,8 @@ import Results from './pages/results';
 import ClubDetails from './pages/ClubDetails';
 import ClubRepresentative from './pages/clubrepresentative';
 import AddElection from './pages/AddElection';
+import EditElection from './pages/EditElection';
+import ViewResults from './pages/resultsCR';
 import EducationDetails from './pages/EducationDetails';
 import SignUpConfirmation from './components/SignUpConfirmation';
 import '@fortawesome/fontawesome-free/css/all.min.css';
@@ -99,6 +101,8 @@ function App() {
               <Route path="/results/:clubName" element={<Results />} />
               <Route path="/clubrepresentative" element={<ClubRepresentative />} />
               <Route path="/add-election" element={<AddElection />} />
+              <Route path="/edit-election/:clubId" element={<EditElection />} />
+              <Route path="/view-results/:clubName" element={<ViewResults />} />
             </>
           ) : (
             <Route path="*" element={<Navigate to="/signin" replace />} />

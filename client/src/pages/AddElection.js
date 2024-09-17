@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import './AddElection.css';
 
 const AddElection = () => {
@@ -7,6 +8,7 @@ const AddElection = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [resultsVisibility, setResultsVisibility] = useState("membersAndOrganisers");
+  const navigate = useNavigate();
 
   return (
     <div>
@@ -29,7 +31,7 @@ const AddElection = () => {
             ))} */}
           </select>
         </div>
-        <div>
+        {/* <div>
           <label htmlFor="description">Description: </label>
           <textarea
             id="description"
@@ -38,7 +40,7 @@ const AddElection = () => {
             placeholder="Enter a brief description of the election"
             required
           />
-        </div>
+        </div> */}
         <div>
           <label htmlFor="startDate">Start Date & Time: </label>
           <input
@@ -59,7 +61,7 @@ const AddElection = () => {
             required
           />
         </div>
-        <div>
+        {/* <div>
           <label>Post-Election Results Visibility: </label>
           <select
             value={resultsVisibility}
@@ -68,9 +70,9 @@ const AddElection = () => {
             <option value="membersAndOrganisers">To Members and Organisers</option>
             <option value="organisers">Only to Organisers</option>
           </select>
-        </div>
+        </div> */}
         <div className="buttons">  
-          <button type="button" onClick={() => alert("Cancelled!")}>Cancel</button>
+          <button type="button" onClick={() => navigate(-1)}>Cancel</button>
           {/* <button type="button" onClick={() => alert("Saved as draft!")}>Save as Draft</button> */}
           <button type="submit">Submit Election</button>
         </div>

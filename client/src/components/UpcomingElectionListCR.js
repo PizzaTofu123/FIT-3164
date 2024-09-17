@@ -8,6 +8,7 @@ const UpcomingElectionListCR = ({ upcomingElections }) => {
       {upcomingElections.map((election) => (
         <UpcomingElectionItemCR
           key={election.id}
+          clubId={election.id}
           clubLogo={election.clubLogo}
           clubName={election.clubName}
           openingDate={election.openingDate}
