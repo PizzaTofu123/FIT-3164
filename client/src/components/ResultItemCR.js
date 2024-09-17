@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './PreferenceItem.css';
 
-const ResultItem = ({ candidates }) => {
+const ResultItemCR = ({ candidates }) => {
   const { clubName } = useParams();
   const navigate = useNavigate();
 
@@ -36,4 +36,4 @@ const ResultItem = ({ candidates }) => {
   );
 };
 
-export default ResultItem;
+export default ResultItemCR;

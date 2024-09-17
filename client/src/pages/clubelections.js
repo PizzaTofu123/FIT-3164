@@ -6,7 +6,7 @@ const ClubElections = () => {
     // pollingStatus:'open', 'closed', or 'not_started'; pollingOpenDate: Only needed if pollingStatus is 'not_started'
     { id: 1, clubName: 'Monash Association of Coding (MAC)', pollingStatus: 'closed', closingDate: '28/08/2024', voteStatus: true },
     { id: 2, clubName: 'Monash Cyber Security Club (MONSEC)', pollingStatus: 'open', closingDate: '15/09/2024', voteStatus: false },
-    { id: 2, clubName: 'Monash Film Society', pollingStatus: 'not_started', closingDate: '15/10/2024', voteStatus: false, pollingOpenDate: '25/10/2024' },
+    { id: 2, clubName: 'Monash Film Society', pollingStatus: 'not_started', closingDate: '15/11/2024', voteStatus: false, pollingOpenDate: '25/10/2024' },
   ]);
 
   const handleVote = (electionId) => {
