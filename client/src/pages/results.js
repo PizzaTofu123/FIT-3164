@@ -2,15 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import ResultItem from '../components/ResultItem';
 import {
   Chart,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
   Tooltip,
   Legend,
-  TimeScale,
-  ChartOptions, PolarAreaController, RadialLinearScale, ArcElement
+ PolarAreaController, RadialLinearScale, ArcElement
   } from 'chart.js';
 
 const sampleCandidates = [
