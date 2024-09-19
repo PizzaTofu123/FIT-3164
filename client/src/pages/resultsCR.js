@@ -1,4 +1,4 @@
-import ResultItemCR from '../components/ResultItemCR';
+import ResultItem from '../components/ResultItem';
 
 const sampleCandidates = [
   { image: 'https://cdn-icons-png.flaticon.com/128/3884/3884864.png', name: 'Brian Bells', position: 'President', votes: 70 },
@@ -9,14 +9,13 @@ const sampleCandidates = [
   // Add more candidates as needed
 ];
 
-const ViewResults = () => {
+const Results = () => {
     return (
       <div>
         <h1 className='main-heading'>Elections Results</h1>
-        <ResultItemCR candidates={sampleCandidates} />
+        <ResultItem candidates={sampleCandidates} />
       </div>
     );
   };
   
-  export default ViewResults;
-  
+  export default Results;
