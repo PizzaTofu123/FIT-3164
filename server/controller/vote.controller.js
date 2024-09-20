@@ -15,6 +15,7 @@ module.exports = {
                     candidateId: req.body.candidateId,
                     level: req.body.level,
                     faculty: req.body.faculty,
+                    secondFaulcty: req.body.secondFaulcty,
                     course: req.body.course,
                     year: req.body.year,
                 })
@@ -120,6 +121,7 @@ module.exports = {
                         candidateId: chosen_candidate,
                         level: user.level,
                         faculty: user.faculty,
+                        secondFaulcty: user.secondFaulcty,
                         course: user.course,
                         year: user.year
                     })
