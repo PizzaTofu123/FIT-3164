@@ -31,13 +31,12 @@ module.exports = {
         try {
             //use curlies cus find multiple users
             const flag = await userElectionFlagQueries.getFlag(req.body.userId, req.body.electionId);
-            if (flag){
-                return flag;
+            if (flag.length == 0){
+                res.status(200).json(false);
             }
             else {
-                return null;
+                res.status(200).json(true);
             }
-            res.status(200).json(flag);
         }
         catch (error){
             //status 500 means error
