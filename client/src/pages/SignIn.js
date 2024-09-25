@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { CSSTransition } from 'react-transition-group';  // Import CSSTransition for animation
 import './Auth.css';
 
 function SignIn({ handleLogin }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [inProp, setInProp] = useState(true);  // Track the animation state
   const navigate = useNavigate();
 
   const handleSignIn = async (e) => {
@@ -23,7 +25,12 @@ function SignIn({ handleLogin }) {
         if (response.ok) {
           console.log('Sign In Successful');
           handleLogin(data);  // Pass the user profile data to App.js
-          navigate('/profile');  // Redirect to profile/dashboard
+
+          // Trigger the fade-out animation before redirecting
+          setInProp(false);
+          setTimeout(() => {
+            navigate('/profile');  // Redirect to profile/dashboard after animation
+          }, 300);  // Animation duration of 300ms
         } else {
           alert('Invalid credentials, please try again.');
         }
@@ -37,37 +44,44 @@ function SignIn({ handleLogin }) {
   };
 
   return (
-    <div className="auth-container">
-      <img src="/images/monash_logo_login.png" alt="Monash University Logo" className="auth-logo" />
-      <h2 className='h2-auth'>Sign In</h2>
-      <form onSubmit={handleSignIn} className="auth-form">
-        <label htmlFor="email">Monash Email</label>
-        <input
-          type="email"
-          id="email"
-          className="auth-input"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          className="auth-input"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <div className="forgot-password">
-          <Link to="/forgot-password" className="auth-link">Forgot Password?</Link>
-        </div>
-        <button type="submit" className="auth-button">Sign In</button>
-      </form>
-      <p className="auth-text">
-        Don’t have an account? <Link to="/signup" className="auth-link">Sign Up</Link>
-      </p>
-    </div>
+    <CSSTransition
+      in={inProp}
+      timeout={300}
+      classNames="fade"
+      unmountOnExit
+    >
+      <div className="auth-container">
+        <img src="/images/monash_logo_login.png" alt="Monash University Logo" className="auth-logo" />
+        <h2 className='h2-auth'>Sign In</h2>
+        <form onSubmit={handleSignIn} className="auth-form">
+          <label htmlFor="email">Monash Email</label>
+          <input
+            type="email"
+            id="email"
+            className="auth-input"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            className="auth-input"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <div className="forgot-password">
+            <Link to="/forgot-password" className="auth-link">Forgot Password?</Link>
+          </div>
+          <button type="submit" className="auth-button">Sign In</button>
+        </form>
+        <p className="auth-text">
+          Don’t have an account? <Link to="/signup" className="auth-link">Sign Up</Link>
+        </p>
+      </div>
+    </CSSTransition>
   );
 }
 
