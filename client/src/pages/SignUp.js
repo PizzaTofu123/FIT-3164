@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 import './SignUp.css';
 
 function SignUp() {
-  const [formData, setFormData] = useState({
+  // Check if there is saved personalInfo in localStorage and load it, otherwise use empty values
+  const savedPersonalInfo = JSON.parse(localStorage.getItem('personalInfo')) || {
     firstName: '',
     lastName: '',
     monashID: '',
@@ -12,10 +13,16 @@ function SignUp() {
     dob: '',
     password: '',
     confirmPassword: ''
-  });
+  };
 
+  const [formData, setFormData] = useState(savedPersonalInfo);
   const [inProp, setInProp] = useState(true);  // Control the animation state
   const navigate = useNavigate();
+
+  // Auto-save to localStorage whenever formData changes
+  useEffect(() => {
+    localStorage.setItem('personalInfo', JSON.stringify(formData));
+  }, [formData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,63 +32,51 @@ function SignUp() {
     }));
   };
 
-  const validateEmail = (email) => {
-    return email.includes('@student.monash.edu');
-  };
+  // Validation functions
+  const validateEmail = (email) => email.includes('@student.monash.edu');
 
   const validateDob = (dob) => {
     const selectedDate = new Date(dob);
     const currentDate = new Date();
     const hundredYearsAgo = new Date();
     hundredYearsAgo.setFullYear(currentDate.getFullYear() - 100);
-
     return selectedDate <= currentDate && selectedDate >= hundredYearsAgo;
   };
 
-  const validateMonashID = (monashID) => {
-    return /^\d{8}$/.test(monashID);
-  };
+  const validateMonashID = (monashID) => /^\d{8}$/.test(monashID);
 
-  const capitalizeName = (name) => {
-    return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
-  };
+  const capitalizeName = (name) => name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Validate password confirmation
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match");
       return;
     }
 
-    // Validate Date of Birth
     if (!validateDob(formData.dob)) {
-      alert("Invalid Date of Birth.");
+      alert("Invalid Date of Birth. It must be within the last 100 years and not in the future.");
       return;
     }
 
-    // Validate Monash Email
     if (!validateEmail(formData.monashEmail)) {
-      alert("Invalid Monash Email.");
+      alert("Invalid Monash Email. It must contain '@student.monash.edu'.");
       return;
     }
 
-    // Validate Monash ID
     if (!validateMonashID(formData.monashID)) {
-      alert("Invalid Monash ID.");
+      alert("Invalid Monash ID. It must be exactly 8 digits.");
       return;
     }
 
-    // Capitalize First Name and Last Name
+    // Capitalize first and last name before saving
     const firstName = capitalizeName(formData.firstName);
     const lastName = capitalizeName(formData.lastName);
 
-    // Calculate the user's age based on the date of birth
     const birthDate = new Date(formData.dob);
     const age = new Date().getFullYear() - birthDate.getFullYear();
 
-    // Store personal info in localStorage
     const personalInfo = {
       firstName: firstName,
       lastName: lastName,
@@ -89,16 +84,17 @@ function SignUp() {
       monashEmail: formData.monashEmail,
       dob: formData.dob,
       password: formData.password,
-      age: age  // Store the age
+      age: age
     };
 
+    // Store updated personal info with formatted names
     localStorage.setItem('personalInfo', JSON.stringify(personalInfo));
 
-    // Trigger the exit animation before navigating to the next step
+    // Trigger the transition to the next page
     setInProp(false);
     setTimeout(() => {
-      navigate('/education-details');  // Navigate to education details after the animation
-    }, 300);  // Match animation duration (300ms)
+      navigate('/education-details');
+    }, 300);  // Match animation duration
   };
 
   return (
