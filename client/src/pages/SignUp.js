@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { CSSTransition } from 'react-transition-group';  // Import CSSTransition for animation
+import { CSSTransition } from 'react-transition-group';
 import './SignUp.css';
 
 function SignUp() {
@@ -25,16 +25,74 @@ function SignUp() {
     }));
   };
 
+  const validateEmail = (email) => {
+    return email.includes('@student.monash.edu');
+  };
+
+  const validateDob = (dob) => {
+    const selectedDate = new Date(dob);
+    const currentDate = new Date();
+    const hundredYearsAgo = new Date();
+    hundredYearsAgo.setFullYear(currentDate.getFullYear() - 100);
+
+    return selectedDate <= currentDate && selectedDate >= hundredYearsAgo;
+  };
+
+  const validateMonashID = (monashID) => {
+    return /^\d{8}$/.test(monashID);
+  };
+
+  const capitalizeName = (name) => {
+    return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // Validate password confirmation
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match");
       return;
     }
 
+    // Validate Date of Birth
+    if (!validateDob(formData.dob)) {
+      alert("Invalid Date of Birth.");
+      return;
+    }
+
+    // Validate Monash Email
+    if (!validateEmail(formData.monashEmail)) {
+      alert("Invalid Monash Email.");
+      return;
+    }
+
+    // Validate Monash ID
+    if (!validateMonashID(formData.monashID)) {
+      alert("Invalid Monash ID.");
+      return;
+    }
+
+    // Capitalize First Name and Last Name
+    const firstName = capitalizeName(formData.firstName);
+    const lastName = capitalizeName(formData.lastName);
+
+    // Calculate the user's age based on the date of birth
+    const birthDate = new Date(formData.dob);
+    const age = new Date().getFullYear() - birthDate.getFullYear();
+
     // Store personal info in localStorage
-    localStorage.setItem('personalInfo', JSON.stringify(formData));
+    const personalInfo = {
+      firstName: firstName,
+      lastName: lastName,
+      monashID: formData.monashID,
+      monashEmail: formData.monashEmail,
+      dob: formData.dob,
+      password: formData.password,
+      age: age  // Store the age
+    };
+
+    localStorage.setItem('personalInfo', JSON.stringify(personalInfo));
 
     // Trigger the exit animation before navigating to the next step
     setInProp(false);
