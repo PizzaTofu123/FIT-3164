@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; // Importing useNavigate for redirection
-import './ClubDetails.css'; // Importing ClubDetails specific CSS
+import { useNavigate } from 'react-router-dom';
+import './ClubDetails.css';
+import { CSSTransition } from 'react-transition-group';
 
 function ClubDetails() {
   const [clubs, setClubs] = useState([]); // State to store clubs from the backend
   const [selectedClubs, setSelectedClubs] = useState([{ clubName: '', representative: false }]); 
+  const [inProp, setInProp] = useState(true); // fade-out effect
   const navigate = useNavigate(); 
 
   // Fetch clubs from the backend
@@ -67,87 +69,93 @@ function ClubDetails() {
     .then(response => response.json())
     .then(data => {
       console.log('Success:', data);
-      navigate('/signup-confirmation'); // Redirect to confirmation page
+      // Trigger fade-out animation before navigating
+      setInProp(false);
+      setTimeout(() => {
+        navigate('/signup-confirmation'); // Redirect to confirmation page
+      }, 300); // Match animation duration
     })
     .catch((error) => {
       console.error('Error:', error);
     });
-  };  
+  };
 
   return (
-    <div className="club-wrapper">
-      <div className="club-header">
-        <img src="/images/monash_logo_login.png" alt="Monash University Logo" className="club-logo" />
-      </div>
-      <div className="club-container">
-        <button className="club-back-button" onClick={() => window.history.back()}>
-          &#8592;
-        </button>
-
-        <div className="club-image">
-          <img src="/images/sign_up_clubs_illustration.png" alt="Membership Illustration" className="club-illustration" />
+    <CSSTransition in={inProp} timeout={300} classNames="fade">
+      <div className="club-wrapper">
+        <div className="club-header">
+          <img src="/images/monash_logo_login.png" alt="Monash University Logo" className="club-logo" />
         </div>
+        <div className="club-container">
+          <button className="club-back-button" onClick={() => window.history.back()}>
+            &#8592;
+          </button>
 
-        <div className="club-form-container">
-          <h2 className="club-heading">Club Membership Details</h2>
-          <p className="club-description">Enter the clubs that you are a member of.</p>
+          <div className="club-image">
+            <img src="/images/sign_up_clubs_illustration.png" alt="Membership Illustration" className="club-illustration" />
+          </div>
 
-          <form onSubmit={handleSubmit}>
-            {selectedClubs.map((club, index) => (
-              <div key={index} className="club-form-group">
-                <div className="club-input-container">
-                  <label className="club-label">Club {index + 1}</label>
+          <div className="club-form-container">
+            <h2 className="club-heading">Club Membership Details</h2>
+            <p className="club-description">Enter the clubs that you are a member of.</p>
 
-                  <select
-                    name="clubName"
-                    value={club.clubName}
-                    onChange={(e) => handleClubChange(index, e)}
-                    className="club-input"
-                    required
-                  >
-                    <option value="">Select a club</option>
-                    {clubs.map((clubOption, i) => (
-                      <option key={i} value={clubOption.clubName}>
-                        {clubOption.clubName}
-                      </option>
-                    ))}
-                  </select>
+            <form onSubmit={handleSubmit}>
+              {selectedClubs.map((club, index) => (
+                <div key={index} className="club-form-group">
+                  <div className="club-input-container">
+                    <label className="club-label">Club {index + 1}</label>
 
-                  {index !== 0 && (
-                    <button
-                      type="button"
-                      className="club-delete-button"
-                      onClick={() => deleteClubField(index)}
+                    <select
+                      name="clubName"
+                      value={club.clubName}
+                      onChange={(e) => handleClubChange(index, e)}
+                      className="club-input"
+                      required
                     >
-                      ❌
-                    </button>
-                  )}
+                      <option value="">Select a club</option>
+                      {clubs.map((clubOption, i) => (
+                        <option key={i} value={clubOption.clubName}>
+                          {clubOption.clubName}
+                        </option>
+                      ))}
+                    </select>
+
+                    {index !== 0 && (
+                      <button
+                        type="button"
+                        className="club-delete-button"
+                        onClick={() => deleteClubField(index)}
+                      >
+                        ❌
+                      </button>
+                    )}
+                  </div>
+
+                  <label className="club-representative-label">
+                    Are you a representative of this club?
+                    <span className="club-yes-label">Yes</span>
+                    <input
+                      type="checkbox"
+                      name="representative"
+                      checked={club.representative}
+                      onChange={(e) => handleClubChange(index, e)}
+                      className="club-checkbox"
+                    />
+                  </label>
                 </div>
+              ))}
 
-                <label className="club-representative-label">
-                  Are you a representative of this club?
-                  <span className="club-yes-label">Yes</span>
-                  <input
-                    type="checkbox"
-                    name="representative"
-                    checked={club.representative}
-                    onChange={(e) => handleClubChange(index, e)}
-                    className="club-checkbox"
-                  />
-                </label>
+              <div className="club-button-container">
+                <button type="button" className="club-add-button" onClick={addClubField}>
+                  +
+                </button>
+                <button type="submit" className="club-submit-button">Sign Up</button>
               </div>
-            ))}
-
-            <div className="club-button-container">
-              <button type="button" className="club-add-button" onClick={addClubField}>
-                +
-              </button>
-              <button type="submit" className="club-submit-button">Sign Up</button>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
+    </CSSTransition>
   );
 }
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { CSSTransition } from 'react-transition-group';  // Import CSSTransition for animation
+import { CSSTransition } from 'react-transition-group';
 import './Auth.css';
 
 function SignIn({ handleLogin }) {
@@ -29,7 +29,7 @@ function SignIn({ handleLogin }) {
           // Trigger the fade-out animation before redirecting
           setInProp(false);
           setTimeout(() => {
-            navigate('/profile');  // Redirect to profile/dashboard after animation
+            navigate('/profile');  // Redirect to dashboard after animation
           }, 300);  // Animation duration of 300ms
         } else {
           alert('Invalid credentials, please try again.');

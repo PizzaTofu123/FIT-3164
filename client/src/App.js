@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import NavBar from './components/NavBar';
-import Layout from './components/Layout'; // Import Layout
+import Layout from './components/Layout';
 import './App.css';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
