@@ -47,12 +47,11 @@ module.exports = {
     deleteFlag : async (req,res) =>
     {
         try {
-            const {id}  = req.params;
-            const user  = await userQueries.getOneUser(id);
-            if (!user){
-                res.status(500).json({message : `User with id ${id} not found`});
+            const flag  = await userElectionFlagQueries.deleteFlag(req.body.userId, req.body.electionId);
+            if (!flag){
+                res.status(500).json({message : `Flag not found`});
             }
-            res.status(200).json(user);
+            res.status(200).json(flag);
         }
         catch (error){
             //status 500 means error
