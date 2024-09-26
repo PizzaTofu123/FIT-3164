@@ -1,17 +1,74 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './EducationDetails.css';
+import { CSSTransition } from 'react-transition-group';
 
 function EducationDetails() {
-  const [educationData, setEducationData] = useState({
+  // Check if there is saved educationInfo in localStorage and load it, otherwise use empty values
+  const savedEducationInfo = JSON.parse(localStorage.getItem('educationInfo')) || {
     level: '',
     faculty: '',
     secondFaculty: '',
     course: '',
     year: '',
-  });
+  };
 
+  const [educationData, setEducationData] = useState(savedEducationInfo);
+  const [inProp, setInProp] = useState(true); // fade-out effect
   const navigate = useNavigate();
+
+  // Auto-save to localStorage whenever educationData changes
+  useEffect(() => {
+    localStorage.setItem('educationInfo', JSON.stringify(educationData));
+  }, [educationData]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setEducationData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  // Validation function for Year
+  const validateYear = (year) => {
+    return year >= 1;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Check if the required fields are filled
+    if (!educationData.level || !educationData.faculty || !educationData.course || !educationData.year) {
+      alert('Please fill in all required fields.');
+      return;
+    }
+
+    // Validate the year input
+    if (!validateYear(educationData.year)) {
+      alert('Year level cannot be less than 1.');
+      return;
+    }
+
+    // Store education info in localStorage
+    localStorage.setItem('educationInfo', JSON.stringify(educationData));
+
+    // Trigger fade-out animation before navigating
+    setInProp(false);
+    setTimeout(() => {
+      navigate('/club-details'); // Navigate to the next step
+    }, 300); // Match animation duration
+  };
+
+  // Updates the course options based on the selected level
+  const getCourses = () => {
+    if (educationData.level === 'Undergraduate') {
+      return undergraduateCourses;
+    } else if (educationData.level === 'Postgraduate') {
+      return postgraduateCourses;
+    }
+    return [];
+  };
 
   // Arrays for Undergraduate and Postgraduate courses
   const undergraduateCourses = [
@@ -317,145 +374,120 @@ function EducationDetails() {
     "X-ray Image Interpretation",
   ];
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setEducationData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  
-    // Store education info in localStorage
-    localStorage.setItem('educationInfo', JSON.stringify(educationData));
-    navigate('/club-details'); // Navigate to the next step
-  };  
-
-  // Updates the course options based on the selected level
-  const getCourses = () => {
-    if (educationData.level === 'Undergraduate') {
-      return undergraduateCourses;
-    } else if (educationData.level === 'Postgraduate') {
-      return postgraduateCourses;
-    }
-    return [];
-  };
-
   return (
-    <div className="education-wrapper">
-      <div className="education-header">
-        <img src="/images/monash_logo_login.png" alt="Monash University Logo" className="education-logo" />
-      </div>
-      <div className="education-container">
-        {/* Back button */}
-        <button className="education-back-button" onClick={() => navigate('/signup')}>
-          &#8592;
-        </button>
-        
-        <div className="education-image">
-          <img src="/images/sign_up_illustration.png" alt="Sign Up Illustration" className="education-illustration" />
+    <CSSTransition in={inProp} timeout={300} classNames="fade">
+      <div className="education-wrapper">
+        <div className="education-header">
+          <img src="/images/monash_logo_login.png" alt="Monash University Logo" className="education-logo" />
         </div>
-        <div className="education-form-container">
-          <h2 className="education-heading">Education Details</h2>
-          <p className="education-description">Please fill in your education details.</p>
-          <form onSubmit={handleSubmit} className="education-form">
-            <div className="education-form-group">
-              <label className="education-label">Level</label>
-              <select
-                name="level"
-                value={educationData.level}
-                onChange={handleChange}
-                className="education-input"
-                required
-              >
-                <option value="">Select Level</option>
-                <option value="Undergraduate">Undergraduate</option>
-                <option value="Postgraduate">Postgraduate</option>
-              </select>
-            </div>
+        <div className="education-container">
+          {/* Back button */}
+          <button className="education-back-button" onClick={() => navigate('/signup')}>
+            &#8592;
+          </button>
 
-            <div className="education-form-group">
-              <label className="education-label">Faculty</label>
-              <select
-                name="faculty"
-                value={educationData.faculty}
-                onChange={handleChange}
-                className="education-input"
-                required
-              >
-                <option value="">Select Faculty</option>
-                <option value="Faculty of Art, Design and Architecture">Faculty of Art, Design and Architecture</option>
-                <option value="Faculty of Arts">Faculty of Arts</option>
-                <option value="Faculty of Business and Economics">Faculty of Business and Economics</option>
-                <option value="Faculty of Education">Faculty of Education</option>
-                <option value="Faculty of Engineering">Faculty of Engineering</option>
-                <option value="Faculty of Information Technology">Faculty of Information Technology</option>
-                <option value="Faculty of Law">Faculty of Law</option>
-                <option value="Faculty of Medicine, Nursing and Health Sciences">Faculty of Medicine, Nursing and Health Sciences</option>
-                <option value="Faculty of Pharmacy and Pharmaceutical Sciences">Faculty of Pharmacy and Pharmaceutical Sciences</option>
-                <option value="Faculty of Science">Faculty of Science</option>
-              </select>
-            </div>
+          <div className="education-image">
+            <img src="/images/sign_up_illustration.png" alt="Sign Up Illustration" className="education-illustration" />
+          </div>
+          <div className="education-form-container">
+            <h2 className="education-heading">Education Details</h2>
+            <p className="education-description">Please fill in your education details.</p>
+            <form onSubmit={handleSubmit} className="education-form">
+              <div className="education-form-group">
+                <label className="education-label">Level</label>
+                <select
+                  name="level"
+                  value={educationData.level}
+                  onChange={handleChange}
+                  className="education-input"
+                  required
+                >
+                  <option value="">Select Level</option>
+                  <option value="Undergraduate">Undergraduate</option>
+                  <option value="Postgraduate">Postgraduate</option>
+                </select>
+              </div>
 
-            <div className="education-form-group">
-              <label className="education-label">Second Faculty</label>
-              <select
-                name="faculty"
-                value={educationData.faculty}
-                onChange={handleChange}
-                className="education-input"
-                required
-              >
-                <option value="">Select Faculty</option>
-                <option value="Faculty of Art, Design and Architecture">Faculty of Art, Design and Architecture</option>
-                <option value="Faculty of Arts">Faculty of Arts</option>
-                <option value="Faculty of Business and Economics">Faculty of Business and Economics</option>
-                <option value="Faculty of Education">Faculty of Education</option>
-                <option value="Faculty of Engineering">Faculty of Engineering</option>
-                <option value="Faculty of Information Technology">Faculty of Information Technology</option>
-                <option value="Faculty of Law">Faculty of Law</option>
-                <option value="Faculty of Medicine, Nursing and Health Sciences">Faculty of Medicine, Nursing and Health Sciences</option>
-                <option value="Faculty of Pharmacy and Pharmaceutical Sciences">Faculty of Pharmacy and Pharmaceutical Sciences</option>
-                <option value="Faculty of Science">Faculty of Science</option>
-              </select>
-            </div>
+              <div className="education-form-group">
+                <label className="education-label">Course</label>
+                <select
+                  name="course"
+                  value={educationData.course}
+                  onChange={handleChange}
+                  className="education-input"
+                  required
+                >
+                  <option value="">Select Course</option>
+                  {getCourses().map((course, index) => (
+                    <option key={index} value={course}>{course}</option>
+                  ))}
+                </select>
+              </div>
 
-            <div className="education-form-group">
-              <label className="education-label">Course</label>
-              <select
-                name="course"
-                value={educationData.course}
-                onChange={handleChange}
-                className="education-input"
-                required
-              >
-                <option value="">Select Course</option>
-                {getCourses().map((course, index) => (
-                  <option key={index} value={course}>{course}</option>
-                ))}
-              </select>
-            </div>
+              <div className="education-form-group">
+                <label className="education-label">Faculty</label>
+                <select
+                  name="faculty"
+                  value={educationData.faculty}
+                  onChange={handleChange}
+                  className="education-input"
+                  required
+                >
+                  <option value="">Select Faculty</option>
+                  <option value="Faculty of Art, Design and Architecture">Faculty of Art, Design and Architecture</option>
+                  <option value="Faculty of Arts">Faculty of Arts</option>
+                  <option value="Faculty of Business and Economics">Faculty of Business and Economics</option>
+                  <option value="Faculty of Education">Faculty of Education</option>
+                  <option value="Faculty of Engineering">Faculty of Engineering</option>
+                  <option value="Faculty of Information Technology">Faculty of Information Technology</option>
+                  <option value="Faculty of Law">Faculty of Law</option>
+                  <option value="Faculty of Medicine, Nursing and Health Sciences">Faculty of Medicine, Nursing and Health Sciences</option>
+                  <option value="Faculty of Pharmacy and Pharmaceutical Sciences">Faculty of Pharmacy and Pharmaceutical Sciences</option>
+                  <option value="Faculty of Science">Faculty of Science</option>
+                </select>
+              </div>
 
-            <div className="education-form-group">
-              <label className="education-label">Year</label>
-              <input 
-                type="number" 
-                name="year" 
-                value={educationData.year} 
-                onChange={handleChange} 
-                className="education-input" 
-                required 
-                min="1"
-              />
-            </div>
+              <div className="education-form-group">
+                <label className="education-label">Second Faculty</label>
+                <select
+                  name="secondFaculty"
+                  value={educationData.secondFaculty}
+                  onChange={handleChange}
+                  className="education-input"
+                >
+                  <option value="">Select Second Faculty</option>
+                  <option value="Faculty of Art, Design and Architecture">Faculty of Art, Design and Architecture</option>
+                  <option value="Faculty of Arts">Faculty of Arts</option>
+                  <option value="Faculty of Business and Economics">Faculty of Business and Economics</option>
+                  <option value="Faculty of Education">Faculty of Education</option>
+                  <option value="Faculty of Engineering">Faculty of Engineering</option>
+                  <option value="Faculty of Information Technology">Faculty of Information Technology</option>
+                  <option value="Faculty of Law">Faculty of Law</option>
+                  <option value="Faculty of Medicine, Nursing and Health Sciences">Faculty of Medicine, Nursing and Health Sciences</option>
+                  <option value="Faculty of Pharmacy and Pharmaceutical Sciences">Faculty of Pharmacy and Pharmaceutical Sciences</option>
+                  <option value="Faculty of Science">Faculty of Science</option>
+                </select>
+              </div>
 
-            <button type="submit" className="education-button">Next ➜</button>
-          </form>
+              <div className="education-form-group">
+                <label className="education-label">Year</label>
+                <input 
+                  type="number" 
+                  name="year" 
+                  value={educationData.year} 
+                  onChange={handleChange} 
+                  className="education-input" 
+                  required 
+                  min="1"
+                />
+              </div>
+
+              <button type="submit" className="education-button">Next ➜</button>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
+    </CSSTransition>
   );
 }
 
