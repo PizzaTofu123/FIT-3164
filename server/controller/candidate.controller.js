@@ -95,7 +95,7 @@ module.exports = {
                 return res.status(500).json({message : 'Candidate not found'});
             }
             
-            res.status(200).json({message: `deleted candidate with id: ${id}`});
+            res.status(200).json(candidate);
 
         }
         catch (error){

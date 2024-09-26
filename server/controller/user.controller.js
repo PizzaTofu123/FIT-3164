@@ -434,6 +434,7 @@ module.exports = {
                 return Math.floor(Math.random() * (max - min + 1) + min);
             }
             let userArray = [];
+
             for (let i = 1; i < 451; i++) {
                 let level = levelArray[Math.floor(Math.random() * levelArray.length)];
                 let faculty = faculties[Math.floor(Math.random() * faculties.length)];
@@ -455,7 +456,7 @@ module.exports = {
                     dob: new Date(),
                     age: randomIntFromInterval(17, 62),
                     email: "clubmem" + i + "@student.monash.edu",
-                    clubs: ["66e96f137e1df97dfe38e09b"],
+                    clubs: ["66e96f137e1df97dfe38e09b", "66e96f137e1df97dfe38e09c"],
                     representingClubs: [],
                     level: level,
                     faculty: faculty,
@@ -478,11 +479,13 @@ module.exports = {
                 if (user.representingClubs){
                     repList.push(user._id)
                 }
+                await mainQueries.clubs._linkUserToClubs(user._id, user.clubs, user.representingClubs);
             }
             const club  = await Club.findByIdAndUpdate(req.body.clubId, {
                 clubMembers: memList,
                 clubRepresentatives: repList
             });
+            
             res.status(200).json({message: "done"});
 
         }
