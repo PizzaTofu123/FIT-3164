@@ -51,7 +51,6 @@ const EditElection = () => {
     e.preventDefault();
     
     const updatedElection = {
-      clubName,
       electionStartDate: new Date(startDate).toISOString(),
       electionEndDate: new Date(endDate).toISOString(),
     };
@@ -59,7 +58,7 @@ const EditElection = () => {
     console.log("Updating election with data:", updatedElection);
     
     try {
-      const response = await fetch(`http://localhost:5000/api/clubs/${clubId}`, {
+      const response = await fetch(`http://localhost:5000/api/clubs/election/schedule/${clubId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -68,7 +67,7 @@ const EditElection = () => {
       });
 
       const result = await response.json();
-  console.log("Server response:", result); // Log the server's response
+      console.log("Server response:", result); // Log the server's response
       
       if (response.ok) {
         navigate(`/clubrepresentative`);
@@ -79,6 +78,7 @@ const EditElection = () => {
     } catch (err) {
         console.error("Error updating election:", err);
       setError("Error updating election.");
+      
     }
   };
 
@@ -103,19 +103,6 @@ const EditElection = () => {
                 value={clubName}
                 readOnly 
             />
-            {/* <select
-              id="clubName"
-              value={clubName}
-              onChange={(e) => setClubName(e.target.value)}
-              required
-            >
-              <option value="">Select a Club</option> */}
-              {/* {clubs.map((club) => (
-                <option key={club.id} value={club.name}>
-                  {club.name}
-                </option>
-              ))} */}
-            {/* </select> */}
           </div>
 
           {/* <div>
@@ -150,17 +137,6 @@ const EditElection = () => {
               required
             />
           </div>
-
-          {/* <div>
-            <label>Post-Election Results Visibility: </label>
-            <select
-              value={resultsVisibility}
-              onChange={(e) => setResultsVisibility(e.target.value)}
-            >
-              <option value="membersAndOrganisers">To Members and Organisers</option>
-              <option value="organisers">Only to Organisers</option>
-            </select>
-          </div> */}
 
           <div className="buttons">  
             <button type="button" onClick={() => navigate(-1)}>Cancel</button>
