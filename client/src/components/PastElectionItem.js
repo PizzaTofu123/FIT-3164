@@ -23,8 +23,8 @@ const PastElectionItem = ({ clubLogo, clubName, closingDate }) => {
         <h3>{clubName}</h3>
         <div className="election-info-index">
         <p>Polling closed: {closingDate}</p>
-        <button className="index-button disabled" onClick={handleEditDetailsClick}>Edit Details</button>
-        <button className="index-button disabled" onClick={handleEditCandidatesClick}>Edit Candidates</button>
+        <button className="index-button disabled">Edit Details</button>
+        <button className="index-button disabled">Edit Candidates</button>
         <button className="index-button yellow" onClick={handleViewResultsClick}>View Results</button>
     </div>
     </div>

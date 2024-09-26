@@ -25,7 +25,7 @@ const UpcomingElectionItemCR = ({ clubId, clubLogo, clubName, openingDate }) => 
         <p>Polling opens: {openingDate}</p>
         <button className="index-button grey" onClick={handleEditDetailsClick}>Edit Details</button>
         <button className="index-button grey" onClick={handleEditCandidatesClick}>Edit Candidates</button>
-        <button className="index-button disabled" onClick={handleViewResultsClick}>View Results</button>
+        <button className="index-button disabled">View Results</button>
     </div>
     </div>
     </div>
