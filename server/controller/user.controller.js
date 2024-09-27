@@ -9,6 +9,8 @@ module.exports = {
     createOneUser : async (req,res) =>
     {
         try {
+            console.log('Received user data:', req.body);
+
             const inClub = await mainQueries.clubs.checkMemberAndRepresentativeUsingEmail(req.body.email, req.body.clubs, req.body.representingClubs);
             if(!inClub){
                 res.status(200).json({message: "Wrong club/representative input"});
@@ -34,10 +36,13 @@ module.exports = {
                     year: req.body.year,
                 })
                 await mainQueries.clubs._linkUserToClubs(user._id, user.clubs, user.representingClubs);
+                
+                console.log('User successfully created', user);
                 res.status(200).json(user);
             }
         }
         catch (error){
+            console.error('Error creating user:', error);
             //status 500 means error
             res.status(500).json({message:error.message});
         }
