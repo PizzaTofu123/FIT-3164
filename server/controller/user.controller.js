@@ -114,6 +114,25 @@ module.exports = {
         }
     },
 
+    checkEmailExists: async (req, res) => {
+        try {
+            const { email } = req.body;
+
+            // Check if the email exists in the database
+            const existingUser = await User.findOne({ email: email });
+            if (existingUser) {
+                // If user is found, return a message indicating the account exists
+                return res.status(200).json({ exists: true, message: 'User account already exists. Please sign in.' });
+            } else {
+                // If no user is found, return a response indicating the account doesn't exist
+                return res.status(200).json({ exists: false, message: 'Email available for registration.' });
+            }
+        } catch (error) {
+            console.error('Error checking email:', error);
+            return res.status(500).json({ message: 'An error occurred while checking the email.' });
+        }
+    },
+
     
     login : async (req,res) =>{
         try {

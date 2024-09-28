@@ -17,6 +17,7 @@ function SignUp() {
 
   const [formData, setFormData] = useState(savedPersonalInfo);
   const [inProp, setInProp] = useState(true);  // Control the animation state
+  const [errorMessage, setErrorMessage] = useState('');  // For showing error messages
   const navigate = useNavigate();
 
   // Auto-save to localStorage whenever formData changes
@@ -30,6 +31,8 @@ function SignUp() {
       ...prevData,
       [name]: value,
     }));
+    // Clear the error message when the user makes changes
+    setErrorMessage('');
   };
 
   // Validation functions
@@ -47,27 +50,53 @@ function SignUp() {
 
   const capitalizeName = (name) => name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
 
-  const handleSubmit = (e) => {
+  // Check if email already exists in the database
+  const checkEmailExists = async (email) => {
+    try {
+      const response = await fetch('http://localhost:5000/api/users/check-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+      return data.exists; // Return true if the email exists
+    } catch (error) {
+      console.error('Error checking email:', error);
+      return false; // Default to false if an error occurs
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match");
+      setErrorMessage("Passwords do not match");
       return;
     }
 
     if (!validateDob(formData.dob)) {
-      alert("Invalid Date of Birth. It must be within the last 100 years and not in the future.");
+      setErrorMessage("Invalid Date of Birth. It must be within the last 100 years and not in the future.");
       return;
     }
 
     if (!validateEmail(formData.monashEmail)) {
-      alert("Invalid Monash Email. It must contain '@student.monash.edu'.");
+      setErrorMessage("Invalid Monash Email. It must contain '@student.monash.edu'.");
       return;
     }
 
     if (!validateMonashID(formData.monashID)) {
-      alert("Invalid Monash ID. It must be exactly 8 digits.");
+      setErrorMessage("Invalid Monash ID. It must be exactly 8 digits.");
       return;
+    }
+
+    // Check if the email is already registered
+    const emailExists = await checkEmailExists(formData.monashEmail);
+    if (emailExists) {
+      setErrorMessage("This email is already registered. Please sign in instead.");
+      return; // Stop form submission if email exists
     }
 
     // Capitalize first and last name before saving
@@ -89,6 +118,17 @@ function SignUp() {
 
     // Store updated personal info with formatted names
     localStorage.setItem('personalInfo', JSON.stringify(personalInfo));
+
+    // Reset the form data after successful submission
+    setFormData({
+      firstName: '',
+      lastName: '',
+      monashID: '',
+      monashEmail: '',
+      dob: '',
+      password: '',
+      confirmPassword: ''
+    });
 
     // Trigger the transition to the next page
     setInProp(false);
@@ -117,6 +157,10 @@ function SignUp() {
             <p className="signup-text">
               Already have an account? <Link to="/signin" className="signup-link">Sign In</Link>
             </p>
+
+            {/* Display error message */}
+            {errorMessage && <div className="error-message">{errorMessage}</div>}
+
             <form onSubmit={handleSubmit} className="signup-form">
               <div className="signup-form-group">
                 <label className="signup-label">First Name</label>
