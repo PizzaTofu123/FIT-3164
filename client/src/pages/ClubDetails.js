@@ -7,6 +7,7 @@ function ClubDetails() {
   const [clubs, setClubs] = useState([]); // State to store clubs from the backend
   const [selectedClubs, setSelectedClubs] = useState([{ clubId: '', representative: false }]);
   const [inProp, setInProp] = useState(true); // fade-out effect
+  const [errorMessage, setErrorMessage] = useState(''); // Store error message if any
   const navigate = useNavigate();
 
   // Fetch clubs from the backend
@@ -24,9 +25,13 @@ function ClubDetails() {
     fetchClubs();
   }, []);
 
+  // Clear the error message when user interacts with the form
   const handleClubChange = (index, event) => {
     const { name, value, checked, type } = event.target;
     const newClubs = [...selectedClubs];
+
+    // Reset error message when the user selects a club or toggles the representative checkbox
+    setErrorMessage('');
 
     if (type === 'checkbox') {
       newClubs[index][name] = checked;
@@ -43,27 +48,28 @@ function ClubDetails() {
 
   const addClubField = () => {
     setSelectedClubs([...selectedClubs, { clubId: '', representative: false }]);
+    setErrorMessage(''); // Clear error when adding a new club field
   };
 
   const deleteClubField = (index) => {
     const newClubs = selectedClubs.filter((_, i) => i !== index);
     setSelectedClubs(newClubs);
+    setErrorMessage(''); // Clear error when deleting a club field
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+    
     // Retrieve personal info and education info from localStorage
     const personalInfo = JSON.parse(localStorage.getItem('personalInfo'));
     const educationInfo = JSON.parse(localStorage.getItem('educationInfo'));
-  
-    // Adjust the data structure to match what the backend expects
+    
     const userData = {
       firstName: personalInfo.firstName,
       lastName: personalInfo.lastName,
-      studentId: personalInfo.monashID, // Change this to match backend expectation
-      email: personalInfo.monashEmail, // Change this to match backend expectation
-      passwordHash: personalInfo.password, // Backend expects hashed password, handle this as needed
+      studentId: personalInfo.monashID,
+      email: personalInfo.monashEmail,
+      passwordHash: personalInfo.password,
       dob: personalInfo.dob,
       age: personalInfo.age,
       clubs: selectedClubs.map(club => club.clubId), // Only send club IDs
@@ -74,9 +80,9 @@ function ClubDetails() {
       course: educationInfo.course,
       year: educationInfo.year,
     };
-  
+    
     console.log('Submitting User Data to Backend:', JSON.stringify(userData));
-  
+    
     try {
       const response = await fetch('http://localhost:5000/api/users', {
         method: 'POST',
@@ -85,22 +91,29 @@ function ClubDetails() {
         },
         body: JSON.stringify(userData),
       });
-  
+    
       const data = await response.json();
       console.log('Backend Response:', data);
   
-      if (response.ok) {
+      // Check if the backend returned an error regarding clubs/representation
+      if (response.ok && !data.message) {
+        // Clear form and localStorage
+        setSelectedClubs([{ clubId: '', representative: false }]); // Reset selected clubs to initial state
+        localStorage.removeItem('personalInfo'); // Clear saved personal details from localStorage
+        localStorage.removeItem('educationInfo'); // Clear saved education info from localStorage
+  
         setInProp(false); // Trigger fade-out animation before navigating
         setTimeout(() => {
           navigate('/signup-confirmation'); // Redirect to confirmation page
         }, 300); // Match animation duration
       } else {
+        // Show error message instead of redirecting
         const errorMessage = data.message || 'An unknown error occurred';
-        alert(errorMessage); // Handle backend validation errors
+        setErrorMessage(errorMessage); // Display error message in the UI
       }
     } catch (error) {
       console.error('Error during request:', error);
-      alert('An error occurred while registering. Please try again.');
+      setErrorMessage('An error occurred while registering. Please try again.');
     }
   };  
 
@@ -122,6 +135,13 @@ function ClubDetails() {
           <div className="club-form-container">
             <h2 className="club-heading">Club Membership Details</h2>
             <p className="club-description">Enter the clubs that you are a member of.</p>
+
+            {/* Display error message */}
+            {errorMessage && (
+              <div className="error-message">
+                {errorMessage}
+              </div>
+            )}
 
             <form onSubmit={handleSubmit}>
               {selectedClubs.map((club, index) => (
