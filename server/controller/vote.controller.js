@@ -71,6 +71,19 @@ module.exports = {
         }
     },
 
+    getVotesByElectionId : async (req,res) =>{
+        try {
+            //get id from req params instantly
+            const {electionId}  = req.params;
+            const votes = await voteQueries.getVotesByElectionId(electionId)
+    
+            res.status(200).json(votes);
+        }
+            catch (error){
+                res.status(500).json({message:error.message});
+            }
+        },
+
     deleteOneVote : async (req,res) =>{
         try {
             const {voteId}  = req.params;

@@ -1,5 +1,6 @@
 const Vote = require("../models/vote.models");
 const mainQueries = require("./main.queries");
+const ObjectId = require('mongodb').ObjectId; 
 
 const voteQueries = {
     createOneVote : async (data) => {
@@ -24,7 +25,18 @@ const voteQueries = {
         const vote = await Vote.findByIdAndDelete(voteId);
         mainQueries.candidates._unlinkVoteFromCandidate(voteId, vote.candidateId);
         return vote;
+    },
+
+    getVotesByElectionId : async (electionId) => {
+
+            votesOId = new ObjectId(electionId)
+            // Mongoose query to find votes by electionId and populate associated fields
+            const votes = await Vote.find({electionId: votesOId});
+            return votes
+
     }
+
+
 }
 
 mainQueries.votes = voteQueries;
