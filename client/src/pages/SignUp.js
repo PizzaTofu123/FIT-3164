@@ -18,6 +18,7 @@ function SignUp() {
   const [formData, setFormData] = useState(savedPersonalInfo);
   const [inProp, setInProp] = useState(true);  // Control the animation state
   const [errorMessage, setErrorMessage] = useState('');  // For showing error messages
+  const [emailExists, setEmailExists] = useState(false);  // To track if the email exists
   const navigate = useNavigate();
 
   // Auto-save to localStorage whenever formData changes
@@ -33,6 +34,26 @@ function SignUp() {
     }));
     // Clear the error message when the user makes changes
     setErrorMessage('');
+    setEmailExists(false); // Reset emailExists if the user changes email
+  };
+
+  // Check if email already exists in the database
+  const checkEmailExists = async (email) => {
+    try {
+      const response = await fetch('http://localhost:5000/api/users/check-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+      return data.exists; // Returns true or false depending on whether the email exists
+    } catch (error) {
+      console.error('Error checking email:', error);
+      return false;
+    }
   };
 
   // Validation functions
@@ -50,53 +71,38 @@ function SignUp() {
 
   const capitalizeName = (name) => name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
 
-  // Check if email already exists in the database
-  const checkEmailExists = async (email) => {
-    try {
-      const response = await fetch('http://localhost:5000/api/users/check-email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      });
-
-      const data = await response.json();
-      return data.exists; // Return true if the email exists
-    } catch (error) {
-      console.error('Error checking email:', error);
-      return false; // Default to false if an error occurs
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Clear any previous error message
+    setErrorMessage('');
+
     if (formData.password !== formData.confirmPassword) {
-      setErrorMessage("Passwords do not match");
+      setErrorMessage("Passwords do not match.");
       return;
     }
 
     if (!validateDob(formData.dob)) {
-      setErrorMessage("Invalid Date of Birth. It must be within the last 100 years and not in the future.");
+      setErrorMessage("Invalid Date of Birth.");
       return;
     }
 
     if (!validateEmail(formData.monashEmail)) {
-      setErrorMessage("Invalid Monash Email. It must contain '@student.monash.edu'.");
+      setErrorMessage("Invalid Monash Email.");
       return;
     }
 
     if (!validateMonashID(formData.monashID)) {
-      setErrorMessage("Invalid Monash ID. It must be exactly 8 digits.");
+      setErrorMessage("Invalid Monash ID.");
       return;
     }
 
-    // Check if the email is already registered
-    const emailExists = await checkEmailExists(formData.monashEmail);
-    if (emailExists) {
+    // Check if the email already exists in the database
+    const emailAlreadyExists = await checkEmailExists(formData.monashEmail);
+    if (emailAlreadyExists) {
       setErrorMessage("This email is already registered. Please sign in instead.");
-      return; // Stop form submission if email exists
+      setEmailExists(true);
+      return;
     }
 
     // Capitalize first and last name before saving
@@ -118,17 +124,6 @@ function SignUp() {
 
     // Store updated personal info with formatted names
     localStorage.setItem('personalInfo', JSON.stringify(personalInfo));
-
-    // Reset the form data after successful submission
-    setFormData({
-      firstName: '',
-      lastName: '',
-      monashID: '',
-      monashEmail: '',
-      dob: '',
-      password: '',
-      confirmPassword: ''
-    });
 
     // Trigger the transition to the next page
     setInProp(false);
@@ -193,7 +188,7 @@ function SignUp() {
                   name="monashID" 
                   value={formData.monashID} 
                   onChange={handleChange} 
-                  className="signup-input" 
+                  className={`signup-input ${emailExists ? 'input-error' : ''}`} 
                   required 
                 />
               </div>
@@ -205,7 +200,7 @@ function SignUp() {
                   name="monashEmail" 
                   value={formData.monashEmail} 
                   onChange={handleChange} 
-                  className="signup-input" 
+                  className={`signup-input ${emailExists ? 'input-error' : ''}`} 
                   required 
                 />
               </div>
