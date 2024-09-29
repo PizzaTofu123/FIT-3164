@@ -14,7 +14,7 @@ const ResultItem = ({ candidates }) => {
     <div className="preferences-page">
     <div className="page-header">
       <button className="back-button-preference" onClick={handleBackClick}>
-      <i class="fa-solid fa-circle-arrow-left"></i>
+      <i className="fa-solid fa-circle-arrow-left"></i>
         </button>
       <h2 className="index">{clubName}</h2>
       </div>
