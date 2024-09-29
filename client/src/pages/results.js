@@ -7,18 +7,28 @@ import {
   Legend,
   PolarAreaController,
   RadialLinearScale,
-  ArcElement
+  ArcElement,
+  LinearScale,
+  CategoryScale,
+  BarController,
+  BarElement,
+  
 } from 'chart.js';
+
 
 const Results = () => {
   const location = useLocation(); 
   const chartRef = useRef(null);
-  const canvasRef = useRef(null); // Reference to the canvas element
+  const canvasRef = useRef(null); // polar canvas
+  const barChartRef = useRef(null);
+  const barCanvasRef = useRef(null);
+  const [votesData, setVotesData] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState('level'); // default to level of education
   const [facultyData, setFacultyData] = useState({ labels: [], data: [] });
-  const [club, setClub] = useState(null); // Store the full club object
+  const [club, setClub] = useState(null); 
   const [sampleCandidates, setSampleCandidates] = useState([]); 
 
-  // Extract the club name from the URL 
+
   const clubName = decodeURIComponent(location.pathname.split("/").pop());
 
   // Fetch club by name and retrieve its elections
@@ -30,6 +40,7 @@ const Results = () => {
       if (club) {
         setClub(club); 
         fetchElections(club.elections); 
+        fetchVotes(club.elections);
       }
     } catch (error) {
       console.error('Error fetching clubs:', error);
@@ -44,11 +55,9 @@ const Results = () => {
       try {
         const electionResponse = await fetch(`http://localhost:5000/api/elections/${electionId}`);
         const election = await electionResponse.json();
-        console.log(election);
         const candidates = await fetchCandidates(election.candidates);
         const winner = findWinner(candidates);
         
-        // Add the winner 
         updatedCandidates.push({
           name: winner.name,
           position: election.electionName,
@@ -84,31 +93,134 @@ const Results = () => {
     }, null);
   };
 
-  // will need to change this later 
-  // Fetch users and process faculty data
-  const fetchUsers = async () => {
-    try {
-      const response = await fetch('http://localhost:5000/api/users/');
-      const users = await response.json();
-      const facultyCounts = users.reduce((acc, user) => {
-        const faculty = user.faculty;
-        acc[faculty] = (acc[faculty] || 0) + 1;
-        return acc;
-      }, {});
-      setFacultyData({
-        labels: Object.keys(facultyCounts),
-        data: Object.values(facultyCounts)
-      });
-      
-    } catch (error) {
-      console.error('Error fetching users:', error);
+  // Fetch votes and aggregate them by faculty and position for Sankey chart
+  const fetchVotes = async (electionIds) => {
+    const facultyVotes = {};
+    const levelCounts = {};
+    const courseCounts = {};
+    const yearCounts = {};
+    
+    for (const electionId of electionIds) {
+      try {
+        const votesResponse = await fetch(`http://localhost:5000/api/votes/election/${electionId}`);
+        const votes = await votesResponse.json();
+        
+        // total votes by faculty and prepare Sankey data
+        for (const vote of votes) {
+          const faculty = vote.faculty || 'Unknown Faculty';
+          const level = vote.level || 'Unknown Level';
+          const course = vote.course || 'Unknown Course';
+          const year = vote.year || 'Unknown Year';
+
+          if (!facultyVotes[faculty]) {
+            facultyVotes[faculty] = 0;
+          }
+
+
+          levelCounts[level] = (levelCounts[level] || 0) + 1;
+          courseCounts[course] = (courseCounts[course] || 0) + 1;
+          yearCounts[year] = (yearCounts[year] || 0) + 1;
+          facultyVotes[faculty] += 1; 
+        }
+      } catch (error) {
+        console.error(`Error fetching votes for election ${electionId}:`, error);
+      }
     }
+
+    // set polar data
+    setFacultyData({
+      labels: Object.keys(facultyVotes),
+      data: Object.values(facultyVotes),
+    });
+
+    setVotesData({
+      level: levelCounts,
+      course: Object.fromEntries(Object.entries(courseCounts).filter(([key, value]) => value > 8)),// filter less than 8 cuz theres too much
+      year: yearCounts
+    });
+  };
+
+  const renderChart = () => {
+    if (!votesData || !votesData[selectedCategory] || !barCanvasRef.current) return;
+  
+    const ctx = barCanvasRef.current.getContext('2d');
+    if (barChartRef.current) barChartRef.current.destroy();
+  
+    const data = votesData[selectedCategory];
+    const sortedData = Object.entries(data).sort(([, a], [, b]) => b - a); // Sort by descending
+    const labels = sortedData.map(([label]) => label);
+    const voteCounts = sortedData.map(([, count]) => count);
+  
+    // Rainbow colours
+    const backgroundColors = labels.map((_, index) => `hsl(${index * 40}, 70%, 50%)`); 
+  
+    barChartRef.current = new Chart(ctx, {
+      type: 'bar',  
+      data: {
+        labels: labels,
+        datasets: [{
+          label: `Votes by ${selectedCategory.charAt(0).toUpperCase() + selectedCategory.slice(1)}`,
+          data: voteCounts,
+          backgroundColor: backgroundColors,
+          borderColor: backgroundColors,
+          borderWidth: 1,
+        }],
+      },
+      options: {
+        indexAxis: 'y',  // This makes the chart horizontal
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            beginAtZero: true,
+            ticks: {
+              autoSkip: false,
+            }
+          },
+          y: {
+            beginAtZero: true
+          }
+        },
+        plugins: {
+          legend: {
+            display: true, // Show the legend
+            position: 'top',
+            onClick: () => {},
+            labels: {
+              generateLabels: function (chart) {
+                return chart.data.labels.map((label, index) => ({
+                  text: label, 
+                  fillStyle: chart.data.datasets[0].backgroundColor[index], 
+                  strokeStyle: chart.data.datasets[0].backgroundColor[index],
+                  lineWidth: 1,
+                }));
+              }
+            },
+          },
+          tooltip: {
+            enabled: true, 
+          },
+        }
+      }
+    });
+  };
+  
+  // Handle category change
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
   };
 
   useEffect(() => {
-    Chart.register(PolarAreaController, Tooltip, Legend, RadialLinearScale, ArcElement);
-    fetchUsers();
-    fetchClubByName(); // Fetch the full club object and its elections
+    renderChart();
+  }, [votesData, selectedCategory]);
+
+  useEffect(() => {
+    Chart.register(PolarAreaController, Tooltip, Legend, RadialLinearScale, ArcElement, LinearScale
+      ,CategoryScale,
+      BarController,
+      BarElement
+    );
+    fetchClubByName(); 
   }, [clubName]);
 
   useEffect(() => {
@@ -153,10 +265,11 @@ const Results = () => {
     }
   }, [facultyData]);
 
+
   return (
     <div>
       <h1 className='main-heading'>
-        Elections Results for {clubName} {club && `(Club ID: ${club._id.$oid})`}
+        Elections Results for {clubName} 
       </h1>
 
       <div style={{
@@ -171,6 +284,30 @@ const Results = () => {
       </div>
 
       <ResultItem candidates={sampleCandidates} />
+
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center', 
+        gap: '10px',  
+        marginBottom: '20px'  
+      }}>
+        <button onClick={() => handleCategoryChange('level')}>Level of Education</button>
+        <button onClick={() => handleCategoryChange('course')}>University Course</button>
+        <button onClick={() => handleCategoryChange('year')}>Year of Study</button>
+      </div>
+
+    
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+        marginBottom: '100px',
+      }}>
+        <div style={{ width: '95%' }}>  
+          <canvas ref={barCanvasRef} style={{ width: '100%', height: '500px' }}></canvas>  
+        </div>
+      </div>
     </div>
   );
 };
