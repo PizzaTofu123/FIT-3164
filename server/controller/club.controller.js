@@ -166,7 +166,7 @@ module.exports = {
                     electionOngoingFlag: true,
                     electionStartDate: nowTime,
                     electionEndDate: req.body.electionEndDate
-                    });
+                    }).exec();
         
                 if (!club){
                     return res.status(500).json({message : `Club with id ${clubId} not found`});
@@ -191,7 +191,7 @@ module.exports = {
                 const club  = await Club.findByIdAndUpdate(clubId, {
                     electionStartDate: req.body.electionStartDate,
                     electionEndDate: req.body.electionEndDate
-                    });
+                    }).exec();
         
                 if (!club){
                     return res.status(500).json({message : `Club with id ${clubId} not found`});
