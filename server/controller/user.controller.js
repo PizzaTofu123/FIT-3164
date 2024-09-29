@@ -67,7 +67,7 @@ module.exports = {
                 //get id from ref
                 //may change this to req.body soon ?
                 const {userId}  = req.params;
-                const user  = await userQueries.getOneUser(userId);
+                const user = await User.findById(userId).populate('clubs', 'clubName');
                 if (!user){
                     res.status(500).json({message : `User with id ${userId} not found`});
                 }

@@ -6,7 +6,6 @@ const ClubSchema = mongoose.Schema({
     clubName: {
         type: String,
         required: [true, "Please enter club name"],
-
     },
     clubDescription: {
         type: String,
@@ -14,7 +13,8 @@ const ClubSchema = mongoose.Schema({
     },
     image: {
         type: String,
-        required: false
+        required: false,
+        default: null
     },
     clubRepresentatives: [{
         type: mongoose.Schema.Types.ObjectId,
@@ -42,7 +42,7 @@ const ClubSchema = mongoose.Schema({
     },
     electionOngoingFlag: {
         type: Boolean,
-        deafult:false
+        default: false
     },
     elections: [{
         type: mongoose.Schema.Types.ObjectId,
@@ -51,19 +51,12 @@ const ClubSchema = mongoose.Schema({
     pastElection: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Election"
-    }],
-    image: {
-        type: String,
-        required: false,
-        default: null
-    },
-    
-},
-    {
-        // 2 extra fields for created and updated at
-        Timestamps: true
-    }
-);
+    }]
+}, {
+    // 2 extra fields for created and updated at
+    timestamps: true
+});
+
 
 //for mongodb to use
 const Club = mongoose.model("Club", ClubSchema);
