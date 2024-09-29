@@ -37,6 +37,17 @@ function ClubDetails() {
       newClubs[index][name] = checked;
     } else {
       const selectedClub = clubs.find((club) => club.clubName === value); // Find the club by its name
+      
+      // Check if the club has already been selected
+      const alreadySelected = selectedClubs.some(
+        (club) => club.clubId === selectedClub._id && club.clubId !== newClubs[index].clubId
+      );
+
+      if (alreadySelected) {
+        setErrorMessage('This club has already been selected. Please choose a different one.');
+        return;
+      }
+
       if (selectedClub) {
         newClubs[index].clubId = selectedClub._id; // Store the club's _id (ObjectId)
         newClubs[index].clubName = selectedClub.clubName; // Store club name (optional, for display purposes)
@@ -115,7 +126,7 @@ function ClubDetails() {
       console.error('Error during request:', error);
       setErrorMessage('An error occurred while registering. Please try again.');
     }
-  };  
+  };
 
   return (
     <CSSTransition in={inProp} timeout={300} classNames="fade">
