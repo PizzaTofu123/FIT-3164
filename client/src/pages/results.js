@@ -1,61 +1,120 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import ResultItem from '../components/ResultItem';
 import {
   Chart,
   Tooltip,
   Legend,
- PolarAreaController, RadialLinearScale, ArcElement
-  } from 'chart.js';
-
-const sampleCandidates = [
-  { image: 'https://cdn-icons-png.flaticon.com/128/3884/3884864.png', name: 'Brian Bells', position: 'President', votes: 70 },
-  { image: 'https://cdn-icons-png.flaticon.com/128/4892/4892710.png', name: 'Peeta Malarkey', position: 'Vice President', votes: 46 },
-  { image: 'https://cdn-icons-png.flaticon.com/128/4329/4329449.png', name: 'Wonyoung Jang', position: 'Secretary', votes: 56 },
-  { image: 'https://cdn-icons-png.flaticon.com/128/4829/4829575.png', name: 'Karina Yu', position: 'Treasurer', votes: 50 },
-  { image: 'https://cdn-icons-png.flaticon.com/128/3667/3667832.png', name: 'Yoji Daphne', position: 'Events Director', votes: 61 },
-];
+  PolarAreaController,
+  RadialLinearScale,
+  ArcElement
+} from 'chart.js';
 
 const Results = () => {
+  const location = useLocation(); 
   const chartRef = useRef(null);
+  const canvasRef = useRef(null); // Reference to the canvas element
   const [facultyData, setFacultyData] = useState({ labels: [], data: [] });
+  const [club, setClub] = useState(null); // Store the full club object
+  const [sampleCandidates, setSampleCandidates] = useState([]); 
 
-  // Function to fetch users and process faculty data
+  // Extract the club name from the URL 
+  const clubName = decodeURIComponent(location.pathname.split("/").pop());
+
+  // Fetch club by name and retrieve its elections
+  const fetchClubByName = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/clubs/');
+      const clubs = await response.json();
+      const club = clubs.find(club => club.clubName === "Super cool club"); // use super cool club temporarily
+      if (club) {
+        setClub(club); 
+        fetchElections(club.elections); 
+      }
+    } catch (error) {
+      console.error('Error fetching clubs:', error);
+    }
+  };
+
+  // Fetch elections and their candidates
+  const fetchElections = async (electionIds) => {
+    
+    const updatedCandidates = [];
+    for (const electionId of electionIds) {
+      try {
+        const electionResponse = await fetch(`http://localhost:5000/api/elections/${electionId}`);
+        const election = await electionResponse.json();
+        console.log(election);
+        const candidates = await fetchCandidates(election.candidates);
+        const winner = findWinner(candidates);
+        
+        // Add the winner 
+        updatedCandidates.push({
+          name: winner.name,
+          position: election.electionName,
+          votes: winner.voteCount, 
+          image: null, // For now image is null since idk where to get it from
+        });
+      } catch (error) {
+        console.error(`Error fetching election ${electionId}:`, error);
+      }
+    }
+    setSampleCandidates(updatedCandidates); // Update the state with winners
+  };
+
+  // Fetch candidates and their vote counts
+  const fetchCandidates = async (candidateIds) => {
+    const candidates = [];
+    for (const candidateId of candidateIds) {
+      try {
+        const candidateResponse = await fetch(`http://localhost:5000/api/candidates/${candidateId}`);
+        const candidate = await candidateResponse.json();
+        candidates.push(candidate);
+      } catch (error) {
+        console.error(`Error fetching candidate ${candidateId}:`, error);
+      }
+    }
+    return candidates;
+  };
+
+  // Find winner
+  const findWinner = (candidates) => {
+    return candidates.reduce((winner, candidate) => {
+      return candidate.voteCount > (winner?.voteCount || 0) ? candidate : winner;
+    }, null);
+  };
+
+  // will need to change this later 
+  // Fetch users and process faculty data
   const fetchUsers = async () => {
     try {
       const response = await fetch('http://localhost:5000/api/users/');
       const users = await response.json();
-
-      // Process the faculty data
       const facultyCounts = users.reduce((acc, user) => {
         const faculty = user.faculty;
         acc[faculty] = (acc[faculty] || 0) + 1;
         return acc;
       }, {});
-
-      const labels = Object.keys(facultyCounts);
-      const data = Object.values(facultyCounts);
-
-      setFacultyData({ labels, data });
+      setFacultyData({
+        labels: Object.keys(facultyCounts),
+        data: Object.values(facultyCounts)
+      });
+      
     } catch (error) {
       console.error('Error fetching users:', error);
     }
   };
 
   useEffect(() => {
-
-    Chart.register(PolarAreaController, Tooltip, Legend,RadialLinearScale, ArcElement);
-
+    Chart.register(PolarAreaController, Tooltip, Legend, RadialLinearScale, ArcElement);
     fetchUsers();
-  }, []);
+    fetchClubByName(); // Fetch the full club object and its elections
+  }, [clubName]);
 
   useEffect(() => {
-    if (facultyData.labels.length > 0) {
-      const ctx = document.getElementById('polar');
-
-      if (chartRef.current) {
-        chartRef.current.destroy();
-      }
-
+    if (facultyData.labels.length > 0 && canvasRef.current) {
+      const ctx = canvasRef.current.getContext('2d');
+      if (chartRef.current) chartRef.current.destroy(); 
       chartRef.current = new Chart(ctx, {
         type: 'polarArea',
         data: {
@@ -82,40 +141,36 @@ const Results = () => {
           aspectRatio: 1,
           plugins: {
             legend: {
-              position: 'right', // Position the legend to the right
+              position: 'right'
             }
           }
         }
       });
 
       return () => {
-        if (chartRef.current) {
-          chartRef.current.destroy();
-        }
+        if (chartRef.current) chartRef.current.destroy();
       };
     }
   }, [facultyData]);
 
   return (
     <div>
-      <h1 className='main-heading'>Elections Results</h1>
+      <h1 className='main-heading'>
+        Elections Results for {clubName} {club && `(Club ID: ${club._id.$oid})`}
+      </h1>
 
-      {/* Flexbox container to center the chart with the legend on the right */}
       <div style={{
         display: 'flex',
-        justifyContent: 'center',  // Center the chart and legend container
-        alignItems: 'center',      // Vertically center if needed
-        height: '50vh',           // Full viewport height for centering
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '50vh',
       }}>
-        <div style={{ width: '700px' }}>  {/* Adjust the width of the chart container */}
-          <canvas id="polar" style={{ width: '100%', height: '100%' }}></canvas>
+        <div style={{ width: '700px' }}>
+          <canvas ref={canvasRef} style={{ width: '100%', height: '100%' }}></canvas>
         </div>
       </div>
 
-      {/* Render the sample candidates */}
       <ResultItem candidates={sampleCandidates} />
-
-
     </div>
   );
 };
