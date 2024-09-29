@@ -134,20 +134,30 @@ module.exports = {
     },
 
     
-    login : async (req,res) =>{
+    login : async (req, res) => {
         try {
-            const user = await User.findOne({ email:req.body.email }).exec();
-            if (user) {
-                let flag = await bcrypt.compare(req.body.password, user.passwordHash);
-                res.status(200).json(flag);
-            } else {
-                res.status(200).json(false);
+            const user = await User.findOne({ email: req.body.email }).exec();
+    
+            if (!user) {
+                // If the user does not exist, return a 'User not found' message
+                return res.status(404).json({ message: 'User not found' });
             }
+    
+            // If the user exists, compare the provided password with the stored password
+            const isPasswordValid = await bcrypt.compare(req.body.password, user.passwordHash);
+    
+            if (!isPasswordValid) {
+                // If the password is incorrect, return an 'Invalid password' message
+                return res.status(401).json({ message: 'Invalid password' });
+            }
+    
+            // If both email and password are correct, respond with user data
+            res.status(200).json(user);
+        } catch (error) {
+            console.error('Error during login:', error);
+            res.status(500).json({ message: 'Server error during login' });
         }
-        catch (error){
-            res.status(500).json({message:error.message});
-        }
-    },
+    },    
 
     populateUser : async (req,res) =>{
         try{
