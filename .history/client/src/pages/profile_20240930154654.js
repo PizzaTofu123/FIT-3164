@@ -26,7 +26,7 @@ function Profile({ user, handleLogout }) {
         );
 
         const fetchedClubsDetails = await Promise.all(clubDetailsPromises);
-        setClubsDetails(fetchedClubsDetails);
+        setClubsDetails(fetchedClubsDetails); // Store the fetched club details
         setLoading(false);
       } catch (err) {
         setError("Failed to fetch club data.");
