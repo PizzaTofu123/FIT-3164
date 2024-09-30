@@ -1,30 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import ResultItem from '../components/ResultItem';
-import {
-  Chart,
-  Tooltip,
-  Legend,
-  PolarAreaController,
-  RadialLinearScale,
-  ArcElement,
-  LinearScale,
-  CategoryScale,
-  BarController,
-  BarElement,
-  
-} from 'chart.js';
+
 
 
 const Results = () => {
   const location = useLocation(); 
-  const chartRef = useRef(null);
-  const canvasRef = useRef(null); // polar canvas
-  const barChartRef = useRef(null);
-  const barCanvasRef = useRef(null);
-  const [votesData, setVotesData] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState('level'); // default to level of education
-  const [facultyData, setFacultyData] = useState({ labels: [], data: [] });
   const [club, setClub] = useState(null); 
   const [sampleCandidates, setSampleCandidates] = useState([]); 
 
@@ -40,7 +21,6 @@ const Results = () => {
       if (club) {
         setClub(club); 
         fetchElections(club.elections); 
-        fetchVotes(club.elections);
       }
     } catch (error) {
       console.error('Error fetching clubs:', error);
@@ -53,13 +33,9 @@ const Results = () => {
     const updatedCandidates = [];
     for (const election of elections) {
       try {
-        
-        // const electionResponse = await fetch(`http://localhost:5000/api/elections/${electionId}`);
-        // const election = await electionResponse.json();
-        // console.log(electionIds);
         const candidates = await fetchCandidates(election.candidates);
         const winner = findWinner(candidates);
-        // console.log(candidates);
+        
         updatedCandidates.push({
           name: winner.firstName + " " + winner.lastName,
           position: election.electionName,
@@ -95,177 +71,9 @@ const Results = () => {
     }, null);
   };
 
-  // Fetch votes and aggregate them by faculty and position for Sankey chart
-  const fetchVotes = async (elections) => {
-    const facultyVotes = {};
-    const levelCounts = {};
-    const courseCounts = {};
-    const yearCounts = {};
-    
-    for (const election of elections) {
-      try {
-        const votesResponse = await fetch(`http://localhost:5000/api/votes/election/${election._id}`);
-        const votes = await votesResponse.json();
-        
-        // total votes by faculty and prepare Sankey data
-        for (const vote of votes) {
-          const faculty = vote.faculty || 'Unknown Faculty';
-          const level = vote.level || 'Unknown Level';
-          const course = vote.course || 'Unknown Course';
-          const year = vote.year || 'Unknown Year';
-
-          if (!facultyVotes[faculty]) {
-            facultyVotes[faculty] = 0;
-          }
-
-
-          levelCounts[level] = (levelCounts[level] || 0) + 1;
-          courseCounts[course] = (courseCounts[course] || 0) + 1;
-          yearCounts[year] = (yearCounts[year] || 0) + 1;
-          facultyVotes[faculty] += 1; 
-        }
-      } catch (error) {
-        console.error(`Error fetching votes for election ${election._id}:`, error);
-      }
-    }
-
-    // set polar data
-    setFacultyData({
-      labels: Object.keys(facultyVotes),
-      data: Object.values(facultyVotes),
-    });
-
-    setVotesData({
-      level: levelCounts,
-      course: Object.fromEntries(Object.entries(courseCounts).filter(([key, value]) => value > 8)),// filter less than 8 cuz theres too much
-      year: yearCounts
-    });
-  };
-
-  const renderChart = () => {
-    if (!votesData || !votesData[selectedCategory] || !barCanvasRef.current) return;
-  
-    const ctx = barCanvasRef.current.getContext('2d');
-    if (barChartRef.current) barChartRef.current.destroy();
-  
-    const data = votesData[selectedCategory];
-    const sortedData = Object.entries(data).sort(([, a], [, b]) => b - a); // Sort by descending
-    const labels = sortedData.map(([label]) => label);
-    const voteCounts = sortedData.map(([, count]) => count);
-  
-    // Rainbow colours
-    const backgroundColors = labels.map((_, index) => `hsl(${index * 40}, 70%, 50%)`); 
-  
-    barChartRef.current = new Chart(ctx, {
-      type: 'bar',  
-      data: {
-        labels: labels,
-        datasets: [{
-          label: `Votes by ${selectedCategory.charAt(0).toUpperCase() + selectedCategory.slice(1)}`,
-          data: voteCounts,
-          backgroundColor: backgroundColors,
-          borderColor: backgroundColors,
-          borderWidth: 1,
-        }],
-      },
-      options: {
-        indexAxis: 'y',  // This makes the chart horizontal
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          x: {
-            beginAtZero: true,
-            ticks: {
-              autoSkip: false,
-            }
-          },
-          y: {
-            beginAtZero: true
-          }
-        },
-        plugins: {
-          legend: {
-            display: true, // Show the legend
-            position: 'top',
-            onClick: () => {},
-            labels: {
-              generateLabels: function (chart) {
-                return chart.data.labels.map((label, index) => ({
-                  text: label, 
-                  fillStyle: chart.data.datasets[0].backgroundColor[index], 
-                  strokeStyle: chart.data.datasets[0].backgroundColor[index],
-                  lineWidth: 1,
-                }));
-              }
-            },
-          },
-          tooltip: {
-            enabled: true, 
-          },
-        }
-      }
-    });
-  };
-  
-  // Handle category change
-  const handleCategoryChange = (category) => {
-    setSelectedCategory(category);
-  };
-
   useEffect(() => {
-    renderChart();
-  }, [votesData, selectedCategory]);
-
-  useEffect(() => {
-    Chart.register(PolarAreaController, Tooltip, Legend, RadialLinearScale, ArcElement, LinearScale
-      ,CategoryScale,
-      BarController,
-      BarElement
-    );
     fetchClubByName(); 
   }, [clubName]);
-
-  useEffect(() => {
-    if (facultyData.labels.length > 0 && canvasRef.current) {
-      const ctx = canvasRef.current.getContext('2d');
-      if (chartRef.current) chartRef.current.destroy(); 
-      chartRef.current = new Chart(ctx, {
-        type: 'polarArea',
-        data: {
-          labels: facultyData.labels,
-          datasets: [{
-            label: 'Users by Faculty',
-            data: facultyData.data,
-            backgroundColor: [
-              'rgb(255, 99, 132)',
-              'rgb(75, 192, 192)',
-              'rgb(255, 205, 86)',
-              'rgb(201, 203, 207)',
-              'rgb(54, 162, 235)',
-              'rgb(153, 102, 255)',
-              'rgb(255, 159, 64)',
-              'rgb(255, 99, 71)',
-              'rgb(60, 179, 113)',
-              'rgb(106, 90, 205)'
-            ],
-          }]
-        },
-        options: {
-          maintainAspectRatio: false,
-          aspectRatio: 1,
-          plugins: {
-            legend: {
-              position: 'right'
-            }
-          }
-        }
-      });
-
-      return () => {
-        if (chartRef.current) chartRef.current.destroy();
-      };
-    }
-  }, [facultyData]);
 
 
   return (
@@ -274,42 +82,9 @@ const Results = () => {
         Elections Results for {clubName} 
       </h1>
 
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '50vh',
-      }}>
-        <div style={{ width: '700px' }}>
-          <canvas ref={canvasRef} style={{ width: '100%', height: '100%' }}></canvas>
-        </div>
-      </div>
-
       <ResultItem candidates={sampleCandidates} />
 
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center', 
-        gap: '10px',  
-        marginBottom: '20px'  
-      }}>
-        <button onClick={() => handleCategoryChange('level')}>Level of Education</button>
-        <button onClick={() => handleCategoryChange('course')}>University Course</button>
-        <button onClick={() => handleCategoryChange('year')}>Year of Study</button>
-      </div>
 
-    
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%',
-        marginBottom: '100px',
-      }}>
-        <div style={{ width: '80%' }}>  
-          <canvas ref={barCanvasRef} style={{ width: '100%', height: '500px' }}></canvas>  
-        </div>
-      </div>
     </div>
   );
 };
