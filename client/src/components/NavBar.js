@@ -23,7 +23,7 @@ const NavBar = ({ user }) => {
       <div className="navbar-right">
         {representingClubs.length > 0 && (
           <Link to="/clubrepresentative">
-            <i className="fas fa-user-tie navbar-icon"></i>
+            <i className="fas fa-solid fa-people-group navbar-icon"></i>
           </Link>
         )}
         <i className="fas fa-bell navbar-icon"></i>
