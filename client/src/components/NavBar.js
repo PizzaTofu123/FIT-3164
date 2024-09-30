@@ -7,6 +7,7 @@ const NavBar = ({ user }) => {
   // Safely access user data with optional chaining
   const firstName = user?.firstName || 'Guest';
   const lastName = user?.lastName || '';
+  const representingClubs = user?.representingClubs || []; // Check if the user has any representing clubs
 
   return (
     <nav className="navbar">
@@ -18,9 +19,12 @@ const NavBar = ({ user }) => {
         <Link to="/clubelections" className="navbar-link">CLUB ELECTIONS</Link>
       </div>
       <div className="navbar-right">
-        <Link to="/clubrepresentative">
-        <i className="fas fa-solid fa-people-group navbar-icon"></i>
-        </Link>
+        {/* Conditionally render the CLUB REPRESENTATIVE icon */}
+        {representingClubs.length > 0 && (
+          <Link to="/clubrepresentative">
+            <i className="fas fa-solid fa-people-group navbar-icon"></i> {/* Icon for Club Representative */}
+          </Link>
+        )}
         <i className="fas fa-bell navbar-icon"></i>
         <span className="navbar-username">{firstName} {lastName}</span>
         <Link to="/profile">
