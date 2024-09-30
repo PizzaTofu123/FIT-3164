@@ -12,17 +12,18 @@ const NavBar = ({ user }) => {
   return (
     <nav className="navbar">
       <div className="navbar-left">
-        <img src="/images/monash-logo.png" alt="Monash University Logo" className="navbar-logo" />
+        <Link to="/">
+          <img src="/images/monash-logo.png" alt="Monash University Logo" className="navbar-logo" />
+        </Link>
       </div>
       <div className="navbar-center">
         <Link to="/" className="navbar-link">DASHBOARD</Link>
         <Link to="/clubelections" className="navbar-link">CLUB ELECTIONS</Link>
       </div>
       <div className="navbar-right">
-        {/* Conditionally render the CLUB REPRESENTATIVE icon */}
         {representingClubs.length > 0 && (
           <Link to="/clubrepresentative">
-            <i className="fas fa-solid fa-people-group navbar-icon"></i> {/* Icon for Club Representative */}
+            <i className="fas fa-user-tie navbar-icon"></i>
           </Link>
         )}
         <i className="fas fa-bell navbar-icon"></i>
