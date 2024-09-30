@@ -13,8 +13,8 @@ module.exports = {
                 res.status(200).json({message: "club not found"});
             }
             else {
-                let flag = club.electionOngoingFlag;
-                if (flag){
+                let start = club.electionStartDate;
+                if (start != null){
                     const election = await electionQueries.createElection({
                         electionName: req.body.electionName,
                         club: req.body.club,

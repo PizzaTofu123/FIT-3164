@@ -14,6 +14,11 @@ const candidateQueries = {
         return candidate;
     },
 
+    getAllCandidate : async () => {
+        const candidates = await Candidate.find({});
+        return candidates;
+    },
+
     getCandidateWithVotes : async (candidateId) => {
         const candidate = await Candidate.findById(candidateId).populate("votes");
         return candidate;

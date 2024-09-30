@@ -13,6 +13,7 @@ router.put('/:clubId', ClubController.updateOneClub);
 
 router.get('/:clubId', ClubController.getOneClub);
 router.get('/', ClubController.getAllClub);
+router.get('/checkElection', ClubController.checkElection);
 
 router.delete('/:clubId', ClubController.deleteOneClub);
 

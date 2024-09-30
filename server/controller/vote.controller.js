@@ -3,6 +3,7 @@
 const Vote = require("../models/vote.models");
 const voteQueries = require("../queries/vote.queries");
 const mainQueries = require("../queries/main.queries");
+const Flag = require("../models/user.election.flag.models");
 
 module.exports = {
     createOneVote : async (req,res) =>
@@ -123,26 +124,57 @@ module.exports = {
         try{
             const elections = await mainQueries.elections.getAllElection();
             const users = await mainQueries.users.getAllUser();
+            let voteArray = [];
+            let flagArray = [];
             for (let i = 0; i < elections.length; i ++){
                 let election = elections[i];
                 let candidates = election.candidates;
                 for (let i = 0; i < users.length; i ++){
                     let user = users[i];
                     let chosen_candidate = candidates[Math.floor(Math.random() * candidates.length)];
-                    const vote = await voteQueries.createOneVote({
+                    voteArray.push({
                         electionId: election._id,
                         candidateId: chosen_candidate,
                         level: user.level,
                         faculty: user.faculty,
                         secondFaulcty: user.secondFaulcty,
                         course: user.course,
-                        year: user.year
+                        year: user.year,
+                        age: user.age
                     })
-                    await mainQueries.userElectionFlags.createFlag({
+                    flagArray.push({
                         userId: user._id,
                         electionId: election._id
                     })
                 }
+                await Vote.insertMany(voteArray).then(function () {
+                    console.log("Data inserted") 
+                }).catch(function (error) {
+                    console.log(error)     
+                });
+                await Flag.insertMany(flagArray).then(function () {
+                    console.log("Data inserted") 
+                }).catch(function (error) {
+                    console.log(error)     
+                });
+            }
+
+            res.status(200).json({message: "done"});
+        }
+        catch (error){
+            res.status(500).json({message:error.message});
+        }
+    },  
+
+    dumpVote: async (req,res) =>{
+        try{
+            const candidates = await mainQueries.candidates.getAllCandidate();
+            for (let i = 0; i < candidates.length; i ++){
+                let candidate = candidates[i];
+                candidate.votes = [];
+                candidate.voteCount = 0;
+                await candidate.save();
+                await Vote.deleteMany({});
             }
             res.status(200).json({message: "done"});
         }

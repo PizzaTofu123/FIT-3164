@@ -11,5 +11,5 @@ router.put('/:voteId', voteController.updateVote);
 router.delete('/:voteId', voteController.deleteOneVote);
 router.post('/populateVote', voteController.populateVote);
 router.get('/election/:electionId', voteController.getVotesByElectionId);
-
+router.post('/dumpVote', voteController.dumpVote);
 module.exports = router;

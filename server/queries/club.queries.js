@@ -10,12 +10,12 @@ const clubQueries = {
     },
     
     getAllClub : async () => {
-        const club = await Club.find({});
+        const club = await Club.find({}).populate("elections");
         return club;
     },
 
     getOneClub : async (clubId) => {
-        const club = await Club.findById(clubId);
+        const club = await Club.findById(clubId).populate("elections");
         return club;
     },
 

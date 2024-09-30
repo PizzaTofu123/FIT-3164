@@ -27,8 +27,6 @@ module.exports = {
     getOneClub : async (req,res) =>
         {
             try {
-                //get id from ref
-                //may change this to req.body soon ?
                 const {clubId}  = req.params;
                 const club  = await clubQueries.getOneClub(clubId);
                 if (!club){
@@ -47,6 +45,7 @@ module.exports = {
     updateOneClub : async (req,res) =>{
     try {
         //get id from req params instantly
+        
         const {clubId}  = req.params;
         const club  = await Club.findByIdAndUpdate(clubId, {
             clubName: req.body.clubName,
@@ -68,8 +67,6 @@ module.exports = {
     getAllClub : async (req,res) =>
     {
         try {
-            await clubQueries.checkScheduleElection();
-            await clubQueries.endElection();
             //use curlies cus find multiple users
             const club  = await clubQueries.getAllClub();
             res.status(200).json(club);
@@ -200,6 +197,17 @@ module.exports = {
                 const updated = await Club.findById(clubId);
                 res.status(200).json(updated);
             }
+        }
+        catch (error){
+            //status 500 means error
+            res.status(500).json({message:error.message});
+        }
+    },
+
+    checkElection : async (req,res) =>{
+        try {
+            await clubQueries.checkScheduleElection();
+            await clubQueries.endElection();
         }
         catch (error){
             //status 500 means error

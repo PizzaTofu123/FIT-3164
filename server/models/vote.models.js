@@ -38,6 +38,10 @@ const VoteSchema = mongoose.Schema({
         type: Number,
         required: true
     },
+    age: {
+        type: Number,
+        required: false
+    },
 
 },
     {
