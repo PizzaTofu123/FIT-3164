@@ -48,24 +48,26 @@ const Results = () => {
   };
 
   // Fetch elections and their candidates
-  const fetchElections = async (electionIds) => {
+  const fetchElections = async (elections) => {
     
     const updatedCandidates = [];
-    for (const electionId of electionIds) {
+    for (const election of elections) {
       try {
-        const electionResponse = await fetch(`http://localhost:5000/api/elections/${electionId}`);
-        const election = await electionResponse.json();
+        
+        // const electionResponse = await fetch(`http://localhost:5000/api/elections/${electionId}`);
+        // const election = await electionResponse.json();
+        // console.log(electionIds);
         const candidates = await fetchCandidates(election.candidates);
         const winner = findWinner(candidates);
-        
+        // console.log(candidates);
         updatedCandidates.push({
-          name: winner.name,
+          name: winner.firstName + " " + winner.lastName,
           position: election.electionName,
           votes: winner.voteCount, 
-          image: null, // For now image is null since idk where to get it from
+          image: "../images/default_profile.png", // For now image is null since idk where to get it from
         });
       } catch (error) {
-        console.error(`Error fetching election ${electionId}:`, error);
+        console.error(`Error fetching election ${election._id}:`, error);
       }
     }
     setSampleCandidates(updatedCandidates); // Update the state with winners
@@ -94,15 +96,15 @@ const Results = () => {
   };
 
   // Fetch votes and aggregate them by faculty and position for Sankey chart
-  const fetchVotes = async (electionIds) => {
+  const fetchVotes = async (elections) => {
     const facultyVotes = {};
     const levelCounts = {};
     const courseCounts = {};
     const yearCounts = {};
     
-    for (const electionId of electionIds) {
+    for (const election of elections) {
       try {
-        const votesResponse = await fetch(`http://localhost:5000/api/votes/election/${electionId}`);
+        const votesResponse = await fetch(`http://localhost:5000/api/votes/election/${election._id}`);
         const votes = await votesResponse.json();
         
         // total votes by faculty and prepare Sankey data
@@ -123,7 +125,7 @@ const Results = () => {
           facultyVotes[faculty] += 1; 
         }
       } catch (error) {
-        console.error(`Error fetching votes for election ${electionId}:`, error);
+        console.error(`Error fetching votes for election ${election._id}:`, error);
       }
     }
 
@@ -304,7 +306,7 @@ const Results = () => {
         width: '100%',
         marginBottom: '100px',
       }}>
-        <div style={{ width: '95%' }}>  
+        <div style={{ width: '80%' }}>  
           <canvas ref={barCanvasRef} style={{ width: '100%', height: '500px' }}></canvas>  
         </div>
       </div>
