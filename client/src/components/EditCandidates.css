@@ -1,0 +1,59 @@
+.candidates-page {
+    padding: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .candidates-header {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #374785;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .candidates-subheader {
+    font-size: 1.5rem;
+    color: #4F4F4F;
+    margin-bottom: 15px;
+  }
+  
+  .candidates-section {
+    margin-bottom: 40px;
+  }
+  
+  .candidates-card-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .candidates-card {
+    width: 180px;
+    height: 230px;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .candidates-icon {
+    font-size: 2.5rem;
+    color: #374785;
+    margin-bottom: 10px;
+  }
+  
+  .candidates-card p {
+    font-size: 1.2rem;
+    color: #4F4F4F;
+  }
+  
+  .candidates-card:hover {
+    background-color: #e3e3e3;
+    transition: background-color 0.3s ease;
+  }
+  
