@@ -96,7 +96,7 @@ function App() {
 
             {isLoggedIn ? (
               <>
-                <Route path="/clubelections" element={<ClubElections />} />
+                <Route path="/clubelections" element={<ClubElections user={userProfile} />} />
                 <Route path="/profile" element={<Profile user={userProfile} handleLogout={handleLogout} />} />
                 <Route path="/edit-profile" element={<EditProfilePage user={userProfile} onSave={handleSaveProfile} />} />
                 <Route path="/vote/:clubName" element={<Vote />} />
