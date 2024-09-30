@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import './AddElection.css';
 
 const AddElection = ({ user }) => {
-  const [clubs, setClubs] = useState([]);
-  const [selectedClubId, setSelectedClubId] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [positions, setPositions] = useState([{ positionName: "" }]);
+  const [clubs, setClubs] = useState([]); // Store the fetched club details from the backend
+  const [selectedClubId, setSelectedClubId] = useState(""); // Store the selected club ID
+  const [startDate, setStartDate] = useState(""); // For scheduling
+  const [endDate, setEndDate] = useState(""); // For scheduling
+  const [positions, setPositions] = useState([{ positionName: "" }]); // Manage the positions
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -26,7 +26,7 @@ const AddElection = ({ user }) => {
           user.representingClubs.map(clubId => fetch(`http://localhost:5000/api/clubs/${clubId}`))
         );
         const clubData = await Promise.all(clubResponses.map(res => res.json()));
-        setClubs(clubData);
+        setClubs(clubData); // Store the fetched club data
         setLoading(false);
       } catch (err) {
         setError("Failed to fetch club details.");
@@ -69,7 +69,7 @@ const AddElection = ({ user }) => {
     console.log("Scheduling election with data:", scheduleData);
 
     try {
-      const response = await fetch(`http://localhost:5000/api/clubs/election/schedule/${selectedClubId}`, {
+      const response = await fetch(`http://localhost:5000/api/election/schedule/${selectedClubId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -104,7 +104,7 @@ const AddElection = ({ user }) => {
       console.log("Creating new election with data:", newElection);
 
       try {
-        const response = await fetch('http://localhost:5000/api/elections', {
+        const response = await fetch('http://localhost:5000/api/election', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -202,13 +202,6 @@ const AddElection = ({ user }) => {
                 >
                   &#x2715; {/* Remove button */}
                 </button>
-                <button 
-              type="button" 
-              className="add-btn" 
-              onClick={addPositionField}
-            >
-              &#43;
-            </button>
               </div>
             ))}
             

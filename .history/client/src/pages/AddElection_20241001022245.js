@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import './AddElection.css';
 
 const AddElection = ({ user }) => {
-  const [clubs, setClubs] = useState([]);
-  const [selectedClubId, setSelectedClubId] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [positions, setPositions] = useState([{ positionName: "" }]);
+  const [clubs, setClubs] = useState([]); // Store the fetched club details from the backend
+  const [selectedClubId, setSelectedClubId] = useState(""); // Store the selected club ID
+  const [startDate, setStartDate] = useState(""); // For scheduling
+  const [endDate, setEndDate] = useState(""); // For scheduling
+  const [positions, setPositions] = useState([{ positionName: "" }]); // Manage the positions
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -26,7 +26,7 @@ const AddElection = ({ user }) => {
           user.representingClubs.map(clubId => fetch(`http://localhost:5000/api/clubs/${clubId}`))
         );
         const clubData = await Promise.all(clubResponses.map(res => res.json()));
-        setClubs(clubData);
+        setClubs(clubData); // Store the fetched club data
         setLoading(false);
       } catch (err) {
         setError("Failed to fetch club details.");

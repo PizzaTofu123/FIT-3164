@@ -2,42 +2,33 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import './AddElection.css';
 
-const AddElection = ({ user }) => {
-  const [clubs, setClubs] = useState([]);
-  const [selectedClubId, setSelectedClubId] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [positions, setPositions] = useState([{ positionName: "" }]);
+const AddElection = (user) => {
+  const [clubs, setClubs] = useState([]); // Store the list of clubs from the backend
+  const [selectedClubId, setSelectedClubId] = useState(""); // Store the selected club ID
+  const [startDate, setStartDate] = useState(""); // For scheduling
+  const [endDate, setEndDate] = useState(""); // For scheduling
+  const [positions, setPositions] = useState([{ positionName: "" }]); // Manage the positions
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const navigate = useNavigate();
 
-  // Fetch club details for the user's representing clubs
+  // Fetch clubs from the backend for the dropdown
   useEffect(() => {
-    const fetchClubDetails = async () => {
-      if (!user || !user.representingClubs || user.representingClubs.length === 0) {
-        setLoading(false);
-        return;
-      }
-
+    const fetchClubs = async () => {
       try {
-        const clubResponses = await Promise.all(
-          user.representingClubs.map(clubId => fetch(`http://localhost:5000/api/clubs/${clubId}`))
-        );
-        const clubData = await Promise.all(clubResponses.map(res => res.json()));
-        setClubs(clubData);
+        const response = await fetch('http://localhost:5000/api/clubs');
+        const data = await response.json();
+        setClubs(data); // Assuming data is an array of club objects
         setLoading(false);
       } catch (err) {
-        setError("Failed to fetch club details.");
+        setError("Failed to fetch clubs.");
         setLoading(false);
       }
     };
 
-    if (user.representingClubs && user.representingClubs.length > 0) {
-      fetchClubDetails();
-    }
-  }, [user]);
+    fetchClubs();
+  }, []);
 
   // Handle position change
   const handlePositionChange = (index, event) => {
@@ -125,6 +116,7 @@ const AddElection = ({ user }) => {
       }
     }
 
+    // After creating all elections, navigate back
     navigate(`/clubrepresentative`);
   };
 

@@ -5,9 +5,9 @@ import './AddElection.css';
 const AddElection = ({ user }) => {
   const [clubs, setClubs] = useState([]);
   const [selectedClubId, setSelectedClubId] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [positions, setPositions] = useState([{ positionName: "" }]);
+  const [startDate, setStartDate] = useState(""); // For scheduling
+  const [endDate, setEndDate] = useState(""); // For scheduling
+  const [positions, setPositions] = useState([{ positionName: "" }]); // Manage the positions
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
