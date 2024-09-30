@@ -54,7 +54,7 @@ const UserSchema = mongoose.Schema({
     },
     clubs: [{
         type: mongoose.Schema.Types.ObjectId,
-        default: []
+        ref: "Club"
     }],
     representingClubs: [{
         type: mongoose.Schema.Types.ObjectId,

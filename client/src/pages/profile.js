@@ -2,6 +2,15 @@ import React, { useState } from 'react';
 import './profile.css';
 import { Link } from 'react-router-dom';
 
+// Function to format the date as dd/mm/yyyy
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+};
+
 function Profile({ user, handleLogout }) {
   const [activeTab, setActiveTab] = useState('about');
 
@@ -25,17 +34,10 @@ function Profile({ user, handleLogout }) {
               </div>
             </div>
             <div className="profile-info-item">
-              <i className="fas fa-venus-mars"></i>
-              <div>
-                <label>Pronouns</label>
-                <p>{user.pronouns}</p>
-              </div>
-            </div>
-            <div className="profile-info-item">
               <i className="fas fa-id-card"></i>
               <div>
                 <label>Monash Student ID</label>
-                <p>{user.studentID}</p>
+                <p>{user.studentId}</p>
               </div>
             </div>
             <div className="profile-info-item">
@@ -46,10 +48,10 @@ function Profile({ user, handleLogout }) {
               </div>
             </div>
             <div className="profile-info-item">
-              <i className="fas fa-phone"></i>
+              <i className="fas fa-calendar-alt"></i>
               <div>
-                <label>Mobile Number</label>
-                <p>{user.mobile}</p>
+                <label>Date of Birth</label>
+                <p>{formatDate(user.dob)}</p>
               </div>
             </div>
           </div>
@@ -72,6 +74,13 @@ function Profile({ user, handleLogout }) {
               </div>
             </div>
             <div className="profile-info-item">
+              <i className="fas fa-university"></i>
+              <div>
+                <label>Second Faculty</label>
+                <p>{user.secondFaculty}</p>
+              </div>
+            </div>
+            <div className="profile-info-item">
               <i className="fas fa-book"></i>
               <div>
                 <label>Course</label>
@@ -90,27 +99,18 @@ function Profile({ user, handleLogout }) {
       case 'clubs':
         return (
           <div className="profile-info">
-            <div className="profile-info-item">
-              <i className="fas fa-users"></i>
-              <div>
-                <label>Commerce and Computing Association (CCA)</label>
-                <p></p>
-              </div>
-            </div>
-            <div className="profile-info-item">
-              <i className="fas fa-users"></i>
-              <div>
-                <label>Monash Association of Coding (MAC)</label>
-                <p></p>
-              </div>
-            </div>
-            <div className="profile-info-item">
-              <i className="fas fa-shield-alt"></i>
-              <div>
-                <label>Monash Cybersecurity Club (MONSEC)</label>
-                <p></p>
-              </div>
-            </div>
+            {user.clubs && user.clubs.length > 0 ? (
+              user.clubs.map((club, index) => (
+                <div key={index} className="profile-info-item">
+                  <i className="fas fa-users"></i>
+                  <div>
+                    <label>{club.clubName}</label> {/* Ensure that club names are shown */}
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p>No clubs found.</p>
+            )}
           </div>
         );
       default:
@@ -136,7 +136,6 @@ function Profile({ user, handleLogout }) {
         {renderContent()}
       </div>
 
-      {/* Log Out Button */}
       <button className="logout-button" onClick={handleLogout}>Log Out</button>
     </div>
   );
