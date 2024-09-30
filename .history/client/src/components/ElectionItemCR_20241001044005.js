@@ -4,6 +4,11 @@ import { useNavigate } from 'react-router-dom';
 const ElectionItemCR = ({ clubId, clubLogo, clubName, closingDate }) => {
   const navigate = useNavigate();
 
+  const parseDate = (dateStr) => {
+    const [day, month, year] = dateStr.split('/').map(Number);
+    return new Date(year, month - 1, day); // month is 0-based in JavaScript Date
+  };
+
   const isClosingSoon = () => {
     const closingDateObj = new Date(closingDate); // Use the Date constructor to parse ISO date
     const today = new Date();

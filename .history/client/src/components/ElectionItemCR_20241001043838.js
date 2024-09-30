@@ -4,15 +4,19 @@ import { useNavigate } from 'react-router-dom';
 const ElectionItemCR = ({ clubId, clubLogo, clubName, closingDate }) => {
   const navigate = useNavigate();
 
+  const parseDate = (dateStr) => {
+    const [day, month, year] = dateStr.split('/').map(Number);
+    return new Date(year, month - 1, day); // month is 0-based in JavaScript Date
+  };
+
   const isClosingSoon = () => {
-    const closingDateObj = new Date(closingDate); // Use the Date constructor to parse ISO date
+    const closingDateObj = parseDate(closingDate);
     const today = new Date();
   
     // Strip the time part from both dates
     today.setHours(0, 0, 0, 0);
     closingDateObj.setHours(0, 0, 0, 0);
   
-    // Calculate the difference in days
     const timeDifference = closingDateObj - today;
     const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
   
