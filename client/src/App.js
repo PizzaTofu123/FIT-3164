@@ -102,7 +102,7 @@ function App() {
                 <Route path="/vote/:clubName" element={<Vote />} />
                 <Route path="/preferences/:clubName" element={<Preferences />} />
                 <Route path="/results/:clubName" element={<Results />} />
-                <Route path="/clubrepresentative" element={<ClubRepresentative />} />
+                <Route path="/clubrepresentative" element={<ClubRepresentative user={userProfile} />} />
                 <Route path="/add-election" element={<AddElection user={userProfile} />} />
                 <Route path="/edit-election/:clubId" element={<EditElection />} />
                 <Route path="/view-results/:clubName" element={<ViewResults />} />

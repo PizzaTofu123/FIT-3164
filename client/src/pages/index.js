@@ -43,7 +43,7 @@ const Home = ({ user }) => {
           console.log(`Processing club: ${club.clubName}`);
 
           // Filter ongoing elections
-          if (club.electionOngoingFlag) {
+          if (club.electionOngoingFlag && club.electionStartDate && club.electionEndDate) {
             allOngoingElections.push({
               id: club._id,
               clubName: club.clubName,
@@ -53,7 +53,7 @@ const Home = ({ user }) => {
           }
 
           // Filter upcoming elections (based on start date)
-          if (new Date(club.electionStartDate) > new Date()) {
+          if (new Date(club.electionStartDate) > new Date() && club.electionStartDate && club.electionEndDate) {
             allUpcomingElections.push({
               id: club._id,
               clubName: club.clubName,
