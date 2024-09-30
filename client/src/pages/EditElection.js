@@ -28,17 +28,21 @@ const EditElection = () => {
   useEffect(() => {
     const fetchClubData = async () => {
       try {
+        console.log("Fetching club data for clubId:", clubId);
         const response = await fetch(`http://localhost:5000/api/clubs/${clubId}`);
         const clubData = await response.json();
+        console.log("Club data fetched:", clubData);
+
         setClubName(clubData.clubName);
         setStartDate(formatDateForInput(clubData.electionStartDate));
         setEndDate(formatDateForInput(clubData.electionEndDate));
 
         // Fetch elections (positions) based on the club's elections array
-        const electionPromises = clubData.elections.map(electionId =>
-          fetch(`http://localhost:5000/api/elections/${electionId}`).then(res => res.json())
+        const electionPromises = clubData.elections.map(election =>
+          fetch(`http://localhost:5000/api/elections/${election._id}`).then(res => res.json())
         );
         const fetchedElections = await Promise.all(electionPromises);
+        console.log("Fetched elections:", fetchedElections);
 
         // Set positions (election names) for the elections
         const newPositions = fetchedElections.map(election => ({
@@ -49,6 +53,7 @@ const EditElection = () => {
 
         setLoading(false);
       } catch (err) {
+        console.error("Error fetching club or election data:", err);
         setError("Failed to fetch club or election data.");
         setLoading(false);
       }
