@@ -32,7 +32,7 @@ function SignIn({ handleLogin }) {
           // Trigger the fade-out animation before redirecting
           setInProp(false);
           setTimeout(() => {
-            navigate('/'); // Redirect to profile/dashboard after animation
+            navigate('/');
           }, 300); // Animation duration of 300ms
         } else {
           // Handle specific error messages from the backend
