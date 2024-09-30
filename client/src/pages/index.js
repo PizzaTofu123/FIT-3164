@@ -2,92 +2,109 @@ import React, { useState, useEffect } from "react";
 import ElectionList from '../components/ElectionList';
 import UpcomingElectionList from "../components/UpcomingElectionList";
 import './index.css';
- 
-const Home = () => {
-    // const [elections] = useState([
-    //     { id: 1, clubLogo: 'https://cdn-icons-png.flaticon.com/128/6062/6062646.png', clubName: 'Monash Association of Coding (MAC)', closingDate: '28/08/2024' },
-    //     { id: 2, clubLogo: 'https://cdn-icons-png.flaticon.com/128/9305/9305711.png', clubName: 'Monash Cyber Security Club (MONSEC)', closingDate: '15/09/2024' },
-    //   ]);
-    
-    //   const [upcomingElections] = useState([
-    //     { id: 3, clubLogo: 'https://cdn-icons-png.flaticon.com/128/3171/3171927.png', clubName: 'Monash Film Society', openingDate: '25/10/2024' },
-    // ]);
 
-    const [elections, setElections] = useState([]);
-    const [upcomingElections, setUpcomingElections] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+const Home = ({ user }) => {
+  const [elections, setElections] = useState([]);
+  const [upcomingElections, setUpcomingElections] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-    useEffect(() => {
-        const fetchElections = async () => {
-            try {
-                setLoading(true);
-                const response = await fetch('http://localhost:5000/api/clubs');
-                const data = await response.json();
+  // Fetch the election data for clubs the user is a member of
+  useEffect(() => {
+    const fetchClubElections = async () => {
+      if (!user || !user.clubs || user.clubs.length === 0) {
+        console.log("No clubs found for user:", user);
+        setLoading(false);
+        return;
+      }
 
-                // Filter only ongoing elections based on the `electionOngoingFlag`
-                const ongoingElections = data.filter(election => election.electionStartDate &&
-                    election.electionEndDate && election.electionOngoingFlag);
+      try {
+        console.log("Fetching elections for user clubs:", user.clubs);
+        setLoading(true);
 
-                // Filter upcoming elections based on start date
-                const upcomingElections = data.filter(election => election.electionStartDate &&
-                    election.electionEndDate && new Date(election.electionStartDate) > new Date());
+        const clubResponses = await Promise.all(
+          user.clubs.map(clubId => {
+            console.log(`Fetching data for club ID: ${clubId}`);
+            return fetch(`http://localhost:5000/api/clubs/${clubId}`);
+          })
+        );
 
-                const formattedElections = ongoingElections.map(election => ({
-                    id: election._id,
-                    clubName: election.clubName,
-                    closingDate: new Date(election.electionEndDate).toLocaleDateString(),
-                    clubLogo: 'https://cdn-icons-png.flaticon.com/128/6062/6062646.png' // modify after logo added in database
-                }));
+        const clubData = await Promise.all(clubResponses.map(res => res.json()));
+        console.log("Fetched club data:", clubData);
 
-                const formattedUpcomingElections = upcomingElections.map(election => ({
-                    id: election._id,
-                    clubName: election.clubName,
-                    openingDate: new Date(election.electionStartDate).toLocaleDateString(),
-                    clubLogo: 'https://cdn-icons-png.flaticon.com/128/3171/3171927.png' // Modify after logo is added in the database
-                }));
+        // Loop through each club and handle its elections
+        const allOngoingElections = [];
+        const allUpcomingElections = [];
 
-                setElections(formattedElections);
-                setUpcomingElections(formattedUpcomingElections);
-            } catch (err) {
-                setError("Error fetching election data");
-            } finally {
-                setLoading(false);
-            }
-        };
+        clubData.forEach(club => {
+          console.log(`Processing club: ${club.clubName}`);
 
-        fetchElections();
-    }, []);
-      
-      const handleVote = (electionId) => {
-        console.log('Vote button clicked for election:', electionId); 
-      };
+          // Filter ongoing elections
+          if (club.electionOngoingFlag) {
+            allOngoingElections.push({
+              id: club._id,
+              clubName: club.clubName,
+              closingDate: new Date(club.electionEndDate).toLocaleDateString(),
+              clubLogo: 'https://cdn-icons-png.flaticon.com/128/6062/6062646.png'
+            });
+          }
 
-      const handleAlert = (electionId) => {
-        console.log('Alert me button clicked for upcoming election:', electionId);
+          // Filter upcoming elections (based on start date)
+          if (new Date(club.electionStartDate) > new Date()) {
+            allUpcomingElections.push({
+              id: club._id,
+              clubName: club.clubName,
+              openingDate: new Date(club.electionStartDate).toLocaleDateString(),
+              clubLogo: 'https://cdn-icons-png.flaticon.com/128/3171/3171927.png'
+            });
+          }
+        });
+
+        console.log("All ongoing elections:", allOngoingElections);
+        console.log("All upcoming elections:", allUpcomingElections);
+
+        setElections(allOngoingElections);
+        setUpcomingElections(allUpcomingElections);
+      } catch (err) {
+        console.error("Error fetching election data:", err);
+        setError("Error fetching election data");
+      } finally {
+        setLoading(false);
+      }
     };
 
-    if (loading) {
-      return <div>Loading elections...</div>;
+    fetchClubElections();
+  }, [user]);
+
+  const handleVote = (electionId) => {
+    console.log('Vote button clicked for election:', electionId); 
+  };
+
+  const handleAlert = (electionId) => {
+    console.log('Alert me button clicked for upcoming election:', electionId);
+  };
+
+  if (loading) {
+    return <div>Loading elections...</div>;
   }
 
   if (error) {
-      return <div>{error}</div>;
+    return <div>{error}</div>;
   }
 
-    return (
-        <div>
-            <h1 className='main-heading'>DASHBOARD</h1>
-            <div className="app-container">
-                <div className="election-container">
-                    <ElectionList elections={elections} handleVote={handleVote} />
-                </div>
-                <div className="election-container">
-                    <UpcomingElectionList upcomingElections={upcomingElections} handleAlert={handleAlert} />
-                </div>
-            </div>
+  return (
+    <div>
+      <h1 className='main-heading'>DASHBOARD</h1>
+      <div className="app-container">
+        <div className="election-container">
+          <ElectionList elections={elections} handleVote={handleVote} />
         </div>
-    );
+        <div className="election-container">
+          <UpcomingElectionList upcomingElections={upcomingElections} handleAlert={handleAlert} />
+        </div>
+      </div>
+    </div>
+  );
 };
- 
+
 export default Home;

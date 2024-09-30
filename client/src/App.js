@@ -87,7 +87,7 @@ function App() {
         {/* Use Layout for transitions */}
         <Layout>
           <Routes>
-            <Route path="/" element={isLoggedIn ? <Home /> : <Navigate to="/signin" replace />} />
+            <Route path="/" element={isLoggedIn ? <Home user={userProfile}/> : <Navigate to="/signin" replace /> } />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/education-details" element={<EducationDetails />} />
             <Route path="/club-details" element={<ClubDetails />} />
