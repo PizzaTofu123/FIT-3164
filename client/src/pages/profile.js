@@ -14,6 +14,7 @@ const formatDate = (dateString) => {
 function Profile({ user, handleLogout }) {
   const [activeTab, setActiveTab] = useState('about');
   const [clubsDetails, setClubsDetails] = useState([]);
+  const [representativeClubs, setRepresentativeClubs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -24,9 +25,17 @@ function Profile({ user, handleLogout }) {
         const clubDetailsPromises = user.clubs.map(clubId =>
           fetch(`http://localhost:5000/api/clubs/${clubId}`).then(res => res.json())
         );
+        
+        // Fetch details for each clubId in the user.representingClubs array
+        const representativeClubPromises = user.representingClubs.map(clubId =>
+          fetch(`http://localhost:5000/api/clubs/${clubId}`).then(res => res.json())
+        );
 
         const fetchedClubsDetails = await Promise.all(clubDetailsPromises);
+        const fetchedRepresentativeClubs = await Promise.all(representativeClubPromises);
+
         setClubsDetails(fetchedClubsDetails);
+        setRepresentativeClubs(fetchedRepresentativeClubs);
         setLoading(false);
       } catch (err) {
         setError("Failed to fetch club data.");
@@ -34,12 +43,12 @@ function Profile({ user, handleLogout }) {
       }
     };
 
-    if (user && user.clubs.length > 0) {
+    if (user && (user.clubs.length > 0 || user.representingClubs.length > 0)) {
       fetchClubDetails();
     } else {
-      setLoading(false); // If user has no clubs, stop loading
+      setLoading(false); // If user has no clubs or representingClubs, stop loading
     }
-  }, [user.clubs]);
+  }, [user.clubs, user.representingClubs]);
 
   if (loading) {
     return <div>Loading club data...</div>;
@@ -48,7 +57,7 @@ function Profile({ user, handleLogout }) {
   if (error) {
     return <div>{error}</div>;
   }
-  
+
   const renderContent = () => {
     switch (activeTab) {
       case 'about':
@@ -134,28 +143,36 @@ function Profile({ user, handleLogout }) {
       case 'clubs':
         return (
           <div className="profile-info">
-            {/* {user.clubs && user.clubs.length > 0 ? (
-              user.clubs.map((club, index) => (
-                <div key={index} className="profile-info-item">
-                  <i className="fas fa-users"></i>
-                  <div>
-                    <label>{club.clubName}</label> Ensure that club names are shown
+            <h3>Member of Clubs:</h3>
+            {clubsDetails.length > 0 ? (
+              <ul>
+                {clubsDetails.map((club) => (
+                  <div className="profile-info-item" key={club._id}>
+                    <i className="fas fa-users"></i>
+                    <li>
+                      <label>{club.clubName}</label>
+                    </li>
                   </div>
-                </div>
-              )) */}
-              {clubsDetails.length > 0 ? (
-          <ul>
-            {clubsDetails.map((club) => (
-              <div className="profile-info-item">
-                  <i className="fas fa-users"></i>
-                  <li key={club._id}>
-                    <label>{club.clubName}</label><br />
-                  </li>
-              </div>
-            ))}
-          </ul>
+                ))}
+              </ul>
             ) : (
               <p>No clubs found.</p>
+            )}
+
+            <h3>Representative of Clubs:</h3>
+            {representativeClubs.length > 0 ? (
+              <ul>
+                {representativeClubs.map((club) => (
+                  <div className="profile-info-item" key={club._id}>
+                    <i className="fas fa-user-tie"></i>
+                    <li>
+                      <label>{club.clubName}</label>
+                    </li>
+                  </div>
+                ))}
+              </ul>
+            ) : (
+              <p>Not a representative of any clubs.</p>
             )}
           </div>
         );
@@ -167,7 +184,11 @@ function Profile({ user, handleLogout }) {
   return (
     <div className="profile-container">
       <div className="profile-header">
-        <img src={user.profilePicture} alt="Profile" className="profile-picture" />
+        <img 
+          src={user.profilePicture ? user.profilePicture : "/images/default_profile.png"} 
+          alt="Profile" 
+          className="profile-picture" 
+        />
         <div className="profile-header-text">
           <h1>{user.firstName} {user.lastName}</h1>
           <Link to="/edit-profile" className="edit-profile-link">Edit profile</Link>
