@@ -129,9 +129,17 @@ module.exports = {
             for (let i = 0; i < elections.length; i ++){
                 let election = elections[i];
                 let candidates = election.candidates;
+                let candidate_vc = []
+
+                for (let i = 0; i < candidates.length; i ++){
+                    candidate_vc.push(0);
+                }
+
                 for (let i = 0; i < users.length; i ++){
                     let user = users[i];
-                    let chosen_candidate = candidates[Math.floor(Math.random() * candidates.length)];
+                    let chosenNum = Math.floor(Math.random() * candidates.length);
+                    let chosen_candidate = candidates[chosenNum];
+                    candidate_vc[chosenNum] += 1;
                     voteArray.push({
                         electionId: election._id,
                         candidateId: chosen_candidate,
@@ -147,6 +155,13 @@ module.exports = {
                         electionId: election._id
                     })
                 }
+                
+                for (let i = 0; i < candidates.length; i ++){
+                    let candidate = await mainQueries.candidates.getOneCandidate(candidates[i]);
+                    candidate.voteCount = candidate_vc[i];
+                    candidate.save();
+                }
+
                 await Vote.insertMany(voteArray).then(function () {
                     console.log("Data inserted") 
                 }).catch(function (error) {

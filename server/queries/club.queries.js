@@ -63,6 +63,20 @@ const clubQueries = {
         await this.deleteMember(userId, clubId);
         return userId;
     },
+
+    async deleteClubElection(clubId){
+        let club = await Club.findById(clubId);
+        let electionArray = club.elections;
+        for (let i = 0; i<electionArray.length; i++ ){
+            await mainQueries.elections.deleteOneElection(electionArray[i])
+        }
+        await Club.updateMany(
+            { _id:  clubId },
+            { elections : [], electionStartDate: null, electionEndDate: null}
+        ).exec();
+        club = await Club.findById(clubId);
+        return club;
+    },
     
     checkMemberAndRepresentativeUsingEmail : async (email, clubs=[], Rclubs=[]) => {
         for(let clubId of clubs){

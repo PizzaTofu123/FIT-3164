@@ -80,6 +80,16 @@ const UserSchema = mongoose.Schema({
         type: Number,
         required: true
     },
+    image: {
+        type: String,
+        required: false,
+        default: null
+    },
+    forgetCode: {
+        type: String,
+        required: false,
+        default: null
+    }
 },
     {
         // 2 extra fields for created and updated at

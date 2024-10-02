@@ -215,6 +215,17 @@ module.exports = {
         }
     },
 
+    deleteClubElection : async (req,res) =>{
+        try {
+            const {clubId}  = req.params;
+            await clubQueries.deleteClubElection(clubId);
+        }
+        catch (error){
+            //status 500 means error
+            res.status(500).json({message:error.message});
+        }
+    },
+
     populateClub: async (req,res) =>{
         try{
             const monashClubs = [

@@ -10,6 +10,9 @@ router.get('/', UserController.getAllUser);
 router.get('/:userId', UserController.getOneUser);
 
 router.put('/:userId', UserController.updateOneUser);
+
+router.put('/:userId/setRecoveryCode', UserController.setRecoveryCode)
+
 router.delete('/:userId', UserController.deleteOneUser);
 
 // check-email route

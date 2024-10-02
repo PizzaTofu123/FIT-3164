@@ -4,6 +4,7 @@ const Club = require("../models/club.models");
 const userQueries = require("../queries/user.queries");
 const mainQueries = require("../queries/main.queries");
 const bcrypt = require('bcrypt');
+const nodemailer = require('nodemailer');
 
 module.exports = {
     createOneUser : async (req,res) =>
@@ -157,12 +158,20 @@ module.exports = {
             console.error('Error during login:', error);
             res.status(500).json({ message: 'Server error during login' });
         }
-    },    
+    },
+
+    setRecoveryCode : async (req, res) => {
+        try {
+            await User.updateMany({}, { $set: { image: null, forgetCode: null } });
+        } catch (error) {
+            console.error('Error during login:', error);
+        }
+    },
 
     populateUser : async (req,res) =>{
         try{
             const levelArray = ["Undergraduate", "Postgraduate"];
-            const faculties = ["Arts", "Art, Design and Architecture", "Business and Economics", "Education", "Engineering", "IT", "Science", "Law", "Medicine, Nursing and Health Sciences", "Pharmacy and Pharmaceutical Sciences"];
+            const faculties = ["Arts", "Art, Design and Architecture", "Business and Economics", "Education", "Engineering", "IT", "Science", "Lwaw", "Medicine, Nursing and Health Sciences", "Pharmacy and Pharmaceutical Sciences"];
             const undergraduateCourses = [
                 "Accounting",
                 "Actuarial Science",
@@ -551,39 +560,3 @@ module.exports = {
         }
     },
 }
-
-//or
-/*
-const User = require("../models/user.models");
-const getAllUser = async (req,res) =>
-{
-    try {
-        //use curlies cus find multiple users
-        const user  = await User.find({});
-        res.status(200).json(user);
-    }
-    catch (error){
-        //status 500 means error
-        res.status(500).json({message:error.message});
-    }
-};
-
-const getOneUser = async (req,res) =>
-    {
-        try {
-            //get id
-            const {id}  = req.params;
-            const user  = await User.findById(id);
-            res.status(200).json(user);
-        }
-        catch (error){
-            //status 500 means error
-            res.status(500).json({message:error.message});
-        }
-    };
-
-module.exports = {
-    getAllUser,
-    getOneUser
-}
-*/
