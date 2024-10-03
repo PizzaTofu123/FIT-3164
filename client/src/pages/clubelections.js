@@ -52,7 +52,7 @@ const ClubElections = ({ user }) => {
           }
 
           // Upcoming elections (future start date)
-          if (startDate > now) {
+          if (club.electionStartDate && club.electionEndDate && startDate > now) {
             upcomingElectionsData.push({
               id: club._id,
               clubName: club.clubName,
@@ -64,7 +64,7 @@ const ClubElections = ({ user }) => {
           }
 
           // Past elections (already closed)
-          if (endDate < now) {
+          if (club.electionStartDate && club.electionEndDate && endDate < now) {
             pastElectionsData.push({
               id: club._id,
               clubName: club.clubName,
