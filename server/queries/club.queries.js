@@ -72,7 +72,7 @@ const clubQueries = {
         }
         await Club.updateMany(
             { _id:  clubId },
-            { elections : [], electionStartDate: null, electionEndDate: null}
+            { elections : [], electionStartDate: null, electionEndDate: null, electionOngoingFlag: false}
         ).exec();
         club = await Club.findById(clubId);
         return club;

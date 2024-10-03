@@ -162,7 +162,14 @@ module.exports = {
 
     setRecoveryCode : async (req, res) => {
         try {
-            await User.updateMany({}, { $set: { image: null, forgetCode: null } });
+            var code = Math.floor(Math.random() * 9999);
+            var transporter = nodemailer.createTransport({
+                service: 'yahoo',
+                auth: {
+                  user: 'coolemail52@yahoo.com',
+                  pass: 'supercoolemail5252' //fit3164group5
+                }
+              });
         } catch (error) {
             console.error('Error during login:', error);
         }
