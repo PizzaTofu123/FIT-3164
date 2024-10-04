@@ -20,6 +20,7 @@ module.exports = {
                 birthDate = Math.floor((new Date() - new Date(req.body.dob).getTime()) / 3.15576e+10) // 3.115576 is miliseconds
                 const salt = await bcrypt.genSalt();
                 const password = await bcrypt.hash(req.body.passwordHash, salt);
+                const forgetAns = await bcrypt.hash(req.body.forgetAns, salt);
                 const user = await userQueries.createOneUser({
                     firstName: req.body.firstName,
                     lastName: req.body.lastName,
@@ -35,6 +36,9 @@ module.exports = {
                     secondFaculty: req.body.secondFaculty,
                     course: req.body.course,
                     year: req.body.year,
+                    image: req.body.image,
+                    forgetQue: req.body.forgetQue,
+                    forgetAns: forgetAns,
                 })
                 await mainQueries.clubs._linkUserToClubs(user._id, user.clubs, user.representingClubs);
                 
@@ -160,21 +164,52 @@ module.exports = {
         }
     },
 
-    setRecoveryCode : async (req, res) => {
+    getForgetQue : async (req, res) => {
         try {
-            var code = Math.floor(Math.random() * 9999);
-            var transporter = nodemailer.createTransport({
-                service: 'yahoo',
-                auth: {
-                  user: 'coolemail52@yahoo.com',
-                  pass: 'supercoolemail5252' //fit3164group5
-                }
-              });
+            const user = await User.findOne({ email: req.body.email }).exec();
+    
+            if (!user) {
+                // If the user does not exist, return a 'User not found' message
+                return res.status(404).json({ message: 'User not found' });
+            }
+    
+            else {
+                // If the password is incorrect, return an 'Invalid password' message
+                return res.status(200).json(user.forgetQue);
+            }
+    
+            // If both email and password are correct, respond with user data
+            res.status(200).json(user);
         } catch (error) {
             console.error('Error during login:', error);
+            res.status(500).json({ message: 'Server error during login' });
         }
     },
 
+    forgetPassword : async (req, res) => {
+        try {
+            const user = await User.findOne({ email: req.body.email }).exec();
+    
+            if (!user) {
+                // If the user does not exist, return a 'User not found' message
+                return res.status(404).json({ message: 'User not found' });
+            }
+    
+            // If the user exists, compare the provided password with the stored password
+            const isPasswordValid = await bcrypt.compare(req.body.forgetAns, user.forgetAns);
+    
+            if (!isPasswordValid) {
+                // If the password is incorrect, return an 'Invalid password' message
+                return res.status(401).json({ message: 'Invalid answer' });
+            }
+    
+            res.status(200).json(user);
+        } catch (error) {
+            console.error('Error during login:', error);
+            res.status(500).json({ message: 'Server error during forget password' });
+        }
+    },
+    
     populateUser : async (req,res) =>{
         try{
             const levelArray = ["Undergraduate", "Postgraduate"];

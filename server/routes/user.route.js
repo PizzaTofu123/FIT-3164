@@ -9,6 +9,9 @@ router.post('/', UserController.createOneUser);
 router.get('/', UserController.getAllUser);
 router.get('/:userId', UserController.getOneUser);
 
+router.get('/forgetPassword', UserController.getForgetQue);
+router.post('/forgetPassword', UserController.forgetPassword);
+
 router.put('/:userId', UserController.updateOneUser);
 
 router.put('/:userId/setRecoveryCode', UserController.setRecoveryCode)
