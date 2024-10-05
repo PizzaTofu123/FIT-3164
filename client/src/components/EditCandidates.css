@@ -47,57 +47,105 @@
 .edit-candidates-card-container {
   display: flex;
   gap: 20px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
+
+.edit-candidates-card-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.edit-candidates-card-container::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 10px;
 }
 
 .edit-candidates-card {
-  width: 250px;
-  height: 320px;
-  background-color: #f0f0f0;
-  border-radius: 10px;
+  width: 270px;
+  height: 250px;
+  background-color: #f7f7f7;
+  border-radius: 15px;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-  justify-content: space-between;
   text-align: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
+  flex: 0 0 auto;
+  cursor: pointer;
+}
+
+.candidate-avatar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 
 .candidate-avatar img {
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  border: 2px solid #ccc;
-  margin-bottom: 10px;
+  border: none;
+}
+
+.candidate-info {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  margin-bottom: 0px;
 }
 
 .candidate-info p {
-  font-size: 1rem;
-  color: #4F4F4F;
-  margin: 0;
+  margin: 5px 0;
+  font-size: 1.1rem;
+  color: black;
+}
+
+.candidate-name {
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #3532A2;
+}
+
+.candidate-course,
+.candidate-year {
+  font-size: 1.1rem;
 }
 
 .view-campaign-btn {
-  background-color: #3532A2;
+  background-color: #919191;
   color: white;
   border: none;
   padding: 10px 20px;
-  border-radius: 5px;
+  border-radius: 30px;
+  font-weight: bold;
   cursor: pointer;
+  text-align: center;
+  width: 50%;
 }
 
 .view-campaign-btn:hover {
-  background-color: #2a2772;
+  background-color: #535353;
+  transition: background-color 0.3s ease;
 }
 
 .edit-candidates-icon {
   font-size: 2.5rem;
   color: #3532A2;
+  text-align: center;
   margin-bottom: 10px;
 }
 
-.edit-candidates-card:hover {
-  background-color: #e3e3e3;
-  transition: background-color 0.3s ease;
+.add-candidate-text {
+  font-size: 1.2rem;
+  color: #3532A2;
+  margin: 0;
+}
+
+.candidate-details-text {
+  font-size: 1.1rem;
+  color: black;
 }

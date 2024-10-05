@@ -100,7 +100,7 @@
   .candidate-profile-details input,
   .candidate-profile-details textarea,
   .candidate-profile-details select {
-    width: 70%; /* Set the same width for inputs, textareas, and selects */
+    width: 70%;
     padding: 10px;
     font-size: 1rem;
     border: 1px solid #ccc;

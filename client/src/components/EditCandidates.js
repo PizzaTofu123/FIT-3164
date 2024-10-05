@@ -14,7 +14,6 @@ function EditCandidates() {
   useEffect(() => {
     const fetchClubDetailsAndCandidates = async () => {
       try {
-        // Fetch all clubs and find the relevant club by name
         const response = await fetch('http://localhost:5000/api/clubs/');
         if (!response.ok) {
           throw new Error('Error fetching clubs');
@@ -30,7 +29,6 @@ function EditCandidates() {
           }));
           setPositions(positions);
 
-          // Fetch candidates for each election by their candidate IDs
           const groupedCandidates = {};
           for (const position of positions) {
             const candidates = await fetchCandidatesByIds(position.candidateIds);
@@ -74,38 +72,41 @@ function EditCandidates() {
       <div className="edit-candidates-section">
         <h3 className="edit-candidates-subheader">{position} Candidates</h3>
         <div className="edit-candidates-card-container">
+          {/* Add Candidate card first */}
+          <div className="edit-candidates-card" onClick={() => handleAddCandidate(position)}>
+            <div className="edit-candidates-icon">+</div>
+            <p className="add-candidate-text">Add Candidate</p>
+          </div>
+
+          {/* Render the rest of the candidates */}
           {candidatesList.map((candidate) => (
             <div key={candidate._id} className="edit-candidates-card">
               <div className="candidate-avatar">
                 <img src="/images/default_profile.png" alt="Profile" />
               </div>
               <div className="candidate-info">
-                <p><strong>{candidate.firstName} {candidate.lastName}</strong></p>
-                <p>{candidate.course}</p>
-                <p>{candidate.year} Year</p>
+                <p className="candidate-name">{candidate.firstName} {candidate.lastName}</p>
+                <p className="candidate-details-text">{candidate.course}</p>
+                <p className="candidate-details-text">Year {candidate.year}</p>
               </div>
               <button className="view-campaign-btn" onClick={() => handleEditClick(candidate._id)}>Edit candidate</button>
             </div>
           ))}
-          <div className="edit-candidates-card" onClick={() => handleAddCandidate(position)}>
-            <div className="edit-candidates-icon">+</div>
-            <p>Add Candidate</p>
-          </div>
         </div>
       </div>
     );
   };
 
   const handleAddCandidate = (position) => {
-    navigate(`/add-candidate/${clubName}/${position}`); // Pass the club name and position
+    navigate(`/add-candidate/${clubName}/${position}`);
   };
 
   const handleEditClick = (candidateId) => {
-    navigate(`/edit-candidate/${candidateId}`); // Navigate to candidate edit page
+    navigate(`/edit-candidate/${candidateId}`);
   };
 
   const handleBackClick = () => {
-    navigate('/clubrepresentative'); // Navigate to the clubrepresentative page
+    navigate('/clubrepresentative');
   };
 
   return (
