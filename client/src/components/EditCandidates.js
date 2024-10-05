@@ -4,56 +4,89 @@ import './EditCandidates.css';
 
 function EditCandidates() {
   const location = useLocation();
-  const navigate = useNavigate(); // useNavigate hook to handle navigation
-  const clubName = decodeURIComponent(location.pathname.split("/").pop()); // Extract and decode club name from URL
-  const [positions, setPositions] = useState([]);
+  const navigate = useNavigate();
+  const clubName = decodeURIComponent(location.pathname.split("/").pop());
+  const [positions, setPositions] = useState([]); // Holds the positions for the election
   const [error, setError] = useState('');
-  const [candidates, setCandidates] = useState({
-    'President': [],
-    'Vice President': []
-  }); // Placeholder state for candidates per position
+  const [candidates, setCandidates] = useState({}); // Holds candidates grouped by position
 
   // Fetch the club's details and its elections based on the clubName
   useEffect(() => {
-    const fetchClubDetails = async () => {
+    const fetchClubDetailsAndCandidates = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/clubs/name/${encodeURIComponent(clubName)}`);
+        // Fetch all clubs and find the relevant club by name
+        const response = await fetch('http://localhost:5000/api/clubs/');
         if (!response.ok) {
-          throw new Error(`Error fetching club details for ${clubName}`);
+          throw new Error('Error fetching clubs');
         }
-        const clubData = await response.json();
+        const clubs = await response.json();
+        const club = clubs.find(club => club.clubName === clubName);
 
-        // Extract the elections (positions) from the fetched club data
-        if (clubData.elections && clubData.elections.length > 0) {
-          setPositions(clubData.elections.map(election => election.electionName));
+        if (club) {
+          const positions = club.elections.map(election => ({
+            electionName: election.electionName,
+            electionId: election._id,
+            candidateIds: election.candidates, // Array of candidate IDs
+          }));
+          setPositions(positions);
+
+          // Fetch candidates for each election by their candidate IDs
+          const groupedCandidates = {};
+          for (const position of positions) {
+            const candidates = await fetchCandidatesByIds(position.candidateIds);
+            groupedCandidates[position.electionName] = candidates;
+          }
+
+          setCandidates(groupedCandidates);
         } else {
-          setPositions([]); // No positions found
+          throw new Error(`Club not found: ${clubName}`);
         }
       } catch (error) {
-        setError(`Error fetching club details for ${clubName}: ${error.message}`);
+        console.error('Error fetching club and candidates:', error);
+        setError(`Error fetching club and candidates: ${error.message}`);
       }
     };
 
-    fetchClubDetails();
+    fetchClubDetailsAndCandidates();
   }, [clubName]);
 
-  if (error) {
-    return <div>{error}</div>;
-  }
+  // Fetch candidates by their IDs
+  const fetchCandidatesByIds = async (candidateIds) => {
+    const candidates = [];
+    for (const candidateId of candidateIds) {
+      try {
+        const candidateResponse = await fetch(`http://localhost:5000/api/candidates/${candidateId}`);
+        if (!candidateResponse.ok) {
+          throw new Error(`Error fetching candidate ${candidateId}`);
+        }
+        const candidate = await candidateResponse.json();
+        candidates.push(candidate);
+      } catch (error) {
+        console.error(`Error fetching candidate ${candidateId}:`, error);
+      }
+    }
+    return candidates;
+  };
 
   const renderCandidates = (position) => {
-    const candidatesList = candidates[position] || []; // Get candidates for each position
+    const candidatesList = candidates[position] || [];
     return (
       <div className="edit-candidates-section">
         <h3 className="edit-candidates-subheader">{position} Candidates</h3>
         <div className="edit-candidates-card-container">
-          {candidatesList.map((candidate, index) => (
-            <div key={index} className="edit-candidates-card">
-              <div className="edit-candidates-icon">+</div> {/* Placeholder for candidate icon */}
-              <p>{candidate.name || `Candidate ${index + 1}`}</p> {/* Candidate Name */}
+          {candidatesList.map((candidate) => (
+            <div key={candidate._id} className="edit-candidates-card">
+              <div className="candidate-avatar">
+                <img src="/images/default_profile.png" alt="Profile" />
+              </div>
+              <div className="candidate-info">
+                <p><strong>{candidate.firstName} {candidate.lastName}</strong></p>
+                <p>{candidate.course}</p>
+                <p>{candidate.year} Year</p>
+              </div>
+              <button className="view-campaign-btn" onClick={() => handleEditClick(candidate._id)}>Edit candidate</button>
             </div>
           ))}
-          {/* Add empty candidate card for adding new candidates */}
           <div className="edit-candidates-card" onClick={() => handleAddCandidate(position)}>
             <div className="edit-candidates-icon">+</div>
             <p>Add Candidate</p>
@@ -65,9 +98,12 @@ function EditCandidates() {
 
   const handleAddCandidate = (position) => {
     navigate(`/add-candidate/${clubName}/${position}`); // Pass the club name and position
-  };  
+  };
 
-  // Handle back button click
+  const handleEditClick = (candidateId) => {
+    navigate(`/edit-candidate/${candidateId}`); // Navigate to candidate edit page
+  };
+
   const handleBackClick = () => {
     navigate('/clubrepresentative'); // Navigate to the clubrepresentative page
   };
@@ -83,7 +119,7 @@ function EditCandidates() {
       {positions.length > 0 ? (
         positions.map((position, index) => (
           <div key={index}>
-            {renderCandidates(position)}
+            {renderCandidates(position.electionName)}
           </div>
         ))
       ) : (

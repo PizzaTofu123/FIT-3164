@@ -1,5 +1,4 @@
 // what happens when routed to the router
-// what happens when routed to the router
 const Candidate = require("../models/candidate.models");
 const candidateQueries = require("../queries/candidate.queries");
 module.exports = {
