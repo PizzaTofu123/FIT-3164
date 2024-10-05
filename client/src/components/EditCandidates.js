@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './EditCandidates.css';
+import '@fortawesome/fontawesome-free/css/all.min.css'; // Ensure Font Awesome is imported
 
 function EditCandidates() {
   const location = useLocation();
@@ -10,7 +11,6 @@ function EditCandidates() {
   const [error, setError] = useState('');
   const [candidates, setCandidates] = useState({}); // Holds candidates grouped by position
 
-  // Fetch the club's details and its elections based on the clubName
   useEffect(() => {
     const fetchClubDetailsAndCandidates = async () => {
       try {
@@ -25,7 +25,7 @@ function EditCandidates() {
           const positions = club.elections.map(election => ({
             electionName: election.electionName,
             electionId: election._id,
-            candidateIds: election.candidates, // Array of candidate IDs
+            candidateIds: election.candidates,
           }));
           setPositions(positions);
 
@@ -48,7 +48,6 @@ function EditCandidates() {
     fetchClubDetailsAndCandidates();
   }, [clubName]);
 
-  // Fetch candidates by their IDs
   const fetchCandidatesByIds = async (candidateIds) => {
     const candidates = [];
     for (const candidateId of candidateIds) {
@@ -66,19 +65,40 @@ function EditCandidates() {
     return candidates;
   };
 
+  const handleDeleteCandidate = async (candidateId, position) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this candidate?");
+    if (!confirmDelete) return;
+
+    try {
+      const response = await fetch(`http://localhost:5000/api/candidates/${candidateId}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        throw new Error('Failed to delete candidate');
+      }
+
+      // Remove the deleted candidate from the UI
+      setCandidates((prevCandidates) => ({
+        ...prevCandidates,
+        [position]: prevCandidates[position].filter((candidate) => candidate._id !== candidateId),
+      }));
+    } catch (error) {
+      console.error('Error deleting candidate:', error);
+      setError('Failed to delete candidate. Please try again.');
+    }
+  };
+
   const renderCandidates = (position) => {
     const candidatesList = candidates[position] || [];
     return (
       <div className="edit-candidates-section">
         <h3 className="edit-candidates-subheader">{position} Candidates</h3>
         <div className="edit-candidates-card-container">
-          {/* Add Candidate card first */}
           <div className="edit-candidates-card" onClick={() => handleAddCandidate(position)}>
             <div className="edit-candidates-icon">+</div>
             <p className="add-candidate-text">Add Candidate</p>
           </div>
 
-          {/* Render the rest of the candidates */}
           {candidatesList.map((candidate) => (
             <div key={candidate._id} className="edit-candidates-card">
               <div className="candidate-avatar">
@@ -89,6 +109,12 @@ function EditCandidates() {
                 <p className="candidate-details-text">{candidate.course}</p>
                 <p className="candidate-details-text">Year {candidate.year}</p>
               </div>
+
+              {/* Delete icon using Font Awesome */}
+              <div className="delete-icon" onClick={() => handleDeleteCandidate(candidate._id, position)}>
+                <i className="fas fa-trash"></i>
+              </div>
+
               <button className="view-campaign-btn" onClick={() => handleEditClick(candidate._id)}>Edit candidate</button>
             </div>
           ))}
@@ -103,7 +129,7 @@ function EditCandidates() {
 
   const handleEditClick = (candidateId) => {
     navigate(`/edit-candidate/${clubName}/${candidateId}`);
-  };  
+  };
 
   const handleBackClick = () => {
     navigate('/clubrepresentative');
@@ -113,7 +139,7 @@ function EditCandidates() {
     <div className="edit-candidates-page">
       <div className="edit-candidates-header">
         <button className="edit-candidates-back-button" onClick={handleBackClick}>
-          ← {/* Unicode left arrow */}
+          ←
         </button>
         Edit Candidates for {clubName}
       </div>
