@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import './Vote.css'; // New CSS for the Vote page
-import '@fortawesome/fontawesome-free/css/all.min.css'; // Font Awesome for icons
+import './Vote.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 function Vote() {
   const location = useLocation();
   const navigate = useNavigate();
   const clubName = decodeURIComponent(location.pathname.split("/").pop());
-  const [positions, setPositions] = useState([]); // Holds the positions for the election
+  const [positions, setPositions] = useState([]);
   const [candidates, setCandidates] = useState({});
   const [selectedCandidates, setSelectedCandidates] = useState({});
+  const [selectedCandidateDetails, setSelectedCandidateDetails] = useState(null);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -73,13 +74,16 @@ function Vote() {
   };
 
   const handleConfirmVote = () => {
-    // Handle the vote submission
     console.log("Voted for candidates:", selectedCandidates);
-    navigate('/confirmation'); // Redirect to confirmation page
+    navigate('/confirmation');
   };
 
-  const handleBackClick = () => {
-    navigate('/');
+  const handleViewCampaign = (candidate) => {
+    setSelectedCandidateDetails(candidate);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedCandidateDetails(null);
   };
 
   const renderCandidates = (position) => {
@@ -102,7 +106,7 @@ function Vote() {
                 <p className="candidate-details-text">{candidate.course}</p>
                 <p className="candidate-details-text">Year {candidate.year}</p>
               </div>
-              <button className="view-campaign-btn">View campaign</button>
+              <button className="view-campaign-btn" onClick={() => handleViewCampaign(candidate)}>View Campaign</button>
             </div>
           ))}
         </div>
@@ -113,7 +117,7 @@ function Vote() {
   return (
     <div className="vote-page">
       <div className="vote-header">
-        <button className="vote-back-button" onClick={handleBackClick}>
+        <button className="vote-back-button" onClick={() => navigate('/clubrepresentative')}>
           ←
         </button>
         Voting for {clubName}
@@ -128,6 +132,30 @@ function Vote() {
         <p>No positions found for this club.</p>
       )}
       <button className="confirm-vote-btn" onClick={handleConfirmVote}>Confirm Vote</button>
+
+      {selectedCandidateDetails && (
+        <div className="modal-overlay" onClick={handleCloseModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>{selectedCandidateDetails.firstName} {selectedCandidateDetails.lastName}</h2>
+              <button className="close-btn" onClick={handleCloseModal}>×</button>
+            </div>
+            <div className="modal-body">
+              <div className="modal-info">
+                <div className="modal-avatar">
+                  <img src="/images/default_profile.png" alt="Profile" />
+                </div>
+                <div className="modal-candidate-details">
+                  <p><strong>Course:</strong> {selectedCandidateDetails.course}</p>
+                  <p><strong>Year:</strong> {selectedCandidateDetails.year}</p>
+                </div>
+              </div>
+              <p><strong>Campaign Description:</strong></p>
+              <p>{selectedCandidateDetails.description}</p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
