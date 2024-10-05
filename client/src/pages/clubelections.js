@@ -8,6 +8,12 @@ const ClubElections = ({ user }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Helper function to format dates in dd/mm/yyyy format
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat('en-GB').format(date);
+  };
+
   useEffect(() => {
     const fetchClubElections = async () => {
       if (!user || !user.clubs || user.clubs.length === 0) {
@@ -30,15 +36,26 @@ const ClubElections = ({ user }) => {
         const clubData = await Promise.all(clubResponses.map(res => res.json()));
         console.log("Fetched club data:", clubData);
 
-        // Processing ongoing, upcoming, and past elections
+        // Process election data for the clubs
         const ongoingElectionsData = [];
         const upcomingElectionsData = [];
         const pastElectionsData = [];
 
-        clubData.forEach(club => {
+        for (const club of clubData) {
           const endDate = new Date(club.electionEndDate);
           const startDate = new Date(club.electionStartDate);
           const now = new Date();
+
+          // Get the first election from the elections array
+          const firstElectionId = club.elections[0];
+
+          // Fetch the flag to check if the user has voted
+          const flagResponse = await fetch(
+            `http://localhost:5000/api/flags?userId=${user._id}&electionId=${firstElectionId}`
+          );
+
+          const flagData = await flagResponse.json();
+          const hasVoted = flagData.length > 0; // If a flag exists, user has voted
 
           // Ongoing elections (currently active)
           if (club.electionOngoingFlag && startDate <= now && endDate >= now) {
@@ -46,34 +63,34 @@ const ClubElections = ({ user }) => {
               id: club._id,
               clubName: club.clubName,
               pollingStatus: 'open',
-              closingDate: endDate.toLocaleDateString(),
-              voteStatus: true // Set to true for now
+              closingDate: formatDate(endDate),
+              voteStatus: hasVoted,  // Update voteStatus based on flag
             });
           }
 
           // Upcoming elections (future start date)
-          if (club.electionStartDate && club.electionEndDate && startDate > now) {
+          if (startDate > now) {
             upcomingElectionsData.push({
               id: club._id,
               clubName: club.clubName,
               pollingStatus: 'not_started',
-              pollingOpenDate: startDate.toLocaleDateString(),
-              closingDate: endDate.toLocaleDateString(),
-              voteStatus: false // Set to false since the election hasn't started
+              pollingOpenDate: formatDate(startDate),
+              closingDate: formatDate(endDate),
+              voteStatus: false, // Election hasn't started, so no vote status
             });
           }
 
           // Past elections (already closed)
-          if (club.electionStartDate && club.electionEndDate && endDate < now) {
+          if (endDate < now) {
             pastElectionsData.push({
               id: club._id,
               clubName: club.clubName,
               pollingStatus: 'closed',
-              closingDate: endDate.toLocaleDateString(),
-              voteStatus: true // For closed elections, assume the user has voted
+              closingDate: formatDate(endDate),
+              voteStatus: hasVoted,  // Update voteStatus based on flag
             });
           }
-        });
+        }
 
         setElections(ongoingElectionsData);
         setUpcomingElections(upcomingElectionsData);
