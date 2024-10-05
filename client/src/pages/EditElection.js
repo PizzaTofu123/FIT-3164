@@ -6,6 +6,7 @@ const EditElection = () => {
   const [clubName, setClubName] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [electionOngoing, setElectionOngoing] = useState(false);
   const [positions, setPositions] = useState([]); // Manage positions fetched from elections
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -36,6 +37,7 @@ const EditElection = () => {
         setClubName(clubData.clubName);
         setStartDate(formatDateForInput(clubData.electionStartDate));
         setEndDate(formatDateForInput(clubData.electionEndDate));
+        setElectionOngoing(clubData.electionOngoingFlag);
 
         // Fetch elections (positions) based on the club's elections array
         const electionPromises = clubData.elections.map(election =>
@@ -220,6 +222,7 @@ const EditElection = () => {
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
                 required
+                readOnly={electionOngoing}
               />
             </div>
 
