@@ -1,53 +1,93 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import './EditCandidates.css'; // Import the updated unique CSS
+import { useLocation, useNavigate } from 'react-router-dom'; // Changed useHistory to useNavigate
+import './EditCandidates.css';
 
 function EditCandidates() {
-  const { clubName } = useParams(); // Fetch clubName from route parameters
-  const [elections, setElections] = useState([]);
+  const location = useLocation();
+  const navigate = useNavigate(); // useNavigate hook to handle navigation
+  const clubName = decodeURIComponent(location.pathname.split("/").pop()); // Extract and decode club name from URL
+  const [positions, setPositions] = useState([]); // State to store positions (elections)
   const [error, setError] = useState('');
-  
-  // Fetch the election details for the club
+  const [candidates, setCandidates] = useState({
+    'President': [],
+    'Vice President': []
+  }); // Placeholder state for candidates per position
+
+  // Fetch the club's details and its elections based on the clubName
   useEffect(() => {
-    const fetchElections = async () => {
+    const fetchClubDetails = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/elections?clubName=${clubName}`);
+        console.log(`Fetching details for club: ${clubName}`); // Debugging line
+        const response = await fetch(`http://localhost:5000/api/clubs/name/${encodeURIComponent(clubName)}`);
         if (!response.ok) {
-          throw new Error('Failed to fetch election details');
+          throw new Error(`Error fetching club details for ${clubName}`);
         }
-        const data = await response.json();
-        setElections(data);
-      } catch (err) {
-        setError('Error fetching election details');
+        const clubData = await response.json();
+
+        // Extract the elections (positions) from the fetched club data
+        if (clubData.elections && clubData.elections.length > 0) {
+          setPositions(clubData.elections.map(election => election.electionName));
+        } else {
+          setPositions([]); // No positions found
+        }
+
+        console.log('Fetched club and positions:', clubData); // Debugging line
+      } catch (error) {
+        console.error(error.message);
+        setError(`Error fetching club details for ${clubName}: ${error.message}`);
       }
     };
-    
-    fetchElections();
+
+    fetchClubDetails();
   }, [clubName]);
 
   if (error) {
     return <div>{error}</div>;
   }
 
-  return (
-    <div className="candidates-page">
-      <h2 className="candidates-header">Edit Candidates</h2>
-      {elections.length > 0 ? (
-        elections.map((election) => (
-          <div key={election._id} className="candidates-section">
-            <h3 className="candidates-subheader">{election.electionName} Candidates</h3>
-            <div className="candidates-card-container">
-              {election.candidates.map((candidateId, index) => (
-                <div key={candidateId} className="candidates-card">
-                  <div className="candidates-icon">+</div>
-                  <p>Candidate {index + 1}</p>
-                </div>
-              ))}
+  const renderCandidates = (position) => {
+    const candidatesList = candidates[position] || []; // Get candidates for each position
+    return (
+      <div className="edit-candidates-section">
+        <h3 className="edit-candidates-subheader">{position} Candidates</h3>
+        <div className="edit-candidates-card-container">
+          {candidatesList.map((candidate, index) => (
+            <div key={index} className="edit-candidates-card">
+              <div className="edit-candidates-icon">+</div> {/* Placeholder for candidate icon */}
+              <p>{candidate.name || `Candidate ${index + 1}`}</p> {/* Candidate Name */}
             </div>
+          ))}
+          {/* Add empty candidate card for adding new candidates */}
+          <div className="edit-candidates-card">
+            <div className="edit-candidates-icon">+</div>
+            <p>Add Candidate</p>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // Handle back button click
+  const handleBackClick = () => {
+    navigate('/clubrepresentative'); // Navigate to the clubrepresentative page
+  };
+
+  return (
+    <div className="edit-candidates-page">
+      <div className="edit-candidates-header">
+        <button className="edit-candidates-back-button" onClick={handleBackClick}>
+          ← {/* Unicode left arrow */}
+        </button>
+        Edit Candidates for {clubName}
+      </div>
+      {positions.length > 0 ? (
+        positions.map((position, index) => (
+          <div key={index}>
+            {renderCandidates(position)}
           </div>
         ))
       ) : (
-        <p>No elections found for this club.</p>
+        <p>No positions found for this club.</p>
       )}
     </div>
   );

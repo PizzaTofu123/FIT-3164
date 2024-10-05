@@ -14,7 +14,7 @@ router.post('/forgetPassword', UserController.forgetPassword);
 
 router.put('/:userId', UserController.updateOneUser);
 
-router.put('/:userId/setRecoveryCode', UserController.setRecoveryCode)
+// router.put('/:userId/setRecoveryCode', UserController.setRecoveryCode)
 
 router.delete('/:userId', UserController.deleteOneUser);
 

@@ -4,7 +4,7 @@ const Club = require("../models/club.models");
 const router = express.Router();
 const ClubController = require("../controller/club.controller");
 
-
+router.get('/name/:clubName', ClubController.getClubByName);
 
 router.post('/', ClubController.createOneClub);
 router.post('/populate', ClubController.populateClub);

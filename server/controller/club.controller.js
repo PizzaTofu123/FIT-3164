@@ -234,8 +234,22 @@ module.exports = {
           console.error('Error in deleteClubElection controller:', error);
           res.status(500).json({ message: 'Internal server error', error: error.message });
         }
-      },
+    },
 
+    getClubByName: async (req, res) => {
+        try {
+            const clubName = req.params.clubName;
+            const club = await Club.findOne({ clubName: clubName }).populate("elections");
+            if (club) {
+                res.status(200).json(club);
+            } else {
+                res.status(404).json({ message: "Club not found" });
+            }
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    },
+    
     populateClub: async (req,res) =>{
         try{
             const monashClubs = [
