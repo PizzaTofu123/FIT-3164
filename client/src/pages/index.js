@@ -3,6 +3,12 @@ import ElectionList from '../components/ElectionList';
 import UpcomingElectionList from "../components/UpcomingElectionList";
 import './index.css';
 
+// Helper function to format dates in dd/mm/yyyy format
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  return new Intl.DateTimeFormat('en-GB').format(date);
+};
+
 const Home = ({ user }) => {
   const [elections, setElections] = useState([]);
   const [upcomingElections, setUpcomingElections] = useState([]);
@@ -47,7 +53,7 @@ const Home = ({ user }) => {
             allOngoingElections.push({
               id: club._id,
               clubName: club.clubName,
-              closingDate: new Date(club.electionEndDate).toLocaleDateString(),
+              closingDate: formatDate(club.electionEndDate),
               clubLogo: 'https://cdn-icons-png.flaticon.com/128/6062/6062646.png'
             });
           }
@@ -57,7 +63,7 @@ const Home = ({ user }) => {
             allUpcomingElections.push({
               id: club._id,
               clubName: club.clubName,
-              openingDate: new Date(club.electionStartDate).toLocaleDateString(),
+              openingDate: formatDate(club.electionStartDate),
               clubLogo: 'https://cdn-icons-png.flaticon.com/128/3171/3171927.png'
             });
           }
