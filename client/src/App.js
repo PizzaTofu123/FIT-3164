@@ -20,6 +20,7 @@ import ViewResults from './pages/resultsCR';
 import EducationDetails from './pages/EducationDetails';
 import SignUpConfirmation from './components/SignUpConfirmation';
 import EditCandidates from './components/EditCandidates';
+import CandidateProfile from './components/CandidateProfile';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 function App() {
@@ -108,6 +109,7 @@ function App() {
                 <Route path="/edit-election/:clubId" element={<EditElection />} />
                 <Route path="/view-results/:clubName" element={<ViewResults />} />
                 <Route path="/edit-candidates/:electionId" element={<EditCandidates />} />
+                <Route path="/add-candidate/:clubName/:position" element={<CandidateProfile />} />
               </>
             ) : (
               <Route path="*" element={<Navigate to="/signin" replace />} />

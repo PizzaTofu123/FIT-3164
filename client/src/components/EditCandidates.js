@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom'; // Changed useHistory to useNavigate
+import { useLocation, useNavigate } from 'react-router-dom';
 import './EditCandidates.css';
 
 function EditCandidates() {
   const location = useLocation();
   const navigate = useNavigate(); // useNavigate hook to handle navigation
   const clubName = decodeURIComponent(location.pathname.split("/").pop()); // Extract and decode club name from URL
-  const [positions, setPositions] = useState([]); // State to store positions (elections)
+  const [positions, setPositions] = useState([]);
   const [error, setError] = useState('');
   const [candidates, setCandidates] = useState({
     'President': [],
@@ -17,7 +17,6 @@ function EditCandidates() {
   useEffect(() => {
     const fetchClubDetails = async () => {
       try {
-        console.log(`Fetching details for club: ${clubName}`); // Debugging line
         const response = await fetch(`http://localhost:5000/api/clubs/name/${encodeURIComponent(clubName)}`);
         if (!response.ok) {
           throw new Error(`Error fetching club details for ${clubName}`);
@@ -30,10 +29,7 @@ function EditCandidates() {
         } else {
           setPositions([]); // No positions found
         }
-
-        console.log('Fetched club and positions:', clubData); // Debugging line
       } catch (error) {
-        console.error(error.message);
         setError(`Error fetching club details for ${clubName}: ${error.message}`);
       }
     };
@@ -58,7 +54,7 @@ function EditCandidates() {
             </div>
           ))}
           {/* Add empty candidate card for adding new candidates */}
-          <div className="edit-candidates-card">
+          <div className="edit-candidates-card" onClick={() => handleAddCandidate(position)}>
             <div className="edit-candidates-icon">+</div>
             <p>Add Candidate</p>
           </div>
@@ -66,6 +62,10 @@ function EditCandidates() {
       </div>
     );
   };
+
+  const handleAddCandidate = (position) => {
+    navigate(`/add-candidate/${clubName}/${position}`); // Pass the club name and position
+  };  
 
   // Handle back button click
   const handleBackClick = () => {

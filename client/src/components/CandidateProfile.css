@@ -1,0 +1,82 @@
+.candidate-profile-page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px;
+  }
+  
+  .candidate-profile-back-button {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: white;
+    border: 2px solid black;
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
+  
+  .candidate-profile-back-button:hover {
+    background-color: #c8c7c7;
+    transition: background-color 0.3s ease;
+  }
+  
+  .candidate-profile-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #374785;
+    text-align: left;
+    margin-bottom: 30px;
+  }
+  
+  .candidate-profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f5f5f5;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .candidate-profile-picture img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+  }
+  
+  .candidate-profile-details input,
+  .candidate-profile-details textarea {
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .candidate-profile-details textarea {
+    height: 100px;
+    resize: none;
+  }
+  
+  .candidate-profile-save-button {
+    background-color: #fcbf49;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  
+  .candidate-profile-save-button:hover {
+    background-color: #fcae16;
+  }
+  
