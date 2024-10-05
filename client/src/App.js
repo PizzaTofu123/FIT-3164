@@ -109,6 +109,7 @@ function App() {
                 <Route path="/edit-election/:clubId" element={<EditElection />} />
                 <Route path="/view-results/:clubName" element={<ViewResults />} />
                 <Route path="/edit-candidates/:electionId" element={<EditCandidates />} />
+                <Route path="/edit-candidate/:clubName/:candidateId" element={<CandidateProfile />} />
                 <Route path="/add-candidate/:clubName/:position" element={<CandidateProfile />} />
               </>
             ) : (

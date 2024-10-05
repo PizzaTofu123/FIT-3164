@@ -102,8 +102,8 @@ function EditCandidates() {
   };
 
   const handleEditClick = (candidateId) => {
-    navigate(`/edit-candidate/${candidateId}`);
-  };
+    navigate(`/edit-candidate/${clubName}/${candidateId}`);
+  };  
 
   const handleBackClick = () => {
     navigate('/clubrepresentative');
