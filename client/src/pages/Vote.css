@@ -1,0 +1,109 @@
+.vote-page {
+    padding: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .vote-back-button {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: white;
+    border: 2px solid black;
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
+  
+  .vote-back-button:hover {
+    background-color: #c8c7c7;
+    transition: background-color 0.3s ease;
+  }
+  
+  .vote-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #3532A2;
+    text-align: left;
+    margin-bottom: 30px;
+  }
+  
+  .vote-subheader {
+    font-size: 1.5rem;
+    color: #3532A2;
+    margin-bottom: 15px;
+  }
+  
+  .vote-card-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 10px;
+  }
+  
+  .vote-card-container::-webkit-scrollbar {
+    height: 8px;
+  }
+  
+  .vote-card-container::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 10px;
+  }
+  
+  .vote-card {
+    width: 270px;
+    height: 250px;
+    background-color: #f7f7f7;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    flex: 0 0 auto;
+    cursor: pointer;
+    position: relative;
+  }
+  
+  .vote-card.selected {
+    border: 3px solid #3532A2;
+  }
+  
+  .view-campaign-btn {
+    background-color: #919191;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    width: 55%;
+  }
+  
+  .confirm-vote-btn {
+    margin-top: 30px;
+    background-color: #FFCC00;
+    color: black;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+  }
+  
+  .confirm-vote-btn:hover {
+    background-color: #FFA500;
+    transition: background-color 0.3s ease;
+  }
+  

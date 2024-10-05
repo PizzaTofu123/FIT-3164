@@ -9,7 +9,7 @@ import ClubElections from './pages/clubelections';
 import Home from './pages/index';
 import Profile from './pages/profile';
 import EditProfilePage from './pages/EditProfilePage';
-import Vote from './pages/vote';
+import Vote from './pages/Vote';
 import Preferences from './pages/preferences';
 import Results from './pages/results';
 import ClubDetails from './pages/ClubDetails';
