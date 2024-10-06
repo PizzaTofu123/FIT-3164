@@ -36,12 +36,15 @@ const ClubElections = ({ user }) => {
         const clubData = await Promise.all(clubResponses.map(res => res.json()));
         console.log("Fetched club data:", clubData);
 
+        // Process and sort the club elections by start date
+        const sortedClubData = clubData.sort((a, b) => new Date(a.electionStartDate) - new Date(b.electionStartDate));
+
         // Process election data for the clubs
         const ongoingElectionsData = [];
         const upcomingElectionsData = [];
         const pastElectionsData = [];
 
-        for (const club of clubData) {
+        for (const club of sortedClubData) {
           const endDate = new Date(club.electionEndDate);
           const startDate = new Date(club.electionStartDate);
           const now = new Date();
@@ -119,21 +122,6 @@ const ClubElections = ({ user }) => {
     fetchClubElections();
   }, [user]);
 
-  const handleVote = (electionId) => {
-    console.log('Vote button clicked for election:', electionId);
-    // Handle vote logic here
-  };
-
-  const handleViewPreferences = (electionId) => {
-    console.log('View Preferences button clicked for election:', electionId);
-    // Handle view preferences logic here
-  };
-
-  const handleViewResults = (electionId) => {
-    console.log('View Results button clicked for election:', electionId);
-    // Handle view results logic here
-  };
-
   if (loading) {
     return <div>Loading elections...</div>;
   }
@@ -153,9 +141,6 @@ const ClubElections = ({ user }) => {
           pollingStatus={election.pollingStatus}
           closingDate={election.closingDate}
           voteStatus={election.voteStatus}
-          onVote={() => handleVote(election.id)}
-          onViewPreferences={() => handleViewPreferences(election.id)}
-          onViewResults={() => handleViewResults(election.id)}
         />
       ))}
       {/* Upcoming Elections */}
@@ -177,7 +162,6 @@ const ClubElections = ({ user }) => {
           pollingStatus={election.pollingStatus}
           closingDate={election.closingDate}
           voteStatus={election.voteStatus}
-          onViewResults={() => handleViewResults(election.id)}
         />
       ))}
     </div>
