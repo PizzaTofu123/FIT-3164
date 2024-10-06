@@ -132,7 +132,7 @@ function ClubDetails() {
     <CSSTransition in={inProp} timeout={300} classNames="fade">
       <div className="club-wrapper">
         <div className="club-header">
-          <img src="/images/monash_logo_login.png" alt="Monash University Logo" className="club-logo" />
+          <img src="/images/monash_logo_login.png" alt="Monash University Logo" className="club-details-logo" />
         </div>
         <div className="club-container">
           <button className="club-back-button" onClick={() => window.history.back()}>

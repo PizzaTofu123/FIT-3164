@@ -85,11 +85,16 @@ const UserSchema = mongoose.Schema({
         required: false,
         default: null
     },
-    forgetCode: {
+    forgetQue: {
         type: String,
         required: false,
         default: null
-    }
+    },
+    forgetAns: {
+        type: String,
+        required: false,
+        default: null
+    },
 },
     {
         // 2 extra fields for created and updated at

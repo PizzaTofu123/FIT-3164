@@ -17,7 +17,8 @@ module.exports = {
                 faculty: req.body.faculty,
                 secondFaculty: req.body.secondFaculty,
                 course: req.body.course,
-                year: req.body.year
+                year: req.body.year,
+                image: req.body.image
             })
             res.status(200).json(candidate);
         }
@@ -55,7 +56,8 @@ module.exports = {
             faculty: req.body.faculty,
             secondFaculty: req.body.secondFaculty,
             course: req.body.course,
-            year: req.body.year
+            year: req.body.year,
+            image: req.body.image
             });
 
         if (!candidate){
