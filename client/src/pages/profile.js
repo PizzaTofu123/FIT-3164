@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 const formatDate = (dateString) => {
   const date = new Date(dateString);
   const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+  const month = String(date.getMonth() + 1).padStart(2, '0');
   const year = date.getFullYear();
   return `${day}/${month}/${year}`;
 };
@@ -21,12 +21,10 @@ function Profile({ user, handleLogout }) {
   useEffect(() => {
     const fetchClubDetails = async () => {
       try {
-        // Fetch details for each clubId in the user.clubs array
         const clubDetailsPromises = user.clubs.map(clubId =>
           fetch(`http://localhost:5000/api/clubs/${clubId}`).then(res => res.json())
         );
         
-        // Fetch details for each clubId in the user.representingClubs array
         const representativeClubPromises = user.representingClubs.map(clubId =>
           fetch(`http://localhost:5000/api/clubs/${clubId}`).then(res => res.json())
         );
@@ -46,7 +44,7 @@ function Profile({ user, handleLogout }) {
     if (user && (user.clubs.length > 0 || user.representingClubs.length > 0)) {
       fetchClubDetails();
     } else {
-      setLoading(false); // If user has no clubs or representingClubs, stop loading
+      setLoading(false);
     }
   }, [user.clubs, user.representingClubs]);
 
@@ -57,6 +55,16 @@ function Profile({ user, handleLogout }) {
   if (error) {
     return <div>{error}</div>;
   }
+
+  const handleTabChange = (tab) => {
+    const content = document.querySelector('.profile-content');
+    content.classList.add('fade-out');
+
+    setTimeout(() => {
+      setActiveTab(tab);
+      content.classList.remove('fade-out');
+    }, 300);
+  };
 
   const renderContent = () => {
     switch (activeTab) {
@@ -195,9 +203,9 @@ function Profile({ user, handleLogout }) {
         </div>
       </div>
       <div className="profile-tabs">
-        <button className={`tab-button ${activeTab === 'about' ? 'active' : ''}`} onClick={() => setActiveTab('about')}>About</button>
-        <button className={`tab-button ${activeTab === 'education' ? 'active' : ''}`} onClick={() => setActiveTab('education')}>Education</button>
-        <button className={`tab-button ${activeTab === 'clubs' ? 'active' : ''}`} onClick={() => setActiveTab('clubs')}>Clubs</button>
+        <button className={`tab-button ${activeTab === 'about' ? 'active' : ''}`} onClick={() => handleTabChange('about')}>About</button>
+        <button className={`tab-button ${activeTab === 'education' ? 'active' : ''}`} onClick={() => handleTabChange('education')}>Education</button>
+        <button className={`tab-button ${activeTab === 'clubs' ? 'active' : ''}`} onClick={() => handleTabChange('clubs')}>Clubs</button>
       </div>
       <div className="profile-content">
         {renderContent()}
