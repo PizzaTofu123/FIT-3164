@@ -54,6 +54,7 @@
   font-weight: bold;
   color: #333;
   border-bottom: 2px solid transparent;
+  transition: color 0.3s ease, transform 0.3s ease;
 }
 
 .tab-button.active {
@@ -61,11 +62,21 @@
   color: #007bff;
 }
 
+.tab-button:hover {
+  transform: scale(1.1);
+}
+
 .profile-content {
   background: #f8f9fa;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  transition: opacity 0.5s ease-in-out;
+  opacity: 1;
+}
+
+.profile-content.fade-out {
+  opacity: 0;
 }
 
 .profile-info {
@@ -104,10 +115,9 @@
   text-align: left;
 }
 
-/* Styles for the Log Out button */
 .logout-button {
   display: block;
-  margin: 20px auto; /* Centers the button */
+  margin: 20px auto;
   padding: 10px 20px;
   background-color: #016DAE;
   color: white;
@@ -116,8 +126,10 @@
   font-size: 1em;
   cursor: pointer;
   text-align: center;
+  transition: background-color 0.3s ease;
 }
 
 .logout-button:hover {
   background-color: #00448c;
+  transition-delay: 0.2s;
 }
