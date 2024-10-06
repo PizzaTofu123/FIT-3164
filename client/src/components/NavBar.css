@@ -1,57 +1,72 @@
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: #016DAE;
-    color: white;
-  }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #016DAE;
+  color: white;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  position: fixed;
+}
   
-  .navbar-left {
-    display: flex;
-    align-items: center;
-  }
+.navbar-left {
+  display: flex;
+  align-items: center;
+}
   
-  .navbar-logo {
-    height: 70px;
-    margin-right: 20px;
-  }
-  
-  
-  .navbar-center {
-    display: flex;
-    align-items: center;
-    flex: 1;
-  }
-  
-  .navbar-link {
-    margin: 0 15px;
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 18px;
-  }
+.navbar-logo {
+  height: 50px;
+  margin-right: 20px;
+  padding: 10px
+}
   
   
-  .navbar-link:hover {
-    text-decoration: underline;
-  }
+.navbar-center {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
   
-  .navbar-right {
-    display: flex;
-    align-items: center;
-  }
+.navbar-link {
+  margin: 0 15px;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 18px;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.navbar-link:hover {
+  transform: scale(1.1);
+  text-decoration: underline;
+}
+
   
-  .navbar-username {
-    margin-right: 15px;
-    font-weight: bold;
-    font-size: 18px;
-  }
+.navbar-right {
+  display: flex;
+  align-items: center;
+  padding-right: 30px;
+}
   
-  .navbar-icon {
-    font-size: 24px;
-    margin-right: 15px;
-    color: white !important;
-  }
+.navbar-username {
+  margin-right: 15px;
+  font-weight: bold;
+  font-size: 18px;
+}
+  
+.navbar-icon {
+  font-size: 24px;
+  margin-right: 15px;
+  color: white !important;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.navbar-icon:hover {
+  transform: scale(1.2);
+}
+
   
   

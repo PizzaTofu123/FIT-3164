@@ -1,3 +1,7 @@
+body, .content {
+  margin-top: 120px; /* Adjust this based on the actual height of your navbar */
+}
+
 .index {
   color: #3532A2;
 }
