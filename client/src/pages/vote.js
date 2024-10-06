@@ -10,6 +10,7 @@ function Vote({ user }) {
   const [positions, setPositions] = useState([]);
   const [candidates, setCandidates] = useState({});
   const [selectedCandidates, setSelectedCandidates] = useState({});
+  const [shuffledCandidates, setShuffledCandidates] = useState({})
   const [selectedCandidateDetails, setSelectedCandidateDetails] = useState(null);
   const [error, setError] = useState('');
   const [showConfirmation, setShowConfirmation] = useState(false); // State for confirmation popup
@@ -33,11 +34,20 @@ function Vote({ user }) {
           setPositions(positions);
 
           const groupedCandidates = {};
+          const shuffledGroupedCandidates = {};
           for (const position of positions) {
             const candidates = await fetchCandidatesByIds(position.candidateIds);
             groupedCandidates[position.electionName] = candidates;
+            // Shuffle the candidates for each position and store them
+            const shuffled = [...candidates];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            shuffledGroupedCandidates[position.electionName] = shuffled;
           }
           setCandidates(groupedCandidates);
+          setShuffledCandidates(shuffledGroupedCandidates);
         } else {
           throw new Error(`Club not found: ${clubName}`);
         }
@@ -148,12 +158,13 @@ function Vote({ user }) {
   };
 
   const renderCandidates = (position) => {
-    const candidatesList = candidates[position] || [];
+    // const candidatesList = candidates[position] || [];
+    const shuffledCandidatesList = shuffledCandidates[position] || [];
     return (
       <div className="vote-section">
         <h3 className="vote-subheader">{position} Candidates</h3>
         <div className="vote-card-container">
-          {candidatesList.map((candidate) => (
+          {shuffledCandidatesList.map((candidate) => (
             <div
               key={candidate._id}
               className={`vote-card ${selectedCandidates[position] === candidate._id ? 'selected' : ''}`}
@@ -194,7 +205,7 @@ function Vote({ user }) {
   return (
     <div className="vote-page">
       <div className="vote-header">
-        <button className="vote-back-button" onClick={() => navigate('/clubrepresentative')}>
+        <button className="vote-back-button" onClick={() => navigate(-1)}>
           ←
         </button>
         Voting for {clubName}
