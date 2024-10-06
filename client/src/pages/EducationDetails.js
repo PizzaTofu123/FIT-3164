@@ -447,6 +447,8 @@ function EducationDetails() {
                 </select>
               </div>
 
+              <p className="education-description">Select Second Faculty only if you have a double degree.</p>
+
               <div className="education-form-group">
                 <label className="education-label">Second Faculty</label>
                 <select
