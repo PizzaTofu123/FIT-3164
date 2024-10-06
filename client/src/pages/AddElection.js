@@ -10,6 +10,7 @@ const AddElection = ({ user }) => {
   const [positions, setPositions] = useState([{ positionName: "" }]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [duplicateError, setDuplicateError] = useState("");
 
   const navigate = useNavigate();
 
@@ -57,9 +58,21 @@ const AddElection = ({ user }) => {
     setPositions(newPositions);
   };
 
+  // Validate for duplicate positions
+  const hasDuplicatePositions = () => {
+    const positionNames = positions.map(pos => pos.positionName.trim().toLowerCase());
+    return new Set(positionNames).size !== positionNames.length;
+  };
+
   // Handle form submission to schedule the election first
   const handleScheduleSubmit = async (e) => {
     e.preventDefault();
+
+    // Check for duplicate positions
+    if (hasDuplicatePositions()) {
+      setDuplicateError("Duplicate positions are not allowed.");
+      return;
+    }
 
     const scheduleData = {
       electionStartDate: new Date(startDate).toISOString(),
@@ -213,6 +226,8 @@ const AddElection = ({ user }) => {
             ))}
             
           </div>
+
+          {duplicateError && <p className="error-message">{duplicateError}</p>}
 
           <div className="buttons">
             <button type="button" onClick={() => navigate(-1)}>

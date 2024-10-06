@@ -10,6 +10,7 @@ const EditElection = () => {
   const [positions, setPositions] = useState([]); // Manage positions fetched from elections
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [duplicateError, setDuplicateError] = useState("");
 
   const navigate = useNavigate();
   const { clubId } = useParams(); // Get clubId from URL parameters
@@ -97,9 +98,21 @@ const EditElection = () => {
     setPositions(newPositions);
   };
 
+  // Validate for duplicate positions
+  const hasDuplicatePositions = () => {
+    const positionNames = positions.map(pos => pos.positionName.trim().toLowerCase());
+    return new Set(positionNames).size !== positionNames.length;
+  };
+  
   // Handle form submission for updating both schedule and positions
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Check for duplicate positions
+    if (hasDuplicatePositions()) {
+      setDuplicateError("Duplicate positions are not allowed.");
+      return;
+    }
 
     const scheduleData = {
       electionStartDate: new Date(startDate).toISOString(),
@@ -262,6 +275,8 @@ const EditElection = () => {
             ))}
             
           </div>
+
+          {duplicateError && <p className="error-message">{duplicateError}</p>}
 
           <div className="buttons">
             <button type="delete" className="left-button delete-btn" onClick={handleDeleteElection}>
