@@ -43,12 +43,15 @@ const ClubRepresentative = ({ user }) => {
                 const clubData = await Promise.all(clubResponses.map(res => res.json()));
                 console.log("Fetched club data:", clubData);
 
+                // Process and sort the club elections by start date
+                const sortedClubData = clubData.sort((a, b) => new Date(a.electionStartDate) - new Date(b.electionStartDate));
+
                 // Filter and process the elections for ongoing, upcoming, and past
                 const allOngoingElections = [];
                 const allUpcomingElections = [];
                 const allPastElections = [];
 
-                clubData.forEach(club => {
+                sortedClubData.forEach(club => {
                     console.log(`Processing club: ${club.clubName}`);
 
                     // Ongoing elections
@@ -118,13 +121,13 @@ const ClubRepresentative = ({ user }) => {
             </div>
             <div className="app-container">
                 <div className="election-container">
-                    <ElectionListCR elections={elections} />
+                    {elections.length > 0 &&<ElectionListCR elections={elections} />}
                 </div>
                 <div className="election-container">
-                    <UpcomingElectionListCR upcomingElections={upcomingElections} />
+                    {upcomingElections.length > 0 && <UpcomingElectionListCR upcomingElections={upcomingElections} />}
                 </div>
                 <div className="election-container">
-                    <PastElectionList pastElections={pastElections} />
+                    {pastElections.length > 0 && <PastElectionList pastElections={pastElections} />}
                 </div>
             </div>
         </div>
