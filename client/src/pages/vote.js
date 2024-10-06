@@ -77,6 +77,10 @@ function Vote({ user }) {
     return candidates;
   };
 
+  const areAllPositionsFilled = () => {
+    return positions.every(position => selectedCandidates[position.electionName]);
+  };
+  
   // Disable scrolling on the body when popup is active
   const disableScroll = () => {
     document.body.style.overflow = 'hidden';
@@ -95,6 +99,11 @@ function Vote({ user }) {
   };
 
   const handleConfirmVote = async () => {
+    if (!areAllPositionsFilled()) {
+      alert('Please vote for all positions before confirming.');
+      return;
+    }
+
     try {
       for (const position in selectedCandidates) {
         const candidateId = selectedCandidates[position];
@@ -140,8 +149,12 @@ function Vote({ user }) {
   };
 
   const handleShowConfirmation = () => {
-    disableScroll(); // Disable scrolling when showing the confirmation popup
-    setShowConfirmation(true); // Show the confirmation modal
+    if (areAllPositionsFilled()) {
+      disableScroll(); // Disable scrolling when showing the confirmation popup
+      setShowConfirmation(true); // Show the confirmation modal
+    } else {
+      alert('Please vote for all positions before confirming.');
+    }
   };
 
   const handleCancelVote = () => {
