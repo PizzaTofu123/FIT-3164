@@ -46,16 +46,29 @@ const ClubElections = ({ user }) => {
           const startDate = new Date(club.electionStartDate);
           const now = new Date();
 
-          // Get the first election from the elections array
-          const firstElectionId = club.elections[0];
+        // Check if the club has any elections
+        let hasVoted = false;  // Default to false if no elections
+
+        if (club.elections && club.elections.length > 0) {
+          const firstElectionId = club.elections[0]._id;
+          console.log(`Fetching flag for user ${user._id} and election ${firstElectionId}`);
 
           // Fetch the flag to check if the user has voted
           const flagResponse = await fetch(
-            `http://localhost:5000/api/flags?userId=${user._id}&electionId=${firstElectionId}`
+            `http://localhost:5000/api/flags/${firstElectionId}/${user._id}`, 
+            {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+              }
+            }
           );
 
-          const flagData = await flagResponse.json();
-          const hasVoted = flagData.length > 0; // If a flag exists, user has voted
+          hasVoted = await flagResponse.json();
+          console.log(`Vote status for user ${user._id} in election ${firstElectionId}:`, hasVoted);
+        } else {
+          console.log(`No elections found for club ${club.clubName}, setting hasVoted to false`);
+        }
 
           // Ongoing elections (currently active)
           if (club.electionOngoingFlag && startDate <= now && endDate >= now) {
