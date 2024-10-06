@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const ElectionItem = ({ clubLogo, clubName, closingDate }) => {
+const ElectionItem = ({ clubLogo, clubName, closingDate, voteStatus }) => {
   const navigate = useNavigate();
 
   const isClosingSoon = () => {
@@ -31,9 +31,13 @@ const ElectionItem = ({ clubLogo, clubName, closingDate }) => {
       <h3>{clubName}</h3>
       <div className="election-info-index">
       <p className={isClosingSoon() ? 'closing-soon' : ''}>
-            {isClosingSoon() ? `Closing soon: ${closingDate}` : `Polling closes: ${closingDate}`}
-          </p>
-      <button className="index-button" onClick={handleVoteClick}>Vote</button>
+        {isClosingSoon() ? `Closing soon: ${closingDate}` : `Polling closes: ${closingDate}`}
+      </p>
+      {!voteStatus && (
+        <button className="index-button" onClick={handleVoteClick}>
+          Vote
+        </button>
+      )}
       </div>
     </div>
     </div>

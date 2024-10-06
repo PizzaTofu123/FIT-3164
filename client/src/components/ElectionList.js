@@ -1,7 +1,7 @@
 import React from 'react';
 import ElectionItem from './ElectionItem';
 
-const ElectionList = ({ elections, handleVote }) => {
+const ElectionList = ({ elections}) => {
   return (
     <div className="election-list">
       <h2 className="index">Ongoing Elections</h2>
@@ -11,7 +11,7 @@ const ElectionList = ({ elections, handleVote }) => {
           clubLogo={election.clubLogo}
           clubName={election.clubName}
           closingDate={election.closingDate}
-          onVote={() => handleVote(election.id)}
+          voteStatus={election.voteStatus}
         />
       ))}
     </div>

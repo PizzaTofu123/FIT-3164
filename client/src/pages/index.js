@@ -41,33 +41,59 @@ const Home = ({ user }) => {
         const clubData = await Promise.all(clubResponses.map(res => res.json()));
         console.log("Fetched club data:", clubData);
 
+        // Process and sort the club elections by start date
+        const sortedClubData = clubData.sort((a, b) => new Date(a.electionStartDate) - new Date(b.electionStartDate));
+
         // Loop through each club and handle its elections
         const allOngoingElections = [];
         const allUpcomingElections = [];
 
-        clubData.forEach(club => {
-          console.log(`Processing club: ${club.clubName}`);
+        for (const club of sortedClubData) {
+          let hasVoted = false;  // Default to false if no elections
 
-          // Filter ongoing elections
+          if (club.elections && club.elections.length > 0) {
+            const firstElectionId = club.elections[0]._id;
+            console.log(`Fetching flag for user ${user._id} and election ${firstElectionId}`);
+
+            // Fetch the flag to check if the user has voted
+            const flagResponse = await fetch(
+              `http://localhost:5000/api/flags/${firstElectionId}/${user._id}`, 
+              {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                }
+              }
+            );
+
+            hasVoted = await flagResponse.json();
+            console.log(`Vote status for user ${user._id} in election ${firstElectionId}:`, hasVoted);
+          } else {
+            console.log(`No elections found for club ${club.clubName}, setting hasVoted to false`);
+          }
+
+          // Ongoing elections (currently active)
           if (club.electionOngoingFlag && club.electionStartDate && club.electionEndDate) {
             allOngoingElections.push({
               id: club._id,
               clubName: club.clubName,
               closingDate: formatDate(club.electionEndDate),
-              clubLogo: 'https://cdn-icons-png.flaticon.com/128/6062/6062646.png'
+              clubLogo: 'https://cdn-icons-png.flaticon.com/128/6062/6062646.png',
+              voteStatus: hasVoted,  // Update vote status based on flag
             });
           }
 
-          // Filter upcoming elections (based on start date)
+          // Upcoming elections (future start date)
           if (new Date(club.electionStartDate) > new Date() && club.electionStartDate && club.electionEndDate) {
             allUpcomingElections.push({
               id: club._id,
               clubName: club.clubName,
               openingDate: formatDate(club.electionStartDate),
-              clubLogo: 'https://cdn-icons-png.flaticon.com/128/3171/3171927.png'
+              clubLogo: 'https://cdn-icons-png.flaticon.com/128/3171/3171927.png',
+              voteStatus: false, // Election hasn't started, so no vote status
             });
           }
-        });
+        }
 
         console.log("All ongoing elections:", allOngoingElections);
         console.log("All upcoming elections:", allUpcomingElections);
@@ -85,14 +111,6 @@ const Home = ({ user }) => {
     fetchClubElections();
   }, [user]);
 
-  const handleVote = (electionId) => {
-    console.log('Vote button clicked for election:', electionId); 
-  };
-
-  const handleAlert = (electionId) => {
-    console.log('Alert me button clicked for upcoming election:', electionId);
-  };
-
   if (loading) {
     return <div>Loading elections...</div>;
   }
@@ -106,10 +124,10 @@ const Home = ({ user }) => {
       <h1 className='main-heading'>DASHBOARD</h1>
       <div className="app-container">
         <div className="election-container">
-          <ElectionList elections={elections} handleVote={handleVote} />
+          <ElectionList elections={elections} />
         </div>
         <div className="election-container">
-          <UpcomingElectionList upcomingElections={upcomingElections} handleAlert={handleAlert} />
+          <UpcomingElectionList upcomingElections={upcomingElections} />
         </div>
       </div>
     </div>

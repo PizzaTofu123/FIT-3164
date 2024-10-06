@@ -1,6 +1,6 @@
 import React from 'react';
 
-const UpcomingElectionItem = ({ clubLogo, clubName, openingDate, onAlert }) => {
+const UpcomingElectionItem = ({ clubLogo, clubName, openingDate }) => {
   return (
     <div className="election-item">
       <img src={clubLogo} alt={`${clubName} logo`} className="club-logo" />
@@ -8,7 +8,7 @@ const UpcomingElectionItem = ({ clubLogo, clubName, openingDate, onAlert }) => {
       <h3>{clubName}</h3>
       <div className="election-info-index">
       <p>Polling opens: {openingDate}</p>
-      <button className="alert-button" onClick={onAlert}>Alert me</button>
+      <button className="alert-button" >Alert me</button>
     </div>
     </div>
     </div>
