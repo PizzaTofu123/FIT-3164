@@ -17,7 +17,7 @@
   align-items: flex-start; /* Ensure logo stays aligned at the top left */
 }
 
-.club-logo {
+.club-details-logo {
   width: 150px; /* Set an explicit width */
   height: auto;  /* Maintain aspect ratio */
   max-width: none; /* Remove max width restriction */

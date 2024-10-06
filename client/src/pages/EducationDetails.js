@@ -391,7 +391,7 @@ function EducationDetails() {
           </div>
           <div className="education-form-container">
             <h2 className="education-heading">Education Details</h2>
-            <p className="education-description">Please fill in your education details.</p>
+            <p>Please fill in your education details.</p>
             <form onSubmit={handleSubmit} className="education-form">
               <div className="education-form-group">
                 <label className="education-label">Level</label>
