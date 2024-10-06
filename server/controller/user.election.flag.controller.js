@@ -30,7 +30,8 @@ module.exports = {
     {
         try {
             //use curlies cus find multiple users
-            const flag = await userElectionFlagQueries.getFlag(req.body.userId, req.body.electionId);
+            const {userId, electionId}  = req.params;
+            const flag = await userElectionFlagQueries.getFlag(userId, electionId);
             if (flag.length == 0){
                 res.status(200).json(false);
             }
@@ -47,7 +48,8 @@ module.exports = {
     deleteFlag : async (req,res) =>
     {
         try {
-            const flag  = await userElectionFlagQueries.deleteFlag(req.body.userId, req.body.electionId);
+            const {userId, electionId}  = req.params;
+            const flag  = await userElectionFlagQueries.deleteFlag(userId, electionId);
             if (!flag){
                 res.status(500).json({message : `Flag not found`});
             }
