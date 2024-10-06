@@ -65,6 +65,11 @@ const CandidateSchema = mongoose.Schema({
         type: Number,
         required: true
     },
+    image: {
+        type: String,
+        required: false,
+        default: null
+    },
 
 },
     {
