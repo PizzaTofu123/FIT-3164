@@ -67,16 +67,6 @@ function Vote({ user }) {
     return candidates;
   };
 
-  // Disable scrolling on the body when popup is active
-  const disableScroll = () => {
-    document.body.style.overflow = 'hidden';
-  };
-
-  // Enable scrolling again when popup is closed
-  const enableScroll = () => {
-    document.body.style.overflow = 'auto';
-  };
-  
   const handleVote = (position, candidateId) => {
     setSelectedCandidates({
       ...selectedCandidates,
@@ -115,14 +105,10 @@ function Vote({ user }) {
         if (!response.ok) {
           throw new Error('Failed to submit vote');
         }
-        else {
-          console.log("Vote data:", voteData);
-        }
       }
 
       console.log("Vote submitted successfully for:", selectedCandidates);
       setShowConfirmation(false); // Close the confirmation modal after submission
-      navigate('/');
     } catch (error) {
       console.error('Error submitting vote:', error);
       setError(`Error submitting vote: ${error.message}`);
@@ -130,12 +116,10 @@ function Vote({ user }) {
   };
 
   const handleShowConfirmation = () => {
-    disableScroll(); // Disable scrolling when showing the confirmation popup
     setShowConfirmation(true); // Show the confirmation modal
   };
 
   const handleCancelVote = () => {
-    enableScroll(); // Re-enable scrolling when closing the popup
     setShowConfirmation(false); // Close the confirmation modal without submitting
   };
 
@@ -175,22 +159,6 @@ function Vote({ user }) {
     );
   };
 
-  const renderConfirmationDetails = () => {
-    return Object.keys(selectedCandidates).map((position) => {
-      const candidateId = selectedCandidates[position];
-      const candidate = candidates[position].find(candidate => candidate._id === candidateId);
-
-      return (
-        <div key={candidate._id} className="confirmation-candidate-container">
-          <p><strong>{position}</strong> </p>
-          <p><strong>Candidate:</strong> {candidate.firstName} {candidate.lastName}</p>
-          <p><strong>Course:</strong> {candidate.course}</p>
-          <p><strong>Year:</strong> {candidate.year}</p>
-        </div>
-      );
-    });
-  };
-
   return (
     <div className="vote-page">
       <div className="vote-header">
@@ -215,11 +183,10 @@ function Vote({ user }) {
         <div className="confirmation-popup">
           <div className="confirmation-content">
             <h2>Confirm Your Vote</h2>
-            <p>Please review your selected candidates:</p>
-            {renderConfirmationDetails()}
+            <p>Are you sure you want to submit your vote?</p>
             <div className="confirmation-buttons">
+              <button className="confirm-btn" onClick={handleConfirmVote}>Yes, Submit</button>
               <button className="cancel-btn" onClick={handleCancelVote}>Cancel</button>
-              <button className="confirm-btn" onClick={handleConfirmVote}>Submit</button>
             </div>
           </div>
         </div>

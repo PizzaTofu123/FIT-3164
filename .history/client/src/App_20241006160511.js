@@ -101,7 +101,7 @@ function App() {
                 <Route path="/clubelections" element={<ClubElections user={userProfile} />} />
                 <Route path="/profile" element={<Profile user={userProfile} handleLogout={handleLogout} />} />
                 <Route path="/edit-profile" element={<EditProfilePage user={userProfile} onSave={handleSaveProfile} />} />
-                <Route path="/vote/:clubName" element={<Vote user={userProfile} />} />
+                <Route path="/vote/:clubName" element={<Vote />} />
                 <Route path="/preferences/:clubName" element={<Preferences />} />
                 <Route path="/results/:clubName" element={<Results />} />
                 <Route path="/clubrepresentative" element={<ClubRepresentative user={userProfile} />} />

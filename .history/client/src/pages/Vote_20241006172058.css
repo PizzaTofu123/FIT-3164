@@ -197,8 +197,6 @@
     max-width: 90%;
     text-align: center;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); /* Add shadow for depth */
-    max-height: 90vh; /* Limit the height of the popup */
-    overflow-y: auto; /* Make the content inside the popup scrollable */
   }
   
   .confirmation-buttons {

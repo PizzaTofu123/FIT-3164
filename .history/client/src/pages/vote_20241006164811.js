@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import './Vote.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
-function Vote({ user }) {
+function Vote( user ) {
   const location = useLocation();
   const navigate = useNavigate();
   const clubName = decodeURIComponent(location.pathname.split("/").pop());
@@ -12,7 +12,6 @@ function Vote({ user }) {
   const [selectedCandidates, setSelectedCandidates] = useState({});
   const [selectedCandidateDetails, setSelectedCandidateDetails] = useState(null);
   const [error, setError] = useState('');
-  const [showConfirmation, setShowConfirmation] = useState(false); // State for confirmation popup
 
   useEffect(() => {
     const fetchClubDetailsAndCandidates = async () => {
@@ -67,16 +66,6 @@ function Vote({ user }) {
     return candidates;
   };
 
-  // Disable scrolling on the body when popup is active
-  const disableScroll = () => {
-    document.body.style.overflow = 'hidden';
-  };
-
-  // Enable scrolling again when popup is closed
-  const enableScroll = () => {
-    document.body.style.overflow = 'auto';
-  };
-  
   const handleVote = (position, candidateId) => {
     setSelectedCandidates({
       ...selectedCandidates,
@@ -84,59 +73,9 @@ function Vote({ user }) {
     });
   };
 
-  const handleConfirmVote = async () => {
-    try {
-      for (const position in selectedCandidates) {
-        const candidateId = selectedCandidates[position];
-        const positionData = positions.find(pos => pos.electionName === position);
-        const electionId = positionData.electionId;
-        const candidateData = candidates[position].find(candidate => candidate._id === candidateId);
-
-        // Prepare the vote data
-        const voteData = {
-          userId: user._id,           // User ID from the user object
-          electionId,                 // The election ID for the current position
-          candidateId,                // The candidate ID selected by the user
-          level: candidateData.level, // Candidate's level
-          faculty: candidateData.faculty, // Candidate's faculty
-          course: candidateData.course,   // Candidate's course
-          year: candidateData.year        // Candidate's year
-        };
-
-        // POST request to submit the vote
-        const response = await fetch('http://localhost:5000/api/votes', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(voteData)
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to submit vote');
-        }
-        else {
-          console.log("Vote data:", voteData);
-        }
-      }
-
-      console.log("Vote submitted successfully for:", selectedCandidates);
-      setShowConfirmation(false); // Close the confirmation modal after submission
-      navigate('/');
-    } catch (error) {
-      console.error('Error submitting vote:', error);
-      setError(`Error submitting vote: ${error.message}`);
-    }
-  };
-
-  const handleShowConfirmation = () => {
-    disableScroll(); // Disable scrolling when showing the confirmation popup
-    setShowConfirmation(true); // Show the confirmation modal
-  };
-
-  const handleCancelVote = () => {
-    enableScroll(); // Re-enable scrolling when closing the popup
-    setShowConfirmation(false); // Close the confirmation modal without submitting
+  const handleConfirmVote = () => {
+    console.log("Voted for candidates:", selectedCandidates);
+    navigate('/confirmation');
   };
 
   const handleViewCampaign = (candidate) => {
@@ -175,22 +114,6 @@ function Vote({ user }) {
     );
   };
 
-  const renderConfirmationDetails = () => {
-    return Object.keys(selectedCandidates).map((position) => {
-      const candidateId = selectedCandidates[position];
-      const candidate = candidates[position].find(candidate => candidate._id === candidateId);
-
-      return (
-        <div key={candidate._id} className="confirmation-candidate-container">
-          <p><strong>{position}</strong> </p>
-          <p><strong>Candidate:</strong> {candidate.firstName} {candidate.lastName}</p>
-          <p><strong>Course:</strong> {candidate.course}</p>
-          <p><strong>Year:</strong> {candidate.year}</p>
-        </div>
-      );
-    });
-  };
-
   return (
     <div className="vote-page">
       <div className="vote-header">
@@ -208,22 +131,7 @@ function Vote({ user }) {
       ) : (
         <p>No positions found for this club.</p>
       )}
-      <button className="confirm-vote-btn" onClick={handleShowConfirmation}>Confirm Vote</button>
-
-      {/* Confirmation Popup */}
-      {showConfirmation && (
-        <div className="confirmation-popup">
-          <div className="confirmation-content">
-            <h2>Confirm Your Vote</h2>
-            <p>Please review your selected candidates:</p>
-            {renderConfirmationDetails()}
-            <div className="confirmation-buttons">
-              <button className="cancel-btn" onClick={handleCancelVote}>Cancel</button>
-              <button className="confirm-btn" onClick={handleConfirmVote}>Submit</button>
-            </div>
-          </div>
-        </div>
-      )}
+      <button className="confirm-vote-btn" onClick={handleConfirmVote}>Confirm Vote</button>
 
       {selectedCandidateDetails && (
         <div className="modal-overlay" onClick={handleCloseModal}>

@@ -115,11 +115,9 @@ function Vote({ user }) {
         if (!response.ok) {
           throw new Error('Failed to submit vote');
         }
-        else {
-          console.log("Vote data:", voteData);
-        }
       }
 
+      console.log("Vote submitted successfully for:", selectedCandidates);
       console.log("Vote submitted successfully for:", selectedCandidates);
       setShowConfirmation(false); // Close the confirmation modal after submission
       navigate('/');

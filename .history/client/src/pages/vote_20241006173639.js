@@ -115,9 +115,6 @@ function Vote({ user }) {
         if (!response.ok) {
           throw new Error('Failed to submit vote');
         }
-        else {
-          console.log("Vote data:", voteData);
-        }
       }
 
       console.log("Vote submitted successfully for:", selectedCandidates);

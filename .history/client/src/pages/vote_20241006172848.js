@@ -115,14 +115,10 @@ function Vote({ user }) {
         if (!response.ok) {
           throw new Error('Failed to submit vote');
         }
-        else {
-          console.log("Vote data:", voteData);
-        }
       }
 
       console.log("Vote submitted successfully for:", selectedCandidates);
       setShowConfirmation(false); // Close the confirmation modal after submission
-      navigate('/');
     } catch (error) {
       console.error('Error submitting vote:', error);
       setError(`Error submitting vote: ${error.message}`);
@@ -218,8 +214,9 @@ function Vote({ user }) {
             <p>Please review your selected candidates:</p>
             {renderConfirmationDetails()}
             <div className="confirmation-buttons">
-              <button className="cancel-btn" onClick={handleCancelVote}>Cancel</button>
-              <button className="confirm-btn" onClick={handleConfirmVote}>Submit</button>
+            <button className="cancel-btn" onClick={handleCancelVote}>Cancel</button>
+              <button className="confirm-btn" onClick={handleConfirmVote}>Yes, Submit</button>
+              
             </div>
           </div>
         </div>
