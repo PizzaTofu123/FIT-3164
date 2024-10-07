@@ -37,10 +37,9 @@ const ElectionItem = ({ clubLogo, clubName, closingDate, voteStatus }) => {
       <h3>{clubName}</h3>
       <div className="election-info-index">
       <p className={isClosingSoon() ? 'closing-soon' : ''}>
-            {isPollingClosed() ? `Polling Closed: ${closingDate}` : 
-              (isClosingSoon() ? `Closing soon: ${closingDate}` : `Polling closes: ${closingDate}`)}
-          </p>
-          {!voteStatus && !isPollingClosed() && (
+        {isClosingSoon() ? `Closing soon: ${closingDate}` : `Polling closes: ${closingDate}`}
+      </p>
+      {!voteStatus && (
         <button className="index-button" onClick={handleVoteClick}>
           Vote
         </button>

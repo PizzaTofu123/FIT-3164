@@ -22,7 +22,7 @@ const ElectionItem = ({ clubLogo, clubName, closingDate, voteStatus }) => {
     const timeDifference = closingDateObj - today;
     const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
   
-    return daysDifference <= 3 && !isPollingClosed(); // Consider "soon" if closing in 3 days or less
+    return daysDifference <= 3; // Consider "soon" if closing in 3 days or less
   };
 
   const handleVoteClick = () => {
@@ -37,10 +37,9 @@ const ElectionItem = ({ clubLogo, clubName, closingDate, voteStatus }) => {
       <h3>{clubName}</h3>
       <div className="election-info-index">
       <p className={isClosingSoon() ? 'closing-soon' : ''}>
-            {isPollingClosed() ? `Polling Closed: ${closingDate}` : 
-              (isClosingSoon() ? `Closing soon: ${closingDate}` : `Polling closes: ${closingDate}`)}
-          </p>
-          {!voteStatus && !isPollingClosed() && (
+        {isClosingSoon() ? `Closing soon: ${closingDate}` : `Polling closes: ${closingDate}`}
+      </p>
+      {!voteStatus && (
         <button className="index-button" onClick={handleVoteClick}>
           Vote
         </button>

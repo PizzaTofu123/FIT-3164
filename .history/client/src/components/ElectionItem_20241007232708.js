@@ -7,7 +7,7 @@ const ElectionItem = ({ clubLogo, clubName, closingDate, voteStatus }) => {
   const isPollingClosed = () => {
     const today = new Date();
     const closingDateObj = new Date(closingDate);
-    return today > closingDateObj; // Polling is closed if the current date is past the closing date
+    return today > closingDate; // Polling is closed if the current date is past the closing date
   };
 
   const isClosingSoon = () => {
