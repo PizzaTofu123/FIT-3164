@@ -6,14 +6,13 @@ function EditProfilePage({ user, onSave }) {
   const [profileData, setProfileData] = useState(user);
   const [clubsDetails, setClubsDetails] = useState([]);
   const [representativeClubs, setRepresentativeClubs] = useState([]);
-  const [allClubs, setAllClubs] = useState([]); // To store all clubs from the backend
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
   // Format the date as YYYY-MM-DD for the input date field
   useEffect(() => {
     if (user && user.dob) {
-      const formattedDob = new Date(user.dob).toISOString().substr(0, 10); // Format date as YYYY-MM-DD
+      const formattedDob = new Date(user.dob).toISOString().substr(0, 10);
       setProfileData((prevData) => ({
         ...prevData,
         dob: formattedDob,
@@ -48,7 +47,6 @@ function EditProfilePage({ user, onSave }) {
 
   // Validation functions
   const validateEmail = (email) => email.includes('@student.monash.edu');
-
   const validateDob = (dob) => {
     const selectedDate = new Date(dob);
     const currentDate = new Date();
@@ -56,26 +54,32 @@ function EditProfilePage({ user, onSave }) {
     hundredYearsAgo.setFullYear(currentDate.getFullYear() - 100);
     return selectedDate <= currentDate && selectedDate >= hundredYearsAgo;
   };
-
   const validateMonashID = (monashID) => /^\d{8}$/.test(monashID);
-
   const capitalizeName = (name) => name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
 
+  // Handle change in form inputs, including file upload
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setProfileData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    const { name, value, files } = e.target;
+    if (name === 'image' && files[0]) {
+      setProfileData((prevData) => ({
+        ...prevData,
+        image: files[0],  // Handle image file
+      }));
+    } else {
+      setProfileData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
 
+  // Handle form submission and profile update
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Clear any previous error message
     setErrorMessage('');
+    console.log("Save button click");
+    console.log("User ID:", user._id);
 
-    // Personal Information validations
     if (!profileData.firstName || !profileData.lastName || !profileData.dob || !profileData.studentId || !profileData.email) {
       setErrorMessage('Please fill in all required fields.');
       return;
@@ -96,29 +100,48 @@ function EditProfilePage({ user, onSave }) {
       return;
     }
 
-    // Capitalize first and last names before saving
-    const firstName = capitalizeName(profileData.firstName);
-    const lastName = capitalizeName(profileData.lastName);
-
-    const updatedProfileData = {
-      ...profileData,
-      firstName: firstName,
-      lastName: lastName,
-    };
-
     try {
-      const response = await fetch(`/api/users/${user._id}`, {
+      let imageUrl = profileData.image;
+
+      // Check if a new image is selected and upload it
+      if (profileData.image instanceof File) {
+        const formData = new FormData();
+        formData.append('image', profileData.image);
+
+        const imageResponse = await fetch('http://localhost:5000/api/upload', {  // API to handle image upload
+          method: 'POST',
+          body: formData,
+        });
+
+        if (imageResponse.ok) {
+          const { imageUrl: uploadedImageUrl } = await imageResponse.json();
+          imageUrl = uploadedImageUrl;  // Get the uploaded image URL
+        } else {
+          console.error('Failed to upload image');
+          return;
+        }
+      }
+
+      // Update the user's profile with the new data and image URL
+      const updatedProfileData = {
+        ...profileData,
+        image: imageUrl,  // Set the new image URL or existing one
+      };
+
+      const response = await fetch(`http://localhost:5000/api/users/${user._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(updatedProfileData),
-      });
+      });      
 
       if (response.ok) {
         const updatedUser = await response.json();
         onSave(updatedUser);
-        navigate('/profile');
+
+        // Redirect to profile page with success message
+        navigate('/profile', { state: { message: 'Your information has been saved successfully!' } });
       } else {
         console.error('Failed to update profile');
       }
@@ -151,8 +174,17 @@ function EditProfilePage({ user, onSave }) {
     <form className="edit-profile-container" onSubmit={handleSubmit}>
       {errorMessage && <div className="error-message">{errorMessage}</div>}
       <div className="profile-header">
-        <img src={profileData.profilePicture || '/images/default_profile.png'} alt="Profile" className="profile-picture" />
-        <input type="file" accept="image/*" onChange={(e) => handleChange(e)} />
+        <img
+          src={profileData.image ? (typeof profileData.image === 'string' ? profileData.image : URL.createObjectURL(profileData.image)) : '/images/default_profile.png'}
+          alt="Profile"
+          className="profile-picture"
+        />
+        <input
+          type="file"
+          accept="image/*"
+          name="image"
+          onChange={handleChange}
+        />
       </div>
 
       <div className="form-section">
