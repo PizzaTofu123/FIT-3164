@@ -208,6 +208,7 @@ module.exports = {
         try {
             await clubQueries.checkScheduleElection();
             await clubQueries.endElection();
+            res.status(200).json({message:"work"});
         }
         catch (error){
             //status 500 means error
