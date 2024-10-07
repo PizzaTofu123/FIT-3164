@@ -4,16 +4,17 @@ const Club = require("../models/club.models");
 const router = express.Router();
 const ClubController = require("../controller/club.controller");
 
-router.get('/name/:clubName', ClubController.getClubByName);
+
 
 router.post('/', ClubController.createOneClub);
+router.get('/', ClubController.getAllClub);
 router.post('/populate', ClubController.populateClub);
+router.put('/checkElection', ClubController.checkElection);
+
 
 router.put('/:clubId', ClubController.updateOneClub);
 
 router.get('/:clubId', ClubController.getOneClub);
-router.get('/', ClubController.getAllClub);
-router.get('/checkElection', ClubController.checkElection);
 
 router.delete('/:clubId', ClubController.deleteOneClub);
 
