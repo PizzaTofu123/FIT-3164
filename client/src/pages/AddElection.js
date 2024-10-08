@@ -208,13 +208,15 @@ const AddElection = ({ user }) => {
                   onChange={(e) => handlePositionChange(index, e)}
                   required
                 />
-                <button 
-                  type="button" 
-                  className="remove-btn" 
-                  onClick={() => removePositionField(index)}
-                >
-                  &#x2715; {/* Remove button */}
-                </button>
+                {positions.length > 1 && (
+                  <button 
+                    type="button" 
+                    className="remove-btn" 
+                    onClick={() => removePositionField(index)}
+                  >
+                    &#x2715;
+                  </button>
+                )}
                 <button 
               type="button" 
               className="add-btn" 
