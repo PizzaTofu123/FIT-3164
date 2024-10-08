@@ -48,7 +48,7 @@ const ClubSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Election"
     }],
-    pastElection: [{
+    pastElections: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Election"
     }]

@@ -154,10 +154,23 @@ const clubQueries = {
 
     endElection  : async () => {
         var d = new Date();
-        await Club.updateMany(
+        /*await Club.updateMany(
             { electionEndDate:  {$lt : d.getTime()}},
-            { electionOngoingFlag: false, electionStartDate: null, electionEndDate: null }
-        ).exec();
+            { electionOngoingFlag: false }
+        ).exec();*/
+        var ended = await Club.find({electionEndDate:  {$lt : d.getTime()}});
+        console.log(ended);
+        for (let i = 0; i<ended.length; i++){
+            ended[i].electionOngoingFlag = false;
+            curr = ended[i].pastElections;
+            console.log(curr);
+            for(let j = 0; j<ended[i].elections.length; j++){
+                curr.push(ended[i].elections[j]);
+                ended[i].pastElections = curr;
+            };
+            ended[i].elections= [];
+            await ended[i].save();
+        }
     },
 
 }

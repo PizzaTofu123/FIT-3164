@@ -23,7 +23,7 @@ const electionQueries = {
         const election = await Election.findByIdAndDelete(electionId).exec();
         if (election) {
             for(let candidateId of election.candidates){
-                await mainQueries.Candidates.deleteOneCandidate(candidateId);
+                await mainQueries.candidates.deleteOneCandidate(candidateId);
             }
             await mainQueries.clubs._unlinkElectionToClubs(election._id, election.club);
             return election;
