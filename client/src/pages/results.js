@@ -17,7 +17,7 @@ const Results = () => {
     try {
       const response = await fetch('http://localhost:5000/api/clubs/');
       const clubs = await response.json();
-      const club = clubs.find(club => club.clubName === "Super cool club"); // use super cool club temporarily
+      const club = clubs.find(club => club.clubName === clubName); // use super cool club temporarily
       if (club) {
         setClub(club); 
         fetchElections(club.elections); 
