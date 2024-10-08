@@ -10,6 +10,7 @@ const ResultItemCR = ({ candidates }) => {
     navigate(-1); // Navigate to the previous page
   };
 
+  
   return (
     <div className="preferences-page">
     <div className="page-header">
@@ -28,7 +29,8 @@ const ResultItemCR = ({ candidates }) => {
                 <p className="candidate-position">{candidate.position}</p>
               </div>
             </div>
-            <div className="voted-status">{candidate.votes} Votes</div>
+            <button className="index-button yellow" onClick={() => console.log("piss")}>{candidate.votes} Votes</button>
+            {/* <div className="voted-status">{candidate.votes} Votes</div> */}
           </div>
         ))}
       </div>

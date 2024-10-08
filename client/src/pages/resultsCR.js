@@ -14,6 +14,7 @@ import {
   BarElement,
   
 } from 'chart.js';
+import ResultItemCR from '../components/ResultItemCR';
 
 
 const Results = () => {
@@ -306,7 +307,7 @@ const Results = () => {
         </div>
       </div>
 
-      <ResultItem candidates={sampleCandidates} />
+      <ResultItemCR candidates={sampleCandidates} />
     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
     <div style={{ width: '200px', padding: '20px', height: '500px', overflowY: 'scroll', border: '1px solid #ccc' }}>
       <h3>Filters for {selectedCategory}</h3>
