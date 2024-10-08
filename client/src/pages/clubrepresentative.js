@@ -5,12 +5,6 @@ import PastElectionList from "../components/PastElectionList";
 import './clubrepresentative.css';
 import { Link } from "react-router-dom";
 
-// Helper function to format dates in dd/mm/yyyy format
-const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat('en-GB').format(date); 
-  };
-
 const ClubRepresentative = ({ user }) => {
     const [elections, setElections] = useState([]);
     const [upcomingElections, setUpcomingElections] = useState([]);
@@ -59,7 +53,7 @@ const ClubRepresentative = ({ user }) => {
                         allOngoingElections.push({
                             id: club._id,
                             clubName: club.clubName,
-                            closingDate: formatDate(club.electionEndDate),
+                            closingDate: club.electionEndDate,
                             clubLogo: 'https://cdn-icons-png.flaticon.com/128/6062/6062646.png'
                         });
                     }
@@ -69,7 +63,7 @@ const ClubRepresentative = ({ user }) => {
                         allUpcomingElections.push({
                             id: club._id,
                             clubName: club.clubName,
-                            openingDate: formatDate(club.electionStartDate),
+                            openingDate: club.electionStartDate,
                             clubLogo: 'https://cdn-icons-png.flaticon.com/128/3171/3171927.png'
                         });
                     }
@@ -79,7 +73,7 @@ const ClubRepresentative = ({ user }) => {
                         allPastElections.push({
                             id: club._id,
                             clubName: club.clubName,
-                            closingDate: formatDate(club.electionEndDate),
+                            closingDate: club.electionEndDate,
                             clubLogo: 'https://cdn-icons-png.flaticon.com/128/6062/6062646.png'
                         });
                     }
