@@ -18,6 +18,9 @@ const ElectionItemCR = ({ clubId, clubLogo, clubName, closingDate }) => {
   
     return daysDifference <= 3; // Consider "soon" if closing in 3 days or less
   };
+
+    // Format the date string for display only
+  const displayClosingDate = new Intl.DateTimeFormat('en-GB').format(new Date(closingDate));
   
   const handleEditDetailsClick = () => {
     navigate(`/edit-election/${clubId}`);
@@ -38,7 +41,7 @@ const ElectionItemCR = ({ clubId, clubLogo, clubName, closingDate }) => {
         <h3>{clubName}</h3>
         <div className="election-info-index">
         <p className={isClosingSoon() ? 'closing-soon' : ''}>
-            {isClosingSoon() ? `Closing soon: ${closingDate}` : `Polling closes: ${closingDate}`}
+            {isClosingSoon() ? `Closing soon: ${displayClosingDate}` : `Polling closes: ${displayClosingDate}`}
           </p>
           <button className="index-button grey" onClick={handleEditDetailsClick}>Edit Details</button>
           <button className="index-button grey" onClick={handleEditCandidatesClick}>Edit Candidates</button>

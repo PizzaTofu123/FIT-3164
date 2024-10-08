@@ -14,6 +14,7 @@ import {
   BarElement,
   
 } from 'chart.js';
+import ResultItemCR from '../components/ResultItemCR';
 
 
 const Results = () => {
@@ -24,6 +25,10 @@ const Results = () => {
   const barCanvasRef = useRef(null);
   const [votesData, setVotesData] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState('level'); // default to level of education
+  const [selectedFilters, setSelectedFilters] = useState([]); // Keep track of selected filters
+  const [availableFilters, setAvailableFilters] = useState([]);
+  const [allSelected, setAllSelected] = useState(false)
+
   const [facultyData, setFacultyData] = useState({ labels: [], data: [] });
   const [club, setClub] = useState(null); 
   const [sampleCandidates, setSampleCandidates] = useState([]); 
@@ -138,27 +143,30 @@ const Results = () => {
 
     setVotesData({
       level: levelCounts,
-      course: Object.fromEntries(Object.entries(courseCounts).filter(([key, value]) => value > 8)),// filter less than 8 cuz theres too much
-      year: yearCounts
+      course: Object.fromEntries(Object.entries(courseCounts).filter(([key, value]) => value > 0)),// filter less than 8 cuz theres too much
+      year: yearCounts,
     });
+    setAvailableFilters(Object.keys(levelCounts));
   };
 
   const renderChart = () => {
     if (!votesData || !votesData[selectedCategory] || !barCanvasRef.current) return;
-  
+
     const ctx = barCanvasRef.current.getContext('2d');
     if (barChartRef.current) barChartRef.current.destroy();
-  
-    const data = votesData[selectedCategory];
-    const sortedData = Object.entries(data).sort(([, a], [, b]) => b - a); // Sort by descending
-    const labels = sortedData.map(([label]) => label);
-    const voteCounts = sortedData.map(([, count]) => count);
-  
-    // Rainbow colours
-    const backgroundColors = labels.map((_, index) => `hsl(${index * 40}, 70%, 50%)`); 
-  
+
+    // Filter data based on selected filters
+    const filteredData = Object.entries(votesData[selectedCategory])
+      .filter(([key]) => selectedFilters.includes(key)) // Only show selected filters
+      .sort(([, a], [, b]) => b - a); // Sort by vote count (descending)
+
+    const labels = filteredData.map(([label]) => label);
+    const voteCounts = filteredData.map(([, count]) => count);
+
+    const backgroundColors = labels.map((_, index) => `hsl(${index * 40}, 70%, 50%)`);
+
     barChartRef.current = new Chart(ctx, {
-      type: 'bar',  
+      type: 'bar',
       data: {
         labels: labels,
         datasets: [{
@@ -170,7 +178,7 @@ const Results = () => {
         }],
       },
       options: {
-        indexAxis: 'y',  // This makes the chart horizontal
+        indexAxis: 'y', // Horizontal bar chart
         responsive: true,
         maintainAspectRatio: false,
         scales: {
@@ -186,22 +194,12 @@ const Results = () => {
         },
         plugins: {
           legend: {
-            display: true, // Show the legend
+            display: true,
             position: 'top',
-            onClick: () => {},
-            labels: {
-              generateLabels: function (chart) {
-                return chart.data.labels.map((label, index) => ({
-                  text: label, 
-                  fillStyle: chart.data.datasets[0].backgroundColor[index], 
-                  strokeStyle: chart.data.datasets[0].backgroundColor[index],
-                  lineWidth: 1,
-                }));
-              }
-            },
+            onClick: () => {}, // Disable legend click
           },
           tooltip: {
-            enabled: true, 
+            enabled: true,
           },
         }
       }
@@ -211,11 +209,34 @@ const Results = () => {
   // Handle category change
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
+    const sortedFilters = Object.keys(votesData[category]).sort(); // Sort alphabetically
+    setAvailableFilters(sortedFilters); // Update available filters
+    setSelectedFilters([]); // Reset filters when changing categories
+    setAllSelected(false); // Reset 'select all' state
+  };
+
+  const handleFilterChange = (filter) => {
+    setSelectedFilters((prev) => {
+      if (prev.includes(filter)) {
+        return prev.filter((f) => f !== filter); // Deselect filter
+      } else {
+        return [...prev, filter]; // Select filter
+      }
+    });
+  };
+
+  const handleSelectAll = () => {
+    if (allSelected) {
+      setSelectedFilters([]); // Deselect all
+    } else {
+      setSelectedFilters(availableFilters); // Select all
+    }
+    setAllSelected(!allSelected); // Toggle 'select all' state
   };
 
   useEffect(() => {
     renderChart();
-  }, [votesData, selectedCategory]);
+  }, [votesData, selectedCategory,selectedFilters]);
 
   useEffect(() => {
     Chart.register(PolarAreaController, Tooltip, Legend, RadialLinearScale, ArcElement, LinearScale
@@ -286,20 +307,37 @@ const Results = () => {
         </div>
       </div>
 
-      <ResultItem candidates={sampleCandidates} />
+      <ResultItemCR candidates={sampleCandidates} />
+    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+    <div style={{ width: '200px', padding: '20px', height: '500px', overflowY: 'scroll', border: '1px solid #ccc' }}>
+      <h3>Filters for {selectedCategory}</h3>
+      <button onClick={handleSelectAll}>
+        {allSelected ? 'Deselect All' : 'Select All'}
+      </button>
+      {availableFilters.map((filter) => (
+        <div key={filter}>
+          <input
+            type="checkbox"
+            checked={selectedFilters.includes(filter)}
+            onChange={() => handleFilterChange(filter)}
+          />
+          <label>{filter}</label>
+        </div>
+      ))}
+    </div>
 
+    <div style={{ flex: 1, padding: '20px' }}>
       <div style={{
         display: 'flex',
-        justifyContent: 'center', 
-        gap: '10px',  
-        marginBottom: '20px'  
+        justifyContent: 'center',
+        gap: '10px',
+        marginBottom: '20px'
       }}>
         <button onClick={() => handleCategoryChange('level')}>Level of Education</button>
         <button onClick={() => handleCategoryChange('course')}>University Course</button>
         <button onClick={() => handleCategoryChange('year')}>Year of Study</button>
       </div>
 
-    
       <div style={{
         display: 'flex',
         justifyContent: 'center',
@@ -307,11 +345,13 @@ const Results = () => {
         width: '100%',
         marginBottom: '100px',
       }}>
-        <div style={{ width: '95%' }}>  
-          <canvas ref={barCanvasRef} style={{ width: '100%', height: '500px' }}></canvas>  
+        <div style={{ width: '95%' }}>
+          <canvas ref={barCanvasRef} style={{ width: '100%', height: '500px' }}></canvas>
         </div>
       </div>
     </div>
+  </div>
+  </div>
   );
 };
 

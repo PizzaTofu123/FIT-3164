@@ -14,10 +14,13 @@ const ElectionItem = ({ clubLogo, clubName, closingDate, voteStatus }) => {
   
     // Calculate the difference in days
     const timeDifference = closingDateObj - today;
-    const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+    const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
   
-    return daysDifference <= 3; // Consider "soon" if closing in 3 days or less
+    return daysDifference <= 3 && daysDifference >= 0 ; // Consider "soon" if closing in 3 days or less
   };
+
+  // Format the date string for display only
+  const displayClosingDate = new Intl.DateTimeFormat('en-GB').format(new Date(closingDate));
 
   const handleVoteClick = () => {
     // Navigate to the vote page when the button is clicked
@@ -31,7 +34,7 @@ const ElectionItem = ({ clubLogo, clubName, closingDate, voteStatus }) => {
       <h3>{clubName}</h3>
       <div className="election-info-index">
       <p className={isClosingSoon() ? 'closing-soon' : ''}>
-        {isClosingSoon() ? `Closing soon: ${closingDate}` : `Polling closes: ${closingDate}`}
+        {isClosingSoon() ? `Closing soon: ${displayClosingDate}` : `Polling closes: ${displayClosingDate}`}
       </p>
       {!voteStatus && (
         <button className="index-button" onClick={handleVoteClick}>

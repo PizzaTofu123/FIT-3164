@@ -74,7 +74,7 @@ const ClubElections = ({ user }) => {
         }
 
           // Ongoing elections (currently active)
-          if (club.electionOngoingFlag && startDate <= now && endDate >= now) {
+          if (club.electionOngoingFlag && club.electionStartDate && club.electionEndDate) {
             ongoingElectionsData.push({
               id: club._id,
               clubName: club.clubName,
@@ -85,7 +85,7 @@ const ClubElections = ({ user }) => {
           }
 
           // Upcoming elections (future start date)
-          if (startDate > now) {
+          if (startDate > now && club.electionStartDate && club.electionEndDate) {
             upcomingElectionsData.push({
               id: club._id,
               clubName: club.clubName,
@@ -97,7 +97,7 @@ const ClubElections = ({ user }) => {
           }
 
           // Past elections (already closed)
-          if (endDate < now) {
+          if (endDate < now && club.electionStartDate && club.electionEndDate) {
             pastElectionsData.push({
               id: club._id,
               clubName: club.clubName,
