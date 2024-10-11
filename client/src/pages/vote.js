@@ -100,10 +100,10 @@ function Vote({ user }) {
 
   const handleConfirmVote = async () => {
     if (!areAllPositionsFilled()) {
-      alert('Please vote for all positions before confirming.');
+      setError('Please vote for all positions before confirming.');
       return;
     }
-
+    
     try {
       for (const position in selectedCandidates) {
         const candidateId = selectedCandidates[position];
@@ -150,10 +150,11 @@ function Vote({ user }) {
 
   const handleShowConfirmation = () => {
     if (areAllPositionsFilled()) {
+      setError('');
       disableScroll(); // Disable scrolling when showing the confirmation popup
       setShowConfirmation(true); // Show the confirmation modal
     } else {
-      alert('Please vote for all positions before confirming.');
+      setError('Please vote for all positions before confirming.');
     }
   };
 
@@ -232,6 +233,13 @@ function Vote({ user }) {
       ) : (
         <p>No positions found for this club.</p>
       )}
+
+      {/* Display error message if there's an error */}
+    {error && (
+      <div className="error-message">
+        {error}
+      </div>
+    )}
       <button className="confirm-vote-btn" onClick={handleShowConfirmation}>Confirm Vote</button>
 
       {/* Confirmation Popup */}
