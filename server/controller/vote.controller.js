@@ -10,7 +10,7 @@ module.exports = {
     {
         if (req.body.anonymous = true){
             try {
-                //const user  = await User.create(req.body);
+                // vote is created without user id while still recording their information
                 const vote = await voteQueries.createOneVote({
                     electionId: req.body.electionId,
                     candidateId: req.body.candidateId,
@@ -20,6 +20,7 @@ module.exports = {
                     course: req.body.course,
                     year: req.body.year,
                 })
+                // user id is then flagged as already voted
                 await mainQueries.userElectionFlags.createFlag({
                     userId: req.body.userId,
                     electionId: req.body.electionId
