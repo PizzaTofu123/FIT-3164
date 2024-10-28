@@ -109,7 +109,7 @@ const Results = () => {
         const votesResponse = await fetch(`http://localhost:5000/api/votes/election/${election._id}`); // API call
         const votes = await votesResponse.json();
       
-        for (const vote of votes) {
+        for (const vote of votes) { // set votes data
           const faculty = vote.faculty || 'Unknown Faculty';
           const level = vote.level || 'Unknown Level';
           const course = vote.course || 'Unknown Course';
