@@ -17,5 +17,6 @@ router.post('/populateVote', voteController.populateVote);
 
 // get all votes by election ID
 router.get('/election/:electionId', voteController.getVotesByElectionId);
+
 router.post('/dumpVote', voteController.dumpVote);
 module.exports = router;

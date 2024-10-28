@@ -41,7 +41,7 @@ const Results = () => {
     try {
       const response = await fetch('http://localhost:5000/api/clubs/');
       const clubs = await response.json();
-      const club = clubs.find(club => club.clubName === clubName); // use super cool club temporarily
+      const club = clubs.find(club => club.clubName === clubName); 
       if (club) {
         console.log(club);
         setClub(club); 
@@ -59,18 +59,13 @@ const Results = () => {
     const updatedCandidates = [];
     for (const election of elections) {
       try {
-        
-        // const electionResponse = await fetch(`http://localhost:5000/api/elections/${electionId}`);
-        // const election = await electionResponse.json();
-        // console.log(electionIds);
         const candidates = await fetchCandidates(election.candidates);
         const winner = findWinner(candidates);
-        // console.log(candidates);
         updatedCandidates.push({
           name: winner.firstName + " " + winner.lastName,
           position: election.electionName,
           votes: winner.voteCount, 
-          image: "../images/default_profile.png", // For now image is null since idk where to get it from
+          image: "../images/default_profile.png", 
         });
       } catch (error) {
         console.error(`Error fetching election ${election._id}:`, error);
@@ -101,19 +96,19 @@ const Results = () => {
     }, null);
   };
 
-  // Fetch votes and aggregate them by faculty and position for Sankey chart
+  // Fetch votes and aggregate them by faculty and position 
   const fetchVotes = async (elections) => {
     const facultyVotes = {};
     const levelCounts = {};
     const courseCounts = {};
     const yearCounts = {};
-    
+    // for all elections in the club we use the API call to get all votes then record their information
+    // to be displayed on visualisation
     for (const election of elections) {
       try {
-        const votesResponse = await fetch(`http://localhost:5000/api/votes/election/${election._id}`);
+        const votesResponse = await fetch(`http://localhost:5000/api/votes/election/${election._id}`); // API call
         const votes = await votesResponse.json();
-        //console.log(votes);
-        // total votes by faculty and prepare Sankey data
+      
         for (const vote of votes) {
           const faculty = vote.faculty || 'Unknown Faculty';
           const level = vote.level || 'Unknown Level';
