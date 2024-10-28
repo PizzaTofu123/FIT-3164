@@ -112,7 +112,7 @@ const Results = () => {
       try {
         const votesResponse = await fetch(`http://localhost:5000/api/votes/election/${election._id}`);
         const votes = await votesResponse.json();
-        
+        //console.log(votes);
         // total votes by faculty and prepare Sankey data
         for (const vote of votes) {
           const faculty = vote.faculty || 'Unknown Faculty';
@@ -130,6 +130,7 @@ const Results = () => {
           yearCounts[year] = (yearCounts[year] || 0) + 1;
           facultyVotes[faculty] += 1; 
         }
+        
       } catch (error) {
         console.error(`Error fetching votes for election ${election._id}:`, error);
       }
@@ -140,6 +141,8 @@ const Results = () => {
       labels: Object.keys(facultyVotes),
       data: Object.values(facultyVotes),
     });
+
+    
 
     setVotesData({
       level: levelCounts,
